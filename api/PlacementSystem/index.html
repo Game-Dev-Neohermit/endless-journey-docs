@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="plugin-moonwave plugin-id-moonwave" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.1">
+<title data-rh="true">PlacementSystem | Endless Journey</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://game-dev-neohermit.github.io/endless-journey-docs/api/PlacementSystem"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="PlacementSystem | Endless Journey"><meta data-rh="true" name="description" content="Shared placement and validation system used by both the client-side preview
+(PlacementClient) and the server-side anti-exploit validator (PlacementServer).
+
+Visual-only features (TweenPlus colour transitions, grid Texture instances)
+are guarded by `IS_CLIENT` checks inside each method, so the same object can
+be constructed on the server without side-effects.
+
+### Model structure
+Items under `ReplicatedStorage/PlaceableItems` are expected to contain:
+- **VisualMesh** — `MeshPart` or `Part`; visible geometry.
+- **CollisionBox** — `Part`; axis-aligned collision volume used for overlap
+  testing and height correction.
+- **RootPart** *(optional)* — animation rig root; treated as
+  `PlacementIgnore` and hidden.
+
+Parts tagged `PlacementIgnore` are fully hidden and excluded from all
+collision checks.
+
+### Signals fired
+- `Signals.OnBuildValidityChanged` — fired by `UpdateGhostPosition` when
+  `IsValid` flips.
+- `Signals.OnPlacementModeChanged` — fired by `SetGridMode` when the grid
+  toggle changes."><meta data-rh="true" property="og:description" content="Shared placement and validation system used by both the client-side preview
+(PlacementClient) and the server-side anti-exploit validator (PlacementServer).
+
+Visual-only features (TweenPlus colour transitions, grid Texture instances)
+are guarded by `IS_CLIENT` checks inside each method, so the same object can
+be constructed on the server without side-effects.
+
+### Model structure
+Items under `ReplicatedStorage/PlaceableItems` are expected to contain:
+- **VisualMesh** — `MeshPart` or `Part`; visible geometry.
+- **CollisionBox** — `Part`; axis-aligned collision volume used for overlap
+  testing and height correction.
+- **RootPart** *(optional)* — animation rig root; treated as
+  `PlacementIgnore` and hidden.
+
+Parts tagged `PlacementIgnore` are fully hidden and excluded from all
+collision checks.
+
+### Signals fired
+- `Signals.OnBuildValidityChanged` — fired by `UpdateGhostPosition` when
+  `IsValid` flips.
+- `Signals.OnPlacementModeChanged` — fired by `SetGridMode` when the grid
+  toggle changes."><link data-rh="true" rel="canonical" href="https://game-dev-neohermit.github.io/endless-journey-docs/api/PlacementSystem"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/api/PlacementSystem" hreflang="en"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/api/PlacementSystem" hreflang="x-default"><link rel="stylesheet" href="/endless-journey-docs/assets/css/styles.333e449a.css">
+<script src="/endless-journey-docs/assets/js/runtime~main.ebdda3ed.js" defer="defer"></script>
+<script src="/endless-journey-docs/assets/js/main.a950c257.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/endless-journey-docs/"><b class="navbar__title text--truncate">Endless Journey</b></a><a class="navbar__item navbar__link" href="/endless-journey-docs/docs/intro">Docs</a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/endless-journey-docs/api/">API</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/Game-Dev-Neohermit/Endless-Journey" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search"><span aria-label="expand searchbar" role="button" class="search-icon" tabindex="0"></span><input id="search_input_react" type="search" placeholder="Loading..." aria-label="Search" class="navbar__search-input search-bar" disabled=""></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0 docPageContainer_wNNk"><div class="docPage_Dpn1"><div class="docSidebarContainer_o_re"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/endless-journey-docs/api/Signals"><span title="Backbone" class="categoryLinkLabel_W154">Backbone</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/endless-journey-docs/api/SoundManager"><span title="Audio &amp; UI" class="categoryLinkLabel_W154">Audio &amp; UI</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/endless-journey-docs/api/PlacementSystem"><span title="Placement" class="categoryLinkLabel_W154">Placement</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/endless-journey-docs/api/PlacementSystem"><span title="​Placement​System" class="linkLabel_WmDU">​Placement​System</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/endless-journey-docs/api/PlaceableActions"><span title="​Placeable​Actions" class="linkLabel_WmDU">​Placeable​Actions</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/endless-journey-docs/api/SprintValidation"><span title="Movement &amp; Camera" class="categoryLinkLabel_W154">Movement &amp; Camera</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/endless-journey-docs/api/JunkController"><span title="Junk &amp; Grabhook" class="categoryLinkLabel_W154">Junk &amp; Grabhook</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/endless-journey-docs/api/ShredderServer"><span title="Shredder" class="categoryLinkLabel_W154">Shredder</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/endless-journey-docs/api/TrainFuelManager"><span title="Train" class="categoryLinkLabel_W154">Train</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/endless-journey-docs/api/BindableCore"><span title="Utilities" class="categoryLinkLabel_W154">Utilities</span></a></div></li></ul></nav></div></div><main class="docMainContainer_HJE1"><div class="container padding-vert--lg"><div class="row"><div class="col docItemCol_MU3C"><div class="docItemContainer_Wv98"><article><div class="member_J0w1 markdown"><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_oUs_"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><header><h1 class="docTitle_mZRt" style="text-decoration:none"><span style="display:inline-block">Placement</span><span style="display:inline-block">System</span></h1><div class="luaClassTags_EipM"></div><div>
+<p>
+  Shared placement and validation system used by both the client-side preview
+  (PlacementClient) and the server-side anti-exploit validator (PlacementServer).
+</p>
+<p>
+  Visual-only features (TweenPlus colour transitions, grid Texture instances)
+  are guarded by <code>IS_CLIENT</code> checks inside each method, so the same object can
+  be constructed on the server without side-effects.
+</p>
+<h3>Model structure</h3>
+<p>Items under <code>ReplicatedStorage/PlaceableItems</code> are expected to contain:</p>
+<ul>
+  <li><strong>VisualMesh</strong> — <code>MeshPart</code> or <code>Part</code>; visible geometry.</li>
+  <li>
+    <strong>CollisionBox</strong> — <code>Part</code>; axis-aligned collision volume used for overlap
+    testing and height correction.
+  </li>
+  <li>
+    <strong>RootPart</strong> <em>(optional)</em> — animation rig root; treated as
+    <code>PlacementIgnore</code> and hidden.
+  </li>
+</ul>
+<p>
+  Parts tagged <code>PlacementIgnore</code> are fully hidden and excluded from all
+  collision checks.
+</p>
+<h3>Signals fired</h3>
+<ul>
+  <li>
+    <code>Signals.OnBuildValidityChanged</code> — fired by <code>UpdateGhostPosition</code> when
+    <code>IsValid</code> flips.
+  </li>
+  <li>
+    <code>Signals.OnPlacementModeChanged</code> — fired by <code>SetGridMode</code> when the grid
+    toggle changes.
+  </li>
+</ul>
+</div></header><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions" translate="no">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="new"><code style="text-decoration:none">new</code><a href="#new" class="hash-link" aria-label="Direct link to new" title="Direct link to new" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/PlacementSystem.luau#L341"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PlacementSystem<!-- -->.</code><code class="green_DgR4">new</code><code>(</code><div class="inset_uKQm"><div><code>buildAreaTag<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>CollectionService tag that marks valid build-area <code>BasePart</code>s.</p>
+</span></span></div><div><code>gridSize<!-- -->: </code><code class="blue_P4bS">number</code><span class="inlineDescription_G7Er">-- <span>
+<p>Stud interval for grid-snap; also sets <code>StudsPerTile</code> on grid Textures.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/endless-journey-docs/api/PlacementSystem">PlacementSystem</a></code></div><div>
+<p>Constructs a new <code>PlacementSystem</code> instance.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ClearGhostModel"><code style="text-decoration:none">ClearGhostModel</code><a href="#ClearGhostModel" class="hash-link" aria-label="Direct link to ClearGhostModel" title="Direct link to ClearGhostModel" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/PlacementSystem.luau#L446"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PlacementSystem<!-- -->.</code><code class="green_DgR4">ClearGhostModel</code><code>(</code><code>self<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/endless-journey-docs/api/PlacementSystem">PlacementSystem</a></code><code>) → </code><code>(</code><code>)</code></div><div>
+<p>
+  Destroys the local ghost model and resets all ghost-related state
+  (<code>Rotation</code>, <code>IsValid</code>, <code>LastColor</code>, <code>TargetGhostCFrame</code>,
+  <code>CollisionBoxRelCFrame</code>, etc.) to their defaults.
+</p>
+<p>Safe to call when no ghost is active.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Rotate"><code style="text-decoration:none">Rotate</code><a href="#Rotate" class="hash-link" aria-label="Direct link to Rotate" title="Direct link to Rotate" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/PlacementSystem.luau#L539"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PlacementSystem<!-- -->.</code><code class="green_DgR4">Rotate</code><code>(</code><div class="inset_uKQm"><div><code>self<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/endless-journey-docs/api/PlacementSystem">PlacementSystem</a></code><code>,</code></div><div><code>degrees<!-- -->: </code><code class="blue_P4bS">number</code><span class="inlineDescription_G7Er">-- <span>
+<p>Degrees to rotate (positive = counter-clockwise when viewed from above).</p>
+</span></span></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>Adds <code>degrees</code> to the current rotation, wrapping at 360.</p>
+<p>
+  The rotation is applied on the next <code>CalculateGhostCFrame</code> / <code>UpdateGhostPosition</code>
+  call.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="CalculateGhostCFrame"><code style="text-decoration:none">CalculateGhostCFrame</code><a href="#CalculateGhostCFrame" class="hash-link" aria-label="Direct link to CalculateGhostCFrame" title="Direct link to CalculateGhostCFrame" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/PlacementSystem.luau#L576"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PlacementSystem<!-- -->.</code><code class="green_DgR4">CalculateGhostCFrame</code><code>(</code><div class="inset_uKQm"><div><code>self<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/endless-journey-docs/api/PlacementSystem">PlacementSystem</a></code><code>,</code></div><div><code>position<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Vector3" target="_blank" rel="noopener noreferrer">Vector3<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>World-space point on the top surface of a build-area part.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/CFrame" target="_blank" rel="noopener noreferrer">CFrame?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Ghost pivot CFrame, or <code>nil</code> if no ghost is set.</p>
+</span></span></div><div>
+<p>
+  Returns the world-space pivot <code>CFrame</code> for the ghost model given a surface
+  position.
+</p>
+<p>
+  Height is derived so the <strong>bottom face of the CollisionBox</strong> sits exactly at
+  <code>position.Y</code>, correcting for any Y offset between the model pivot and the
+  collision box centre. Returns <code>nil</code> when no ghost is active.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ColorizeGhost"><code style="text-decoration:none">ColorizeGhost</code><a href="#ColorizeGhost" class="hash-link" aria-label="Direct link to ColorizeGhost" title="Direct link to ColorizeGhost" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/PlacementSystem.luau#L696"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PlacementSystem<!-- -->.</code><code class="green_DgR4">ColorizeGhost</code><code>(</code><div class="inset_uKQm"><div><code>self<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/endless-journey-docs/api/PlacementSystem">PlacementSystem</a></code><code>,</code></div><div><code>isValid<!-- -->: </code><code class="blue_P4bS">boolean</code><span class="inlineDescription_G7Er">-- <span>
+<p><code>true</code> → valid colour; <code>false</code> → invalid colour.</p>
+</span></span></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>
+  Smoothly transitions the ghost colour to the valid or invalid tint from
+  <code>PlacementConfig</code>.
+</p>
+<p>
+  No-ops when the colour is already the target value (<code>LastColor</code> comparison),
+  avoiding redundant tweens each frame.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="SetBuildMode"><code style="text-decoration:none">SetBuildMode</code><a href="#SetBuildMode" class="hash-link" aria-label="Direct link to SetBuildMode" title="Direct link to SetBuildMode" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/PlacementSystem.luau#L388"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PlacementSystem<!-- -->:</code><code class="green_DgR4">SetBuildMode</code><code>(</code><div class="inset_uKQm"><div><code>isActive<!-- -->: </code><code class="blue_P4bS">boolean</code><span class="inlineDescription_G7Er">-- <span>
+<p><code>true</code> to enter build mode, <code>false</code> to leave it.</p>
+</span></span></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>Activates or deactivates build mode.</p>
+<p>
+  When <code>isActive</code> is <code>true</code>, grid <code>Texture</code> instances are created on every
+  tagged build-area part. When <code>false</code>, those textures are destroyed and the
+  current ghost model is cleared.
+</p>
+
+  
+    
+    
+      <div class="admonition admonition-caution alert alert--warning">
+        <div class="admonition-heading">
+          <h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                <path d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path>
+              </svg></span><span class="admonition-title">Client only</span></h5>
+        </div>
+        <div class="admonition-content">
+          <p>
+            The server sets <code>IsBuildMode = true</code> directly to avoid creating <code>Texture</code>
+            instances that would permanently replicate to clients.
+          </p>
+        </div>
+      </div>
+    
+  
+
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="SetGridMode"><code style="text-decoration:none">SetGridMode</code><a href="#SetGridMode" class="hash-link" aria-label="Direct link to SetGridMode" title="Direct link to SetGridMode" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/PlacementSystem.luau#L425"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PlacementSystem<!-- -->:</code><code class="green_DgR4">SetGridMode</code><code>(</code><div class="inset_uKQm"><div><code>isGrid<!-- -->: </code><code class="blue_P4bS">boolean</code><span class="inlineDescription_G7Er">-- <span>
+<p><code>true</code> for grid-snap, <code>false</code> for free placement.</p>
+</span></span></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>Switches between grid-snap (<code>true</code>) and free-placement (<code>false</code>) mode.</p>
+<p>
+  Fires <code>Signals.OnPlacementModeChanged</code> with the new boolean value so UI and
+  other systems can react without polling.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="SetGhostModel"><code style="text-decoration:none">SetGhostModel</code><a href="#SetGhostModel" class="hash-link" aria-label="Direct link to SetGhostModel" title="Direct link to SetGhostModel" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/PlacementSystem.luau#L475"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PlacementSystem<!-- -->:</code><code class="green_DgR4">SetGhostModel</code><code>(</code><div class="inset_uKQm"><div><code>template<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/Model" target="_blank" rel="noopener noreferrer">Model<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>The source <code>PlaceableItem</code> model to clone.</p>
+</span></span></div><div><code>ghostParent<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Instance" target="_blank" rel="noopener noreferrer">Instance?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Parent for the cloned ghost; defaults to <code>workspace</code>.</p>
+</span></span></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>
+  Clones <code>template</code>, strips gameplay tags and ProximityPrompts, applies ghost
+  appearance, and sets it as the active ghost model. Also precomputes
+  collision-box relative CFrame data used by <code>CalculateGhostCFrame</code> and
+  <code>GetCollisionBox</code>.
+</p>
+<p>
+  <code>ghostParent</code> defaults to <code>workspace</code> (client preview). The server passes
+  <code>ServerStorage</code> so the validation ghost is never replicated to clients.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="GetCollisionBox"><code style="text-decoration:none">GetCollisionBox</code><a href="#GetCollisionBox" class="hash-link" aria-label="Direct link to GetCollisionBox" title="Direct link to GetCollisionBox" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/PlacementSystem.luau#L599"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PlacementSystem<!-- -->:</code><code class="green_DgR4">GetCollisionBox</code><code>(</code><div class="inset_uKQm"><div><code>ghostCFrame<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/CFrame" target="_blank" rel="noopener noreferrer">CFrame<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>The ghost model's current pivot CFrame.</p>
+</span></span></div></div><code>) → </code><code>(</code><div class="inset_uKQm"><div><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/CFrame" target="_blank" rel="noopener noreferrer">CFrame<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>World-space CFrame of the CollisionBox centre.</p>
+</span></span></div><div><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Vector3" target="_blank" rel="noopener noreferrer">Vector3<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Size of the CollisionBox (slightly inset from the actual part size).</p>
+</span></span></div></div><code>)</code></div><div>
+<p>
+  Returns the world-space <code>CFrame</code> and <code>Size</code> of the collision volume for a
+  given ghost pivot <code>CFrame</code>.
+</p>
+<p>Uses the precomputed relative CFrame cached by <code>SetGhostModel</code>.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="BuildObstructionFilter"><code style="text-decoration:none">BuildObstructionFilter</code><a href="#BuildObstructionFilter" class="hash-link" aria-label="Direct link to BuildObstructionFilter" title="Direct link to BuildObstructionFilter" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/PlacementSystem.luau#L622"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PlacementSystem<!-- -->:</code><code class="green_DgR4">BuildObstructionFilter</code><code>(</code><div class="inset_uKQm"><div><code>extra<!-- -->: </code><code class="purple_ieR2">{</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/Model" target="_blank" rel="noopener noreferrer">Model<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code class="purple_ieR2">}</code><code class="blue_P4bS">?</code><span class="inlineDescription_G7Er">-- <span>
+<p>Additional models to include in the obstruction check.</p>
+</span></span></div></div><code>) → </code><code class="purple_ieR2">{</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Instance" target="_blank" rel="noopener noreferrer">Instance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code class="purple_ieR2">}</code><span class="inlineDescription_G7Er">-- <span>
+<p>List of instances to pass to <code>OverlapParams.FilterDescendantsInstances</code>.</p>
+</span></span></div><div>
+<p>Builds the <code>OverlapParams</code> include-filter list used by <code>CheckValidity</code>.</p>
+<p>
+  The filter includes: the placed-objects folder, the ghost-models folder,
+  every player character, every <code>Enemy</code>-tagged instance, and any <code>extra</code>
+  models supplied by the caller.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="CheckValidity"><code style="text-decoration:none">CheckValidity</code><a href="#CheckValidity" class="hash-link" aria-label="Direct link to CheckValidity" title="Direct link to CheckValidity" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/PlacementSystem.luau#L662"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PlacementSystem<!-- -->:</code><code class="green_DgR4">CheckValidity</code><code>(</code><div class="inset_uKQm"><div><code>boxCFrame<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/CFrame" target="_blank" rel="noopener noreferrer">CFrame<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>World-space CFrame of the collision box centre.</p>
+</span></span></div><div><code>boxSize<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Vector3" target="_blank" rel="noopener noreferrer">Vector3<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>Size of the collision box.</p>
+</span></span></div><div><code>filterOverride<!-- -->: </code><code class="purple_ieR2">{</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Instance" target="_blank" rel="noopener noreferrer">Instance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code class="purple_ieR2">}</code><code class="blue_P4bS">?</code><span class="inlineDescription_G7Er">-- <span>
+<p>Custom include-filter; falls back to <code>BuildObstructionFilter</code> when <code>nil</code>.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS">boolean</code><span class="inlineDescription_G7Er">-- <span>
+<p><code>true</code> if placement is valid (no obstructions).</p>
+</span></span></div><div>
+<p>Returns <code>true</code> when the given collision box does not overlap any obstruction.</p>
+<p>
+  Uses <code>workspace:GetPartBoundsInBox</code> with an include-filter. The local
+  ghost's own parts (<code>GhostOwnParts</code>) are excluded so the ghost never blocks
+  itself. Pass <code>filterOverride</code> to supply a pre-built filter (e.g. with other
+  players' ghosts included); if omitted, <code>BuildObstructionFilter(nil)</code> is
+  called automatically.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="UpdateGhostPosition"><code style="text-decoration:none">UpdateGhostPosition</code><a href="#UpdateGhostPosition" class="hash-link" aria-label="Direct link to UpdateGhostPosition" title="Direct link to UpdateGhostPosition" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/PlacementSystem.luau#L728"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PlacementSystem<!-- -->:</code><code class="green_DgR4">UpdateGhostPosition</code><code>(</code><div class="inset_uKQm"><div><code>position<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Vector3" target="_blank" rel="noopener noreferrer">Vector3<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Surface position from <code>CalculatePlacement</code>.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/CFrame" target="_blank" rel="noopener noreferrer">CFrame?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>The ghost pivot CFrame, or <code>nil</code> if no ghost is active.</p>
+</span></span></div><div>
+<p>
+  Moves the ghost to <code>position</code>, runs the collision validity check,
+  colorizes the ghost, and returns the final world <code>CFrame</code>.
+</p>
+<p>
+  Fires <code>Signals.OnBuildValidityChanged</code> with the new boolean whenever
+  <code>IsValid</code> changes, so UI and audio systems can react without polling.
+</p>
+<p>Called every <code>Heartbeat</code> tick on the client.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="LerpGhost"><code style="text-decoration:none">LerpGhost</code><a href="#LerpGhost" class="hash-link" aria-label="Direct link to LerpGhost" title="Direct link to LerpGhost" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/PlacementSystem.luau#L780"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PlacementSystem<!-- -->:</code><code class="green_DgR4">LerpGhost</code><code>(</code><div class="inset_uKQm"><div><code>dt<!-- -->: </code><code class="blue_P4bS">number</code><span class="inlineDescription_G7Er">-- <span>
+<p>Frame delta time in seconds.</p>
+</span></span></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>Smoothly interpolates the ghost model toward <code>TargetGhostCFrame</code> each frame.</p>
+<p>
+  In grid mode only rotation is interpolated (position snaps instantly in
+  <code>UpdateGhostPosition</code>). In free mode, both position and rotation are
+  smoothed using frame-rate-independent exponential decay.
+</p>
+<p>Should be called every <code>Heartbeat</code> with the frame delta time.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="SetOtherGhost"><code style="text-decoration:none">SetOtherGhost</code><a href="#SetOtherGhost" class="hash-link" aria-label="Direct link to SetOtherGhost" title="Direct link to SetOtherGhost" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/PlacementSystem.luau#L821"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PlacementSystem<!-- -->:</code><code class="green_DgR4">SetOtherGhost</code><code>(</code><div class="inset_uKQm"><div><code>player<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/Player" target="_blank" rel="noopener noreferrer">Player<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>The player whose ghost to manage.</p>
+</span></span></div><div><code>isActive<!-- -->: </code><code class="blue_P4bS">boolean</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p><code>true</code> to show/move, <code>false</code> to hide/destroy.</p>
+</span></span></div><div><code>cframe<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/CFrame" target="_blank" rel="noopener noreferrer">CFrame?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>Target position for the ghost this frame.</p>
+</span></span></div><div><code>template<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/Model" target="_blank" rel="noopener noreferrer">Model?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Source model to clone; only needed on first show.</p>
+</span></span></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>Creates, moves, or destroys the ghost preview for another player.</p>
+<ul>
+  <li><code>isActive = true</code> with a <code>template</code> — clones and shows the ghost.</li>
+  <li><code>isActive = true</code> with a <code>cframe</code> — moves an existing ghost.</li>
+  <li><code>isActive = false</code> — destroys and removes the ghost entry.</li>
+</ul>
+<p>
+  <code>template</code> is only required the first time <code>isActive = true</code> is called for
+  a given player.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="GetSnappedPosition"><code style="text-decoration:none">GetSnappedPosition</code><a href="#GetSnappedPosition" class="hash-link" aria-label="Direct link to GetSnappedPosition" title="Direct link to GetSnappedPosition" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/PlacementSystem.luau#L863"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PlacementSystem<!-- -->:</code><code class="green_DgR4">GetSnappedPosition</code><code>(</code><div class="inset_uKQm"><div><code>hitPosition<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Vector3" target="_blank" rel="noopener noreferrer">Vector3<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>Raw world-space raycast hit position.</p>
+</span></span></div><div><code>hitPart<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/BasePart" target="_blank" rel="noopener noreferrer">BasePart<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>The build-area part that was hit.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Vector3" target="_blank" rel="noopener noreferrer">Vector3<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Grid-snapped, clamped world-space surface position.</p>
+</span></span></div><div>
+<p>
+  Snaps <code>hitPosition</code> to the nearest grid vertex and clamps the result so the
+  collision box never overhangs the build-area edge.
+</p>
+<p>Used when <code>IsGridMode = true</code>.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="GetFreePosition"><code style="text-decoration:none">GetFreePosition</code><a href="#GetFreePosition" class="hash-link" aria-label="Direct link to GetFreePosition" title="Direct link to GetFreePosition" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/PlacementSystem.luau#L888"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PlacementSystem<!-- -->:</code><code class="green_DgR4">GetFreePosition</code><code>(</code><div class="inset_uKQm"><div><code>hitPosition<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Vector3" target="_blank" rel="noopener noreferrer">Vector3<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>Raw world-space raycast hit position.</p>
+</span></span></div><div><code>hitPart<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/BasePart" target="_blank" rel="noopener noreferrer">BasePart<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>The build-area part that was hit.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Vector3" target="_blank" rel="noopener noreferrer">Vector3<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Clamped world-space surface position.</p>
+</span></span></div><div>
+<p>
+  Returns a surface position with the raw X/Z of <code>hitPosition</code> locked to the
+  build-area surface Y, clamped so the collision box never overhangs the edge.
+</p>
+<p>Used when <code>IsGridMode = false</code>.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="CalculatePlacement"><code style="text-decoration:none">CalculatePlacement</code><a href="#CalculatePlacement" class="hash-link" aria-label="Direct link to CalculatePlacement" title="Direct link to CalculatePlacement" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/PlacementSystem.luau#L919"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PlacementSystem<!-- -->:</code><code class="green_DgR4">CalculatePlacement</code><code>(</code><div class="inset_uKQm"><div><code>rayOrigin<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Vector3" target="_blank" rel="noopener noreferrer">Vector3<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>World-space ray origin (typically the camera or mouse position).</p>
+</span></span></div><div><code>rayDirection<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Vector3" target="_blank" rel="noopener noreferrer">Vector3<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>World-space ray direction (magnitude determines max distance).</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Vector3" target="_blank" rel="noopener noreferrer">Vector3?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Resolved surface position, or <code>nil</code> if no valid build area was hit.</p>
+</span></span></div><div>
+<p>
+  Raycasts against tagged build-area parts and returns the resolved surface
+  position (grid-snapped or free, based on <code>IsGridMode</code>), or <code>nil</code> if no
+  build-area part was hit or <code>IsBuildMode</code> is <code>false</code>.
+</p>
+<p>
+  The raycast uses an include-filter limited to build-area parts, so placed
+  objects are transparent to the ray. Overlap with placed items is handled
+  separately by <code>CheckValidity</code>.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Destroy"><code style="text-decoration:none">Destroy</code><a href="#Destroy" class="hash-link" aria-label="Direct link to Destroy" title="Direct link to Destroy" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/PlacementSystem.luau#L951"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>PlacementSystem<!-- -->:</code><code class="green_DgR4">Destroy</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
+<p>Cleans up all ghosts, grid textures, and tween state owned by this instance.</p>
+<p><code>Signals</code> entries are global singletons and are <strong>not</strong> destroyed here.</p>
+</div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
+    &quot;functions&quot;: [
+        {
+            &quot;name&quot;: &quot;new&quot;,
+            &quot;desc&quot;: &quot;Constructs a new `PlacementSystem` instance.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;buildAreaTag&quot;,
+                    &quot;desc&quot;: &quot;CollectionService tag that marks valid build-area `BasePart`s.&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;gridSize&quot;,
+                    &quot;desc&quot;: &quot;Stud interval for grid-snap; also sets `StudsPerTile` on grid Textures.&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;PlacementSystem&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 341,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/PlacementSystem.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;SetBuildMode&quot;,
+            &quot;desc&quot;: &quot;Activates or deactivates build mode.\n\nWhen `isActive` is `true`, grid `Texture` instances are created on every\ntagged build-area part.  When `false`, those textures are destroyed and the\ncurrent ghost model is cleared.\n\n:::caution Client only\nThe server sets `IsBuildMode = true` directly to avoid creating `Texture`\ninstances that would permanently replicate to clients.\n:::&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;isActive&quot;,
+                    &quot;desc&quot;: &quot;`true` to enter build mode, `false` to leave it.&quot;,
+                    &quot;lua_type&quot;: &quot;boolean&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 388,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/PlacementSystem.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;SetGridMode&quot;,
+            &quot;desc&quot;: &quot;Switches between grid-snap (`true`) and free-placement (`false`) mode.\n\nFires `Signals.OnPlacementModeChanged` with the new boolean value so UI and\nother systems can react without polling.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;isGrid&quot;,
+                    &quot;desc&quot;: &quot;`true` for grid-snap, `false` for free placement.&quot;,
+                    &quot;lua_type&quot;: &quot;boolean&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 425,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/PlacementSystem.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;ClearGhostModel&quot;,
+            &quot;desc&quot;: &quot;Destroys the local ghost model and resets all ghost-related state\n(`Rotation`, `IsValid`, `LastColor`, `TargetGhostCFrame`,\n`CollisionBoxRelCFrame`, etc.) to their defaults.\n\nSafe to call when no ghost is active.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;self&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;PlacementSystem&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 446,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/PlacementSystem.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;SetGhostModel&quot;,
+            &quot;desc&quot;: &quot;Clones `template`, strips gameplay tags and ProximityPrompts, applies ghost\nappearance, and sets it as the active ghost model.  Also precomputes\ncollision-box relative CFrame data used by `CalculateGhostCFrame` and\n`GetCollisionBox`.\n\n`ghostParent` defaults to `workspace` (client preview).  The server passes\n`ServerStorage` so the validation ghost is never replicated to clients.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;template&quot;,
+                    &quot;desc&quot;: &quot;The source `PlaceableItem` model to clone.&quot;,
+                    &quot;lua_type&quot;: &quot;Model&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;ghostParent&quot;,
+                    &quot;desc&quot;: &quot;Parent for the cloned ghost; defaults to `workspace`.&quot;,
+                    &quot;lua_type&quot;: &quot;Instance?&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 475,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/PlacementSystem.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Rotate&quot;,
+            &quot;desc&quot;: &quot;Adds `degrees` to the current rotation, wrapping at 360.\n\nThe rotation is applied on the next `CalculateGhostCFrame` / `UpdateGhostPosition`\ncall.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;self&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;PlacementSystem&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;degrees&quot;,
+                    &quot;desc&quot;: &quot;Degrees to rotate (positive = counter-clockwise when viewed from above).&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 539,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/PlacementSystem.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;CalculateGhostCFrame&quot;,
+            &quot;desc&quot;: &quot;Returns the world-space pivot `CFrame` for the ghost model given a surface\nposition.\n\nHeight is derived so the **bottom face of the CollisionBox** sits exactly at\n`position.Y`, correcting for any Y offset between the model pivot and the\ncollision box centre.  Returns `nil` when no ghost is active.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;self&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;PlacementSystem&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;position&quot;,
+                    &quot;desc&quot;: &quot;World-space point on the top surface of a build-area part.&quot;,
+                    &quot;lua_type&quot;: &quot;Vector3&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Ghost pivot CFrame, or `nil` if no ghost is set.&quot;,
+                    &quot;lua_type&quot;: &quot;CFrame?&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 576,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/PlacementSystem.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;GetCollisionBox&quot;,
+            &quot;desc&quot;: &quot;Returns the world-space `CFrame` and `Size` of the collision volume for a\ngiven ghost pivot `CFrame`.\n\nUses the precomputed relative CFrame cached by `SetGhostModel`.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;ghostCFrame&quot;,
+                    &quot;desc&quot;: &quot;The ghost model&#x27;s current pivot CFrame.&quot;,
+                    &quot;lua_type&quot;: &quot;CFrame&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;World-space CFrame of the CollisionBox centre.&quot;,
+                    &quot;lua_type&quot;: &quot;CFrame&quot;
+                },
+                {
+                    &quot;desc&quot;: &quot;Size of the CollisionBox (slightly inset from the actual part size).&quot;,
+                    &quot;lua_type&quot;: &quot;Vector3&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 599,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/PlacementSystem.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;BuildObstructionFilter&quot;,
+            &quot;desc&quot;: &quot;Builds the `OverlapParams` include-filter list used by `CheckValidity`.\n\nThe filter includes: the placed-objects folder, the ghost-models folder,\nevery player character, every `Enemy`-tagged instance, and any `extra`\nmodels supplied by the caller.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;extra&quot;,
+                    &quot;desc&quot;: &quot;Additional models to include in the obstruction check.&quot;,
+                    &quot;lua_type&quot;: &quot;{ Model }?&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;List of instances to pass to `OverlapParams.FilterDescendantsInstances`.&quot;,
+                    &quot;lua_type&quot;: &quot;{ Instance }&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 622,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/PlacementSystem.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;CheckValidity&quot;,
+            &quot;desc&quot;: &quot;Returns `true` when the given collision box does not overlap any obstruction.\n\nUses `workspace:GetPartBoundsInBox` with an include-filter.  The local\nghost&#x27;s own parts (`GhostOwnParts`) are excluded so the ghost never blocks\nitself.  Pass `filterOverride` to supply a pre-built filter (e.g. with other\nplayers&#x27; ghosts included); if omitted, `BuildObstructionFilter(nil)` is\ncalled automatically.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;boxCFrame&quot;,
+                    &quot;desc&quot;: &quot;World-space CFrame of the collision box centre.&quot;,
+                    &quot;lua_type&quot;: &quot;CFrame&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;boxSize&quot;,
+                    &quot;desc&quot;: &quot;Size of the collision box.&quot;,
+                    &quot;lua_type&quot;: &quot;Vector3&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;filterOverride&quot;,
+                    &quot;desc&quot;: &quot;Custom include-filter; falls back to `BuildObstructionFilter` when `nil`.&quot;,
+                    &quot;lua_type&quot;: &quot;{ Instance }?&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;`true` if placement is valid (no obstructions).&quot;,
+                    &quot;lua_type&quot;: &quot;boolean&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 662,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/PlacementSystem.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;ColorizeGhost&quot;,
+            &quot;desc&quot;: &quot;Smoothly transitions the ghost colour to the valid or invalid tint from\n`PlacementConfig`.\n\nNo-ops when the colour is already the target value (`LastColor` comparison),\navoiding redundant tweens each frame.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;self&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;PlacementSystem&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;isValid&quot;,
+                    &quot;desc&quot;: &quot;`true` → valid colour; `false` → invalid colour.&quot;,
+                    &quot;lua_type&quot;: &quot;boolean&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 696,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/PlacementSystem.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;UpdateGhostPosition&quot;,
+            &quot;desc&quot;: &quot;Moves the ghost to `position`, runs the collision validity check,\ncolorizes the ghost, and returns the final world `CFrame`.\n\nFires `Signals.OnBuildValidityChanged` with the new boolean whenever\n`IsValid` changes, so UI and audio systems can react without polling.\n\nCalled every `Heartbeat` tick on the client.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;position&quot;,
+                    &quot;desc&quot;: &quot;Surface position from `CalculatePlacement`.&quot;,
+                    &quot;lua_type&quot;: &quot;Vector3&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;The ghost pivot CFrame, or `nil` if no ghost is active.&quot;,
+                    &quot;lua_type&quot;: &quot;CFrame?&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 728,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/PlacementSystem.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;LerpGhost&quot;,
+            &quot;desc&quot;: &quot;Smoothly interpolates the ghost model toward `TargetGhostCFrame` each frame.\n\nIn grid mode only rotation is interpolated (position snaps instantly in\n`UpdateGhostPosition`).  In free mode, both position and rotation are\nsmoothed using frame-rate-independent exponential decay.\n\nShould be called every `Heartbeat` with the frame delta time.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;dt&quot;,
+                    &quot;desc&quot;: &quot;Frame delta time in seconds.&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 780,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/PlacementSystem.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;SetOtherGhost&quot;,
+            &quot;desc&quot;: &quot;Creates, moves, or destroys the ghost preview for another player.\n\n- `isActive = true` with a `template` — clones and shows the ghost.\n- `isActive = true` with a `cframe` — moves an existing ghost.\n- `isActive = false` — destroys and removes the ghost entry.\n\n`template` is only required the first time `isActive = true` is called for\na given player.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;player&quot;,
+                    &quot;desc&quot;: &quot;The player whose ghost to manage.&quot;,
+                    &quot;lua_type&quot;: &quot;Player&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;isActive&quot;,
+                    &quot;desc&quot;: &quot;`true` to show/move, `false` to hide/destroy.&quot;,
+                    &quot;lua_type&quot;: &quot;boolean&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;cframe&quot;,
+                    &quot;desc&quot;: &quot;Target position for the ghost this frame.&quot;,
+                    &quot;lua_type&quot;: &quot;CFrame?&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;template&quot;,
+                    &quot;desc&quot;: &quot;Source model to clone; only needed on first show.&quot;,
+                    &quot;lua_type&quot;: &quot;Model?&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 821,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/PlacementSystem.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;GetSnappedPosition&quot;,
+            &quot;desc&quot;: &quot;Snaps `hitPosition` to the nearest grid vertex and clamps the result so the\ncollision box never overhangs the build-area edge.\n\nUsed when `IsGridMode = true`.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;hitPosition&quot;,
+                    &quot;desc&quot;: &quot;Raw world-space raycast hit position.&quot;,
+                    &quot;lua_type&quot;: &quot;Vector3&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;hitPart&quot;,
+                    &quot;desc&quot;: &quot;The build-area part that was hit.&quot;,
+                    &quot;lua_type&quot;: &quot;BasePart&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Grid-snapped, clamped world-space surface position.&quot;,
+                    &quot;lua_type&quot;: &quot;Vector3&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 863,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/PlacementSystem.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;GetFreePosition&quot;,
+            &quot;desc&quot;: &quot;Returns a surface position with the raw X/Z of `hitPosition` locked to the\nbuild-area surface Y, clamped so the collision box never overhangs the edge.\n\nUsed when `IsGridMode = false`.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;hitPosition&quot;,
+                    &quot;desc&quot;: &quot;Raw world-space raycast hit position.&quot;,
+                    &quot;lua_type&quot;: &quot;Vector3&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;hitPart&quot;,
+                    &quot;desc&quot;: &quot;The build-area part that was hit.&quot;,
+                    &quot;lua_type&quot;: &quot;BasePart&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Clamped world-space surface position.&quot;,
+                    &quot;lua_type&quot;: &quot;Vector3&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 888,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/PlacementSystem.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;CalculatePlacement&quot;,
+            &quot;desc&quot;: &quot;Raycasts against tagged build-area parts and returns the resolved surface\nposition (grid-snapped or free, based on `IsGridMode`), or `nil` if no\nbuild-area part was hit or `IsBuildMode` is `false`.\n\nThe raycast uses an include-filter limited to build-area parts, so placed\nobjects are transparent to the ray.  Overlap with placed items is handled\nseparately by `CheckValidity`.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;rayOrigin&quot;,
+                    &quot;desc&quot;: &quot;World-space ray origin (typically the camera or mouse position).&quot;,
+                    &quot;lua_type&quot;: &quot;Vector3&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;rayDirection&quot;,
+                    &quot;desc&quot;: &quot;World-space ray direction (magnitude determines max distance).&quot;,
+                    &quot;lua_type&quot;: &quot;Vector3&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Resolved surface position, or `nil` if no valid build area was hit.&quot;,
+                    &quot;lua_type&quot;: &quot;Vector3?&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 919,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/PlacementSystem.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Destroy&quot;,
+            &quot;desc&quot;: &quot;Cleans up all ghosts, grid textures, and tween state owned by this instance.\n\n`Signals` entries are global singletons and are **not** destroyed here.&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 951,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/PlacementSystem.luau&quot;
+            }
+        }
+    ],
+    &quot;properties&quot;: [],
+    &quot;types&quot;: [],
+    &quot;name&quot;: &quot;PlacementSystem&quot;,
+    &quot;desc&quot;: &quot;Shared placement and validation system used by both the client-side preview\n(PlacementClient) and the server-side anti-exploit validator (PlacementServer).\n\nVisual-only features (TweenPlus colour transitions, grid Texture instances)\nare guarded by `IS_CLIENT` checks inside each method, so the same object can\nbe constructed on the server without side-effects.\n\n### Model structure\nItems under `ReplicatedStorage/PlaceableItems` are expected to contain:\n- **VisualMesh** — `MeshPart` or `Part`; visible geometry.\n- **CollisionBox** — `Part`; axis-aligned collision volume used for overlap\n  testing and height correction.\n- **RootPart** *(optional)* — animation rig root; treated as\n  `PlacementIgnore` and hidden.\n\nParts tagged `PlacementIgnore` are fully hidden and excluded from all\ncollision checks.\n\n### Signals fired\n- `Signals.OnBuildValidityChanged` — fired by `UpdateGhostPosition` when\n  `IsValid` flips.\n- `Signals.OnPlacementModeChanged` — fired by `SetGridMode` when the grid\n  toggle changes.&quot;,
+    &quot;source&quot;: {
+        &quot;line&quot;: 163,
+        &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/PlacementSystem.luau&quot;
+    }
+}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#BuildObstructionFilter" class="table-of-contents__link toc-highlight">:BuildObstructionFilter</a></li><li><a href="#CalculatePlacement" class="table-of-contents__link toc-highlight">:CalculatePlacement</a></li><li><a href="#CheckValidity" class="table-of-contents__link toc-highlight">:CheckValidity</a></li><li><a href="#Destroy" class="table-of-contents__link toc-highlight">:Destroy</a></li><li><a href="#GetCollisionBox" class="table-of-contents__link toc-highlight">:GetCollisionBox</a></li><li><a href="#GetFreePosition" class="table-of-contents__link toc-highlight">:GetFreePosition</a></li><li><a href="#GetSnappedPosition" class="table-of-contents__link toc-highlight">:GetSnappedPosition</a></li><li><a href="#LerpGhost" class="table-of-contents__link toc-highlight">:LerpGhost</a></li><li><a href="#SetBuildMode" class="table-of-contents__link toc-highlight">:SetBuildMode</a></li><li><a href="#SetGhostModel" class="table-of-contents__link toc-highlight">:SetGhostModel</a></li><li><a href="#SetGridMode" class="table-of-contents__link toc-highlight">:SetGridMode</a></li><li><a href="#SetOtherGhost" class="table-of-contents__link toc-highlight">:SetOtherGhost</a></li><li><a href="#UpdateGhostPosition" class="table-of-contents__link toc-highlight">:UpdateGhostPosition</a></li><li><a href="#CalculateGhostCFrame" class="table-of-contents__link toc-highlight">.CalculateGhostCFrame</a></li><li><a href="#ClearGhostModel" class="table-of-contents__link toc-highlight">.ClearGhostModel</a></li><li><a href="#ColorizeGhost" class="table-of-contents__link toc-highlight">.ColorizeGhost</a></li><li><a href="#new" class="table-of-contents__link toc-highlight">.new</a></li><li><a href="#Rotate" class="table-of-contents__link toc-highlight">.Rotate</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Built with Moonwave.</div></div></div></footer></div>
+</body>
+</html>

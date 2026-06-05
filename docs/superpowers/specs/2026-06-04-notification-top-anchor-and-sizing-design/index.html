@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-superpowers/specs/2026-06-04-notification-top-anchor-and-sizing-design" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.1">
+<title data-rh="true">NotificationManager — Top-Anchor Position + Reliable Text Sizing — Design | Endless Journey</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-04-notification-top-anchor-and-sizing-design"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="NotificationManager — Top-Anchor Position + Reliable Text Sizing — Design | Endless Journey"><meta data-rh="true" name="description" content="Date: 2026-06-04"><meta data-rh="true" property="og:description" content="Date: 2026-06-04"><link data-rh="true" rel="canonical" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-04-notification-top-anchor-and-sizing-design"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-04-notification-top-anchor-and-sizing-design" hreflang="en"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-04-notification-top-anchor-and-sizing-design" hreflang="x-default"><link rel="stylesheet" href="/endless-journey-docs/assets/css/styles.333e449a.css">
+<script src="/endless-journey-docs/assets/js/runtime~main.ebdda3ed.js" defer="defer"></script>
+<script src="/endless-journey-docs/assets/js/main.a950c257.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/endless-journey-docs/"><b class="navbar__title text--truncate">Endless Journey</b></a><a class="navbar__item navbar__link" href="/endless-journey-docs/docs/intro">Docs</a><a class="navbar__item navbar__link" href="/endless-journey-docs/api/">API</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/Game-Dev-Neohermit/Endless-Journey" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search"><span aria-label="expand searchbar" role="button" class="search-icon" tabindex="0"></span><input id="search_input_react" type="search" placeholder="Loading..." aria-label="Search" class="navbar__search-input search-bar" disabled=""></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>NotificationManager — Top-Anchor Position + Reliable Text Sizing — Design</h1></header>
+<p><strong>Date:</strong> 2026-06-04
+<strong>Status:</strong> Approved (design)
+<strong>Topic:</strong> Fix two reported NotificationManager problems: (1) toasts stack up from the bottom and overlap the hotbar; (2) long messages get clipped (e.g. &quot;You have no junk to shred.&quot; shows as &quot;You have no junk&quot;).</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="background">Background<a href="#background" class="hash-link" aria-label="Direct link to Background" title="Direct link to Background" translate="no">​</a></h2>
+<p>The toast stack is anchored to the <strong>bottom</strong> of the screen and grows upward, colliding with
+the hotbar. Separately, a width-accounting bug clips long messages: <code>calcSize</code> measures text
+wrapping in a box wider than the label is actually rendered (the frame&#x27;s <code>UIPadding</code> is not
+subtracted), so text wraps to more lines than the computed height allows and <code>ClipsDescendants</code>
+cuts off the overflow. A dynamic font-growth path (short messages scale up to 34px) makes short
+messages wrap unexpectedly, worsening the clip.</p>
+<p>Decisions taken during brainstorming:</p>
+<ul>
+<li class="">Long text: <strong>wrap onto multiple lines and grow the toast taller</strong> (width stays capped).</li>
+<li class="">Font: <strong>one fixed readable size</strong> (no dynamic growth).</li>
+<li class="">Stacking: <strong>newest on top</strong>, anchored below the Roblox top bar; remove the position-based fade.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="goals">Goals<a href="#goals" class="hash-link" aria-label="Direct link to Goals" title="Direct link to Goals" translate="no">​</a></h2>
+<ul>
+<li class="">Anchor the stack to the <strong>top</strong>, below the Roblox top bar, growing <strong>downward</strong>; newest on top.</li>
+<li class="">Long messages wrap and the toast grows taller; <strong>nothing is ever clipped</strong>.</li>
+<li class="">Use a single fixed, readable font size per device.</li>
+<li class="">Remove the now-meaningless position-based Y-fade and its per-frame machinery.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="non-goals-yagni">Non-Goals (YAGNI)<a href="#non-goals-yagni" class="hash-link" aria-label="Direct link to Non-Goals (YAGNI)" title="Direct link to Non-Goals (YAGNI)" translate="no">​</a></h2>
+<ul>
+<li class="">No change to the public API (<code>Signals.RequestNotification</code> / <code>RequestClearNotifications</code>).</li>
+<li class="">No change to colors, icons, sounds, durations, <code>MaxConcurrent</code>, the time-bar, the gradient
+text sweep, or the intro grow/fade-in animation.</li>
+<li class="">No new notification types or theming.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="part-1--position--stacking">Part 1 — Position &amp; Stacking<a href="#part-1--position--stacking" class="hash-link" aria-label="Direct link to Part 1 — Position &amp; Stacking" title="Direct link to Part 1 — Position &amp; Stacking" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ensurecontainer-initluau"><code>ensureContainer</code> (init.luau)<a href="#ensurecontainer-initluau" class="hash-link" aria-label="Direct link to ensurecontainer-initluau" title="Direct link to ensurecontainer-initluau" translate="no">​</a></h3>
+<ul>
+<li class=""><code>screenGui.IgnoreGuiInset = false</code> — the stack respects the top-bar inset so it sits below the
+Roblox topbar / playerlist instead of under them.</li>
+<li class="">Container:<!-- -->
+<ul>
+<li class=""><code>AnchorPoint = Vector2.new(0.5, 0)</code> (top-center)</li>
+<li class=""><code>Position = UDim2.fromScale(0.5, NotificationConfig.TopOffsetScale)</code> (small gap below the inset)</li>
+<li class=""><code>Size = UDim2.new(1, 0, 0, 0)</code>, <code>AutomaticSize = Enum.AutomaticSize.Y</code> (unchanged)</li>
+</ul>
+</li>
+<li class=""><code>UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Top</code>.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="newest-on-top-buildframe">Newest on top (<code>buildFrame</code>)<a href="#newest-on-top-buildframe" class="hash-link" aria-label="Direct link to newest-on-top-buildframe" title="Direct link to newest-on-top-buildframe" translate="no">​</a></h3>
+<p>The monotonic <code>layoutCounter</code> currently increments so the newest toast has the <strong>highest</strong>
+<code>LayoutOrder</code> (sorts last → bottom). Invert it so the newest sorts <strong>first</strong> (top):</p>
+<ul>
+<li class="">Timed toasts: <code>frame.LayoutOrder = -layoutCounter</code>.</li>
+<li class="">Executed toasts (none in this project today, but preserve the separation): keep them in a
+distinct band that still sorts newest-first within the band, e.g.
+<code>frame.LayoutOrder = -(1_000_000_000 + layoutCounter)</code> so executed toasts sit <strong>above</strong> timed
+ones. (Functionally equivalent grouping to today, mirrored for top-anchoring.)</li>
+</ul>
+<p>The grow-in size animation is unchanged; a new toast appears at the top and pushes existing
+toasts down.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="remove-the-position-based-y-fade">Remove the position-based Y-fade<a href="#remove-the-position-based-y-fade" class="hash-link" aria-label="Direct link to Remove the position-based Y-fade" title="Direct link to Remove the position-based Y-fade" translate="no">​</a></h3>
+<p>Delete the scroll-fade machinery — it only made sense for a bottom stack and would render fresh
+top toasts as half-faded:</p>
+<ul>
+<li class="">Remove <code>updateEntryTransparency</code> and the shared <code>RunService.Heartbeat</code> connection in <code>Init</code>.</li>
+<li class="">Remove the <code>entering</code> field + its set/clear, the <code>tagged</code> array (and the <code>table.insert(tagged, …)</code>
+calls), and the <code>lastT</code> field from <code>Entry</code>.</li>
+<li class="">Remove <code>FadeStartY</code> / <code>FadeEndY</code> from <code>NotificationConfig</code>.</li>
+<li class="">The intro fade-in tweens (icon <code>ImageTransparency</code>, text <code>TextTransparency</code>) and the gradient
+sweep <strong>stay</strong> — they are independent of the Heartbeat. The frame keeps its static
+<code>BackgroundTransparency = BaseTransparency[type]</code>. Toasts hold normal opacity until they
+shrink-close on timeout / eviction.</li>
+</ul>
+<p>Note: with the intro size tween&#x27;s <code>OnComplete</code> no longer needed to clear <code>entering</code>, the
+<code>&quot;sizeTween&quot;</code> index and <code>track</code> helper remain (still used for intro/resize/close size tweens);
+only the <code>entering</code>-clearing callback is removed.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="part-2--text-sizing">Part 2 — Text Sizing<a href="#part-2--text-sizing" class="hash-link" aria-label="Direct link to Part 2 — Text Sizing" title="Direct link to Part 2 — Text Sizing" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="fixed-font-size">Fixed font size<a href="#fixed-font-size" class="hash-link" aria-label="Direct link to Fixed font size" title="Direct link to Fixed font size" translate="no">​</a></h3>
+<ul>
+<li class="">Replace <code>Device.&lt;&gt;.MinTextSize</code> / <code>MaxTextSize</code> with a single <code>Device.&lt;&gt;.TextSize</code>
+(Desktop ≈ 22, Mobile ≈ 16). The effective size is <code>TextSize * FontScale</code> (existing
+<code>FontScale</code> clamp stays).</li>
+<li class=""><code>getScaled</code> returns <code>TextSize</code> (scaled) instead of <code>MinTextSize</code>/<code>MaxTextSize</code>.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="exact-text-area-width-measured--rendered">Exact text-area width (measured == rendered)<a href="#exact-text-area-width-measured--rendered" class="hash-link" aria-label="Direct link to Exact text-area width (measured == rendered)" title="Direct link to Exact text-area width (measured == rendered)" translate="no">​</a></h3>
+<p><code>calcSize(settings, message, isExecuted)</code> computes the text content width by subtracting <strong>every</strong>
+horizontal contributor, matching what the label actually gets:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#bfc7d5"><span class="token plain">frameWidth   = min(screenWidth * WidthPercentage, MaxWidth)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">horizPadding = settings.Padding * 2                 -- frame UIPadding (left + right)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">gap          = settings.Padding * 0.6               -- UIListLayout.Padding between items</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">reserved     = settings.ImageSize + gap             -- icon + its gap</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">if not isExecuted then</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">    reserved += settings.CanvasWidth + gap          -- time-bar + its gap</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">end</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">textWidth    = math.max(frameWidth - horizPadding - reserved, 1)</span><br></div></code></pre></div></div>
+<ul>
+<li class="">Measure once at the fixed size: <code>bounds = GetTextSize(message, textSize, Font, Vector2(textWidth, math.huge))</code>.</li>
+<li class=""><code>Height = math.ceil(math.max(bounds.Y, settings.ImageSize) + settings.Padding)</code> (vertical
+padding = <code>Padding*0.5</code> top + bottom = <code>Padding</code>). Grows taller for multi-line text.</li>
+<li class="">Return <code>{ Width = frameWidth, Height = Height, TextSize = textSize, TextWidth = textWidth }</code>.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="label--layout-show--buildframe">Label + layout (<code>show</code> / <code>buildFrame</code>)<a href="#label--layout-show--buildframe" class="hash-link" aria-label="Direct link to label--layout-show--buildframe" title="Direct link to label--layout-show--buildframe" translate="no">​</a></h3>
+<ul>
+<li class="">The text label gets an <strong>explicit pixel width</strong>: <code>Size = UDim2.fromOffset(sizeInfo.TextWidth, &lt;fill height&gt;)</code>.
+Use <code>Size = UDim2.new(0, sizeInfo.TextWidth, 1, 0)</code> (fixed width, fill height) so it never relies
+on <code>Scale = 1</code> (the source of the mismatch). <code>TextWrapped = true</code> stays; <code>TextYAlignment = Center</code>.</li>
+<li class=""><code>buildFrame</code>: set <code>UIListLayout.Wraps = false</code> so the icon and label never wrap onto separate
+rows — only the text wraps internally.</li>
+<li class=""><code>ClipsDescendants = true</code> stays (hides content during the grow-in); with the height now exact,
+it no longer clips final text.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="resize">Resize<a href="#resize" class="hash-link" aria-label="Direct link to Resize" title="Direct link to Resize" translate="no">​</a></h3>
+<p><code>resizeAll</code> recomputes via the same <code>calcSize(settings, message, isExecuted)</code> and re-applies the
+label width and frame size. It must pass <code>isExecuted</code> (read from the entry) so the reserved-width
+math matches. The time-bar/icon/padding updates stay.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="config-changes-notificationconfig">Config Changes (<code>NotificationConfig</code>)<a href="#config-changes-notificationconfig" class="hash-link" aria-label="Direct link to config-changes-notificationconfig" title="Direct link to config-changes-notificationconfig" translate="no">​</a></h2>
+<table><thead><tr><th>Field</th><th>Change</th></tr></thead><tbody><tr><td><code>Device.Mobile.TextSize</code> / <code>Device.Desktop.TextSize</code></td><td><strong>New.</strong> Fixed font size (Mobile ≈ 16, Desktop ≈ 22).</td></tr><tr><td><code>Device.*.MinTextSize</code>, <code>Device.*.MaxTextSize</code></td><td><strong>Remove.</strong></td></tr><tr><td><code>FadeStartY</code>, <code>FadeEndY</code></td><td><strong>Remove.</strong></td></tr><tr><td><code>TopOffsetScale</code></td><td><strong>New.</strong> Stack&#x27;s vertical gap below the top inset, fraction of viewport height (≈ 0.03).</td></tr></tbody></table>
+<p><code>Entry</code> type loses <code>tagged</code>, <code>lastT</code>, <code>entering</code>, and <code>baseTransparency</code>. The frame&#x27;s static
+background transparency is already set directly in <code>buildFrame</code>
+(<code>frame.BackgroundTransparency = NotificationConfig.BaseTransparency[notifType]</code>), so the
+per-entry <code>baseTransparency</code> copy — read only by the removed fade — is dropped.
+<code>MaxConcurrent</code>, <code>AnimDuration</code>, <code>AnimEasing</code>,
+<code>GradientSweepDuration</code>, <code>BaseScreenMin</code>, <code>Colors</code>, <code>ImageIds</code>, <code>BaseTransparency</code>, <code>SfxNames</code>,
+<code>Types</code>, <code>Font</code> are unchanged.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="testing-studio--no-automated-suite">Testing (Studio — no automated suite)<a href="#testing-studio--no-automated-suite" class="hash-link" aria-label="Direct link to Testing (Studio — no automated suite)" title="Direct link to Testing (Studio — no automated suite)" translate="no">​</a></h2>
+<ul>
+<li class="">No-junk info toast → full text &quot;You have no junk to shred.&quot;, appears at the top, clear of the hotbar.</li>
+<li class="">A deliberately long message → wraps to multiple lines, toast grows taller, no clipping.</li>
+<li class="">Burst of 6 (exceeds <code>MaxConcurrent</code>) → newest on top, older pushed down, oldest evicted, stack
+stays below the top bar and bounded.</li>
+<li class="">Resize the window mid-stack → toasts stay correctly positioned and sized.</li>
+<li class="">Confirm the intro grow + icon/text fade-in + gradient sweep still play; toasts no longer fade by
+screen position.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="affected-conventions--docs">Affected Conventions / Docs<a href="#affected-conventions--docs" class="hash-link" aria-label="Direct link to Affected Conventions / Docs" title="Direct link to Affected Conventions / Docs" translate="no">​</a></h2>
+<p>No new Signals/Packets. If the maintenance guide describes the notification visuals, update the
+position (top-anchored) and note the fixed font size; otherwise no doc change required.</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/Game-Dev-Neohermit/Endless-Journey/edit/main/docs/superpowers/specs/2026-06-04-notification-top-anchor-and-sizing-design.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#background" class="table-of-contents__link toc-highlight">Background</a></li><li><a href="#goals" class="table-of-contents__link toc-highlight">Goals</a></li><li><a href="#non-goals-yagni" class="table-of-contents__link toc-highlight">Non-Goals (YAGNI)</a></li><li><a href="#part-1--position--stacking" class="table-of-contents__link toc-highlight">Part 1 — Position &amp; Stacking</a><ul><li><a href="#ensurecontainer-initluau" class="table-of-contents__link toc-highlight"><code>ensureContainer</code> (init.luau)</a></li><li><a href="#newest-on-top-buildframe" class="table-of-contents__link toc-highlight">Newest on top (<code>buildFrame</code>)</a></li><li><a href="#remove-the-position-based-y-fade" class="table-of-contents__link toc-highlight">Remove the position-based Y-fade</a></li></ul></li><li><a href="#part-2--text-sizing" class="table-of-contents__link toc-highlight">Part 2 — Text Sizing</a><ul><li><a href="#fixed-font-size" class="table-of-contents__link toc-highlight">Fixed font size</a></li><li><a href="#exact-text-area-width-measured--rendered" class="table-of-contents__link toc-highlight">Exact text-area width (measured == rendered)</a></li><li><a href="#label--layout-show--buildframe" class="table-of-contents__link toc-highlight">Label + layout (<code>show</code> / <code>buildFrame</code>)</a></li><li><a href="#resize" class="table-of-contents__link toc-highlight">Resize</a></li></ul></li><li><a href="#config-changes-notificationconfig" class="table-of-contents__link toc-highlight">Config Changes (<code>NotificationConfig</code>)</a></li><li><a href="#testing-studio--no-automated-suite" class="table-of-contents__link toc-highlight">Testing (Studio — no automated suite)</a></li><li><a href="#affected-conventions--docs" class="table-of-contents__link toc-highlight">Affected Conventions / Docs</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Built with Moonwave.</div></div></div></footer></div>
+</body>
+</html>

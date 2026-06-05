@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-superpowers/specs/2026-05-29-consistent-junk-speed-design" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.1">
+<title data-rh="true">Consistent Floating-Junk Speed on Train State Change | Endless Journey</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-05-29-consistent-junk-speed-design"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Consistent Floating-Junk Speed on Train State Change | Endless Journey"><meta data-rh="true" name="description" content="Date: 2026-05-29"><meta data-rh="true" property="og:description" content="Date: 2026-05-29"><link data-rh="true" rel="canonical" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-05-29-consistent-junk-speed-design"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-05-29-consistent-junk-speed-design" hreflang="en"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-05-29-consistent-junk-speed-design" hreflang="x-default"><link rel="stylesheet" href="/endless-journey-docs/assets/css/styles.333e449a.css">
+<script src="/endless-journey-docs/assets/js/runtime~main.ebdda3ed.js" defer="defer"></script>
+<script src="/endless-journey-docs/assets/js/main.a950c257.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/endless-journey-docs/"><b class="navbar__title text--truncate">Endless Journey</b></a><a class="navbar__item navbar__link" href="/endless-journey-docs/docs/intro">Docs</a><a class="navbar__item navbar__link" href="/endless-journey-docs/api/">API</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/Game-Dev-Neohermit/Endless-Journey" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search"><span aria-label="expand searchbar" role="button" class="search-icon" tabindex="0"></span><input id="search_input_react" type="search" placeholder="Loading..." aria-label="Search" class="navbar__search-input search-bar" disabled=""></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Consistent Floating-Junk Speed on Train State Change</h1></header>
+<p><strong>Date:</strong> 2026-05-29
+<strong>Status:</strong> Approved design, pending implementation plan</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="problem">Problem<a href="#problem" class="hash-link" aria-label="Direct link to Problem" title="Direct link to Problem" translate="no">​</a></h2>
+<p>Floating junk speed is baked into each junk instance at spawn time and never
+revisited. When the train brakes or resumes, the server flips
+<code>CurrentState.Speed</code> between <code>DEFAULT_JUNK_SPEED</code> (10) and <code>STOPPED_JUNK_SPEED</code>
+(5), but that value is only read by <em>future</em> spawns:</p>
+<ul>
+<li class="">Server bakes the speed into the spawn packet: <code>SpawnJunkEvent:Fire(id, model, pos, speed)</code>
+(<a class="" href="/endless-journey-docs/src/ServerScriptService/JunkService.server.luau">JunkService.server.luau:337</a>).</li>
+<li class="">Client stores it per-junk at spawn and the simulation loop moves each junk by
+<code>data.Speed * dt</code> forever
+(<a class="" href="/endless-journey-docs/src/StarterPlayer/StarterPlayerScripts/JunkController.client.luau">JunkController.client.luau:111-118, 259-275</a>).</li>
+</ul>
+<p>Result: already-floating junk keep their old speed while newly-spawned junk move
+at the new speed. Since the junk&#x27;s apparent motion <em>is</em> the train&#x27;s perceived
+motion, mixed speeds break the illusion that the train slowed down or sped up.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="goals">Goals<a href="#goals" class="hash-link" aria-label="Direct link to Goals" title="Direct link to Goals" translate="no">​</a></h2>
+<ul>
+<li class="">All visible junk — existing and new — share a single linear speed at any moment.</li>
+<li class="">On train stop/start, junk <strong>smoothly ramp</strong> to the new speed (≈1.5 s), reading
+as the train physically decelerating/accelerating.</li>
+<li class="">Server-side junk lifetime stays <strong>aligned</strong> with client-side despawn so junk
+never disappears server-side while still visibly floating (no un-collectible
+ghost junk).</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="non-goals">Non-Goals<a href="#non-goals" class="hash-link" aria-label="Direct link to Non-Goals" title="Direct link to Non-Goals" translate="no">​</a></h2>
+<ul>
+<li class="">Per-junk linear speed variance. Every junk already gets the identical
+<code>CurrentState.Speed</code> at a given moment; linear speed is genuinely one global
+value. (Per-junk <strong>rotation</strong> speed stays varied and untouched.)</li>
+<li class="">Reworking how the server tracks junk positions (it still doesn&#x27;t track them).</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="key-insight">Key Insight<a href="#key-insight" class="hash-link" aria-label="Direct link to Key Insight" title="Direct link to Key Insight" translate="no">​</a></h2>
+<p>Because linear junk speed is a single global value, every junk moves the same
+distance each frame. Distance-traveled is therefore the integral of the global
+speed over time. Both server and client can integrate the <strong>same ramped speed
+timeline</strong> into a shared &quot;odometer&quot; and despawn each junk based on distance
+since its spawn — keeping both sides aligned without the server tracking
+positions.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="design">Design<a href="#design" class="hash-link" aria-label="Direct link to Design" title="Direct link to Design" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-packets-packetsinitluau">1. Packets (<a class="" href="/endless-journey-docs/src/ReplicatedStorage/SharedModules/Packets/init.luau">Packets/init.luau</a>)<a href="#1-packets-packetsinitluau" class="hash-link" aria-label="Direct link to 1-packets-packetsinitluau" title="Direct link to 1-packets-packetsinitluau" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Add</strong> <code>SetJunkSpeed</code> (Server → all Clients):<!-- -->
+<ul>
+<li class=""><code>Packet.NumberF32</code> — the new <em>target</em> junk speed.</li>
+</ul>
+</li>
+<li class=""><strong>Change</strong> <code>SpawnJunk</code>: remove the now-redundant <code>Packet.NumberS16</code> speed
+field. New signature: <code>(NumberU16 id, String modelName, Vector3F32 startPos)</code>.</li>
+<li class="">Export <code>SetJunkSpeed</code> in the returned table.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-config-junkconfigluau">2. Config (<a class="" href="/endless-journey-docs/src/ReplicatedStorage/SharedModules/Configs/JunkConfig.luau">JunkConfig.luau</a>)<a href="#2-config-junkconfigluau" class="hash-link" aria-label="Direct link to 2-config-junkconfigluau" title="Direct link to 2-config-junkconfigluau" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Add</strong> <code>JunkConfig.SPEED_RAMP_DURATION = 1.5</code> (seconds).</li>
+<li class=""><strong>Remove</strong> <code>JunkConfig.MAX_LIFETIME_CAP</code> (despawn becomes purely distance-based;
+see §5). Max real-world life is ~140 s at the slowest speed (700 / 5), so no
+time backstop is needed.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-shared-ramp-math">3. Shared ramp math<a href="#3-shared-ramp-math" class="hash-link" aria-label="Direct link to 3. Shared ramp math" title="Direct link to 3. Shared ramp math" translate="no">​</a></h3>
+<p>Both sides advance a <code>currentSpeed</code> toward <code>rampTo</code> using smoothstep over
+<code>SPEED_RAMP_DURATION</code>:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#bfc7d5"><span class="token plain">alpha     = clamp((now - rampStart) / SPEED_RAMP_DURATION, 0, 1)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">smooth    = alpha * alpha * (3 - 2 * alpha)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">currentSpeed = rampFrom + (rampTo - rampFrom) * smooth</span><br></div></code></pre></div></div>
+<p>Ramp state per side: <code>currentSpeed</code>, <code>rampFrom</code>, <code>rampTo</code>, <code>rampStart</code>.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-server-junkserviceserverluau">4. Server (<a class="" href="/endless-journey-docs/src/ServerScriptService/JunkService.server.luau">JunkService.server.luau</a>)<a href="#4-server-junkserviceserverluau" class="hash-link" aria-label="Direct link to 4-server-junkserviceserverluau" title="Direct link to 4-server-junkserviceserverluau" translate="no">​</a></h3>
+<ul>
+<li class="">Add ramp state (<code>currentSpeed</code>, <code>rampFrom</code>, <code>rampTo</code>, <code>rampStart</code>) initialized
+to <code>DEFAULT_JUNK_SPEED</code>, plus a global <code>junkOdometer = 0</code>.</li>
+<li class=""><code>SetTrainState(isMoving)</code>: instead of hard-setting <code>CurrentState.Speed</code>, start a
+ramp — <code>rampFrom = currentSpeed</code>, <code>rampTo = DEFAULT_JUNK_SPEED</code> or
+<code>STOPPED_JUNK_SPEED</code>, <code>rampStart = os.clock()</code> — then broadcast
+<code>Packets.SetJunkSpeed:Fire(rampTo)</code>.</li>
+<li class=""><code>Players.PlayerAdded</code>: <code>Packets.SetJunkSpeed:FireClient(player, currentSpeed)</code>
+so late joiners initialize to the live speed (snapped, not ramped — see §6).</li>
+<li class="">Spawn loop: drop the <code>speed</code> arg from <code>SpawnJunkEvent:Fire(...)</code>. Store
+<code>spawnOdometer = junkOdometer</code> on each <code>activeJunks</code> entry. Remove the
+per-junk <code>task.delay</code> lifetime cleanup.</li>
+<li class="">Heartbeat loop (existing connection): advance <code>currentSpeed</code> via the ramp math,
+then <code>junkOdometer += currentSpeed * dt</code>. Scan <code>activeJunks</code> and remove any
+entry where <code>junkOdometer - spawnOdometer &gt; DESPAWN_DISTANCE</code>, decrementing
+<code>currentCount</code>.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="5-client-junkcontrollerclientluau">5. Client (<a class="" href="/endless-journey-docs/src/StarterPlayer/StarterPlayerScripts/JunkController.client.luau">JunkController.client.luau</a>)<a href="#5-client-junkcontrollerclientluau" class="hash-link" aria-label="Direct link to 5-client-junkcontrollerclientluau" title="Direct link to 5-client-junkcontrollerclientluau" translate="no">​</a></h3>
+<ul>
+<li class="">Add module-level ramp state initialized to <code>DEFAULT_JUNK_SPEED</code>; track whether a
+first speed value has been received.</li>
+<li class=""><code>Packets.SetJunkSpeed.OnClientEvent</code>: first receipt <strong>snaps</strong> <code>currentSpeed</code>
+(and ramp targets) to the value; subsequent receipts start a ramp
+(<code>rampFrom = currentSpeed</code>, <code>rampTo = value</code>, <code>rampStart = os.clock()</code>).</li>
+<li class="">Remove the per-junk <code>Speed</code> field from <code>ActiveJunk</code> and from the <code>SpawnJunk</code>
+handler (which no longer receives a speed arg). Keep per-junk <code>RotSpeed</code> and
+<code>DistanceTraveled</code>.</li>
+<li class=""><code>PreSimulation</code> loop: advance <code>currentSpeed</code> via the ramp math once per frame,
+then move every junk by <code>currentSpeed * dt</code> and accumulate
+<code>DistanceTraveled += currentSpeed * dt</code>. Despawn on
+<code>DistanceTraveled &gt; DESPAWN_DISTANCE</code> (unchanged condition; now fed by the
+shared speed).</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="6-alignment--late-joiners">6. Alignment &amp; late joiners<a href="#6-alignment--late-joiners" class="hash-link" aria-label="Direct link to 6. Alignment &amp; late joiners" title="Direct link to 6. Alignment &amp; late joiners" translate="no">​</a></h3>
+<p><code>DistanceTraveled += currentSpeed * dt</code> (client) is mathematically identical to
+<code>junkOdometer - spawnOdometer</code> (server) as long as both integrate the same speed
+timeline from the junk&#x27;s spawn. Both sides ramp with identical math, so despawn
+occurs at the same distance. Residual drift is bounded only by network latency on
+when each client receives <code>SetJunkSpeed</code> (tens of ms), not by the full speed
+delta — satisfying the &quot;more or less aligned&quot; requirement.</p>
+<p>Late joiners receive a snapped <code>SetJunkSpeed</code> on join; any junk that spawns for
+them after join carries a fresh <code>DistanceTraveled = 0</code>, matching the server&#x27;s
+<code>spawnOdometer</code> for that junk.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="documentation">Documentation<a href="#documentation" class="hash-link" aria-label="Direct link to Documentation" title="Direct link to Documentation" translate="no">​</a></h2>
+<p>Update the networking map in
+<a class="" href="/endless-journey-docs/Documentations/Project-Maintenance-Guide.md">Project-Maintenance-Guide.md</a>:
+add <code>SetJunkSpeed</code>, and amend the <code>SpawnJunk</code> entry (speed arg removed).</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="affected-files">Affected Files<a href="#affected-files" class="hash-link" aria-label="Direct link to Affected Files" title="Direct link to Affected Files" translate="no">​</a></h2>
+<table><thead><tr><th>File</th><th>Change</th></tr></thead><tbody><tr><td><code>Packets/init.luau</code></td><td>Add <code>SetJunkSpeed</code>; remove speed arg from <code>SpawnJunk</code></td></tr><tr><td><code>Configs/JunkConfig.luau</code></td><td>Add <code>SPEED_RAMP_DURATION</code>; remove <code>MAX_LIFETIME_CAP</code></td></tr><tr><td><code>JunkService.server.luau</code></td><td>Ramp state + odometer; broadcast speed; distance-based despawn in Heartbeat; PlayerAdded sync</td></tr><tr><td><code>JunkController.client.luau</code></td><td>Shared ramped <code>currentSpeed</code>; remove per-junk speed; ramp in PreSimulation</td></tr><tr><td><code>Documentations/Project-Maintenance-Guide.md</code></td><td>Networking map update</td></tr></tbody></table></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/Game-Dev-Neohermit/Endless-Journey/edit/main/docs/superpowers/specs/2026-05-29-consistent-junk-speed-design.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#problem" class="table-of-contents__link toc-highlight">Problem</a></li><li><a href="#goals" class="table-of-contents__link toc-highlight">Goals</a></li><li><a href="#non-goals" class="table-of-contents__link toc-highlight">Non-Goals</a></li><li><a href="#key-insight" class="table-of-contents__link toc-highlight">Key Insight</a></li><li><a href="#design" class="table-of-contents__link toc-highlight">Design</a><ul><li><a href="#1-packets-packetsinitluau" class="table-of-contents__link toc-highlight">1. Packets (Packets/init.luau)</a></li><li><a href="#2-config-junkconfigluau" class="table-of-contents__link toc-highlight">2. Config (JunkConfig.luau)</a></li><li><a href="#3-shared-ramp-math" class="table-of-contents__link toc-highlight">3. Shared ramp math</a></li><li><a href="#4-server-junkserviceserverluau" class="table-of-contents__link toc-highlight">4. Server (JunkService.server.luau)</a></li><li><a href="#5-client-junkcontrollerclientluau" class="table-of-contents__link toc-highlight">5. Client (JunkController.client.luau)</a></li><li><a href="#6-alignment--late-joiners" class="table-of-contents__link toc-highlight">6. Alignment &amp; late joiners</a></li></ul></li><li><a href="#documentation" class="table-of-contents__link toc-highlight">Documentation</a></li><li><a href="#affected-files" class="table-of-contents__link toc-highlight">Affected Files</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Built with Moonwave.</div></div></div></footer></div>
+</body>
+</html>

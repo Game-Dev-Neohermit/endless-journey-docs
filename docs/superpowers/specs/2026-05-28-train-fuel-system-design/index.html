@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-superpowers/specs/2026-05-28-train-fuel-system-design" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.1">
+<title data-rh="true">Train Fuel System — Design | Endless Journey</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-05-28-train-fuel-system-design"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Train Fuel System — Design | Endless Journey"><meta data-rh="true" name="description" content="Date: 2026-05-28"><meta data-rh="true" property="og:description" content="Date: 2026-05-28"><link data-rh="true" rel="canonical" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-05-28-train-fuel-system-design"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-05-28-train-fuel-system-design" hreflang="en"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-05-28-train-fuel-system-design" hreflang="x-default"><link rel="stylesheet" href="/endless-journey-docs/assets/css/styles.333e449a.css">
+<script src="/endless-journey-docs/assets/js/runtime~main.ebdda3ed.js" defer="defer"></script>
+<script src="/endless-journey-docs/assets/js/main.a950c257.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/endless-journey-docs/"><b class="navbar__title text--truncate">Endless Journey</b></a><a class="navbar__item navbar__link" href="/endless-journey-docs/docs/intro">Docs</a><a class="navbar__item navbar__link" href="/endless-journey-docs/api/">API</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/Game-Dev-Neohermit/Endless-Journey" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search"><span aria-label="expand searchbar" role="button" class="search-icon" tabindex="0"></span><input id="search_input_react" type="search" placeholder="Loading..." aria-label="Search" class="navbar__search-input search-bar" disabled=""></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Train Fuel System — Design</h1></header>
+<p><strong>Date:</strong> 2026-05-28
+<strong>Status:</strong> Approved design, pending implementation plan</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="summary">Summary<a href="#summary" class="hash-link" aria-label="Direct link to Summary" title="Direct link to Summary" translate="no">​</a></h2>
+<p>A server-authoritative fuel system for the train. Fuel is a single global, server-wide
+resource (0–100). The train consumes fuel while running; players refuel by feeding
+collected <strong>Energy</strong> junk (Tiers 1–5, already collectable via the GrabHook) into the
+engine through a ProximityPrompt. A separate <strong>brake lever</strong> world object lets players
+stop/resume the train: while braked the floating junk slows significantly and fuel drains
+at a much lower rate. When fuel reaches 0 the train stalls (junk slows as if braked) and a
+3-minute countdown begins; on expiry the game prints a placeholder &quot;GAME OVER&quot; message
+(real game-over is a future TODO). Refueling above 0 cancels the countdown and resumes
+running.</p>
+<p>Architecture follows the existing <strong>Approach A</strong> pattern: a dedicated
+<code>TrainFuelManager</code> module + a thin loader, mirroring <code>StaminaManager</code> / <code>StaminaSystemLoader</code>.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="goals">Goals<a href="#goals" class="hash-link" aria-label="Direct link to Goals" title="Direct link to Goals" translate="no">​</a></h2>
+<ul>
+<li class="">Global shared fuel (one train, one 0–100 value, everyone sees the same level).</li>
+<li class="">Refuel by feeding Energy junk via an engine ProximityPrompt.</li>
+<li class="">Brake lever (separate tagged world object) to stop/resume the train.</li>
+<li class="">Visible fuel level on every client&#x27;s HUD.</li>
+<li class="">Server-authoritative with anti-exploit validation, consistent with the codebase&#x27;s
+predict/authoritative pattern.</li>
+<li class="">Engine and lever models are <strong>not built yet</strong> — code must wait on CollectionService
+tags so absent models cause no errors.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="non-goals">Non-goals<a href="#non-goals" class="hash-link" aria-label="Direct link to Non-goals" title="Direct link to Non-goals" translate="no">​</a></h2>
+<ul>
+<li class="">Real game-over handling (only a <code>print</code> + <code>TODO</code> for now).</li>
+<li class="">Per-player fuel.</li>
+<li class="">EXP/progression tie-ins.</li>
+<li class="">Building the engine/lever models themselves (authored later in Studio).</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="key-decisions-from-brainstorming">Key decisions (from brainstorming)<a href="#key-decisions-from-brainstorming" class="hash-link" aria-label="Direct link to Key decisions (from brainstorming)" title="Direct link to Key decisions (from brainstorming)" translate="no">​</a></h2>
+<table><thead><tr><th>Decision</th><th>Choice</th></tr></thead><tbody><tr><td>Fuel scope</td><td>Global / shared, server-wide singleton</td></tr><tr><td>Refuel consumption</td><td>Feed all backpack Energy, but <strong>smallest-tier-first, only as much as needed</strong> to reach cap (preserve stockpile)</td></tr><tr><td>Brake control</td><td>Separate <strong>lever</strong> world object with its own ProximityPrompt</td></tr><tr><td>Out-of-fuel behavior</td><td>Train <strong>stalls like braked</strong> (junk slows, no further drain), 3-min game-over countdown; refuel cancels</td></tr><tr><td>Drain model</td><td><strong>Event-driven + client prediction</strong> (no server loop)</td></tr><tr><td>Recharge curve</td><td>T1=5, T2=10, T3=20, T4=30, T5=50</td></tr><tr><td>Stopped drain rate</td><td>1/30 per sec (5× slower than running)</td></tr><tr><td>Prompt interact distance</td><td>Authored in Studio; <strong>not</strong> script-controlled</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="architecture">Architecture<a href="#architecture" class="hash-link" aria-label="Direct link to Architecture" title="Direct link to Architecture" translate="no">​</a></h2>
+<p>Dedicated server module + loader, mirroring Stamina/Health:</p>
+<ul>
+<li class=""><code>ServerStorage/SharedModules/TrainFuelManager.luau</code> — authoritative state + logic.</li>
+<li class=""><code>ServerScriptService/TrainFuelSystemLoader.server.luau</code> — requires the manager, calls <code>.Initialize()</code>.</li>
+</ul>
+<p>The manager fires the <strong>existing</strong> <code>Signals.SetTrainState(boolean)</code>, which
+<code>JunkService</code> already consumes to slow junk spawn rate / speed. The brake and the stall
+both reuse this wiring — no changes to JunkService&#x27;s junk logic are required.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="drain-model--event-driven--prediction-no-loop">Drain model — event-driven + prediction (no loop)<a href="#drain-model--event-driven--prediction-no-loop" class="hash-link" aria-label="Direct link to Drain model — event-driven + prediction (no loop)" title="Direct link to Drain model — event-driven + prediction (no loop)" translate="no">​</a></h3>
+<p>Fuel drains at a known constant rate within any given state, so it is computed
+algebraically rather than iterated per frame.</p>
+<p>Server holds:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#bfc7d5"><span class="token plain">fuelAtLastEvent : number    -- fuel snapshot at the last state change</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">lastEventTime   : number    -- workspace:GetServerTimeNow() at that change</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">currentRate     : number    -- fuel/sec being drained in the current state</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">isBraked        : boolean    -- player lever state</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">isStalled       : boolean    -- true while fuel == 0</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">gameOverFired   : boolean    -- guard so the placeholder prints once</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">scheduleNonce   : number     -- bumped on every event to invalidate stale task.delay callbacks</span><br></div></code></pre></div></div>
+<ul>
+<li class=""><code>getFuel()</code> = <code>clamp(fuelAtLastEvent - currentRate * (now - lastEventTime), 0, MAX_FUEL)</code> — computed on demand.</li>
+<li class="">Effective running state = <code>not isBraked and not isStalled</code>.</li>
+<li class=""><code>currentRate</code> = <code>RUNNING_DRAIN_PER_SEC</code> when running, <code>STOPPED_DRAIN_PER_SEC</code> when braked, <code>0</code> when stalled.</li>
+</ul>
+<p><strong>Events</strong> (refuel, brake toggle, stall, resume, init): snapshot current fuel into
+<code>fuelAtLastEvent</code>, set <code>lastEventTime = now</code>, update <code>currentRate</code>, bump <code>scheduleNonce</code>,
+(re)schedule future transitions, broadcast <code>TrainStateSync</code>, and fire <code>SetTrainState</code> if
+the effective running state changed.</p>
+<p><strong>Scheduled future transitions</strong> (via <code>task.delay</code>, guarded by <code>scheduleNonce</code>):</p>
+<ul>
+<li class="">Entering a draining state → <code>task.delay(getFuel() / currentRate, onStall)</code> (fires exactly when fuel hits 0).</li>
+<li class="">On stall → <code>task.delay(GAME_OVER_DELAY, onGameOver)</code>.</li>
+<li class="">Any new event bumps <code>scheduleNonce</code>; a fired callback whose captured nonce != current nonce is a no-op.</li>
+</ul>
+<p><strong>onStall:</strong> set <code>isStalled = true</code>, <code>currentRate = 0</code>, snapshot (fuel = 0), fire
+<code>SetTrainState(false)</code>, broadcast, schedule game-over.</p>
+<p><strong>onGameOver:</strong> if not <code>gameOverFired</code> → <code>print(&quot;[TrainFuel] GAME OVER — train out of fuel&quot;)</code>,
+set guard. <code>-- TODO: real game-over mechanic.</code></p>
+<p><strong>Resume from stall</strong> happens only via refuel (see below).</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="initial-state--join">Initial state / join<a href="#initial-state--join" class="hash-link" aria-label="Direct link to Initial state / join" title="Direct link to Initial state / join" translate="no">​</a></h3>
+<ul>
+<li class=""><code>Initialize()</code>: <code>fuel = MAX_FUEL</code>, <code>isBraked = false</code>, <code>isStalled = false</code>,
+<code>currentRate = RUNNING_DRAIN_PER_SEC</code>, <code>lastEventTime = now</code>. Fire <code>SetTrainState(true)</code>,
+schedule stall, broadcast.</li>
+<li class=""><code>Players.PlayerAdded</code> → send <code>TrainStateSync</code> to that player with the current snapshot so
+their HUD initializes correctly.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="config--replicatedstoragesharedmodulesconfigstrainconfigluau">Config — <code>ReplicatedStorage/SharedModules/Configs/TrainConfig.luau</code><a href="#config--replicatedstoragesharedmodulesconfigstrainconfigluau" class="hash-link" aria-label="Direct link to config--replicatedstoragesharedmodulesconfigstrainconfigluau" title="Direct link to config--replicatedstoragesharedmodulesconfigstrainconfigluau" translate="no">​</a></h2>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#bfc7d5"><span class="token plain">MAX_FUEL              = 100</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">RUNNING_DRAIN_PER_SEC = 1/6      -- full tank = 600s = 10 min</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">STOPPED_DRAIN_PER_SEC = 1/30     -- braked: 5x slower</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">GAME_OVER_DELAY       = 180      -- 3 min stalled -&gt; game over (print + TODO)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">PROXIMITY_TOLERANCE   = 4        -- server-only slack added during anti-exploit distance checks</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">ENGINE_TAG            = &quot;TrainEngine&quot;</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">BRAKE_LEVER_TAG       = &quot;TrainBrakeLever&quot;</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">REFUEL_PROMPT_PART    = &quot;RefuelPromptPart&quot;</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">BRAKE_PROMPT_PART     = &quot;BrakePromptPart&quot;</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">BRAKE_ACTION_STOP     = &quot;Stop Train&quot;</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">BRAKE_ACTION_RESUME   = &quot;Resume Train&quot;</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">TierRecharge          = { [1] = 5, [2] = 10, [3] = 20, [4] = 30, [5] = 50 }</span><br></div></code></pre></div></div>
+<p>No <code>INTERACT_DISTANCE</code>: the ProximityPrompt&#x27;s <code>MaxActivationDistance</code> (and
+ActionText/ObjectText for the refuel prompt) are authored in Studio, not pushed by script.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="networking--add-to-packetsinitluau">Networking — add to <code>Packets/init.luau</code><a href="#networking--add-to-packetsinitluau" class="hash-link" aria-label="Direct link to networking--add-to-packetsinitluau" title="Direct link to networking--add-to-packetsinitluau" translate="no">​</a></h2>
+<ul>
+<li class=""><code>TrainStateSync</code> (Server → all Clients; fired only on events, plus to a single player on join):<!-- -->
+<ul>
+<li class=""><code>fuel</code> NumberF32, <code>rate</code> NumberF32, <code>isBraked</code> Boolean8, <code>isStalled</code> Boolean8, <code>serverTime</code> NumberF32</li>
+</ul>
+</li>
+<li class=""><code>ReqRefuelTrain</code> (Client → Server, Response): arg engine <code>Instance</code> (Model)<!-- -->
+<ul>
+<li class="">Response: <code>success</code> Boolean8, <code>fuelAdded</code> NumberF32, <code>reasonCode</code> NumberU8</li>
+</ul>
+</li>
+<li class=""><code>ReqToggleBrake</code> (Client → Server, Response): arg lever <code>Instance</code> (Model)<!-- -->
+<ul>
+<li class="">Response: <code>success</code> Boolean8, <code>isBraked</code> Boolean8, <code>reasonCode</code> NumberU8</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="result-codes--replicatedstoragesharedmodulestrainresultcodesluau">Result codes — <code>ReplicatedStorage/SharedModules/TrainResultCodes.luau</code><a href="#result-codes--replicatedstoragesharedmodulestrainresultcodesluau" class="hash-link" aria-label="Direct link to result-codes--replicatedstoragesharedmodulestrainresultcodesluau" title="Direct link to result-codes--replicatedstoragesharedmodulestrainresultcodesluau" translate="no">​</a></h3>
+<p>Mirrors <code>ShredderResultCodes</code>: <code>NONE, INVALID_ENGINE, INVALID_LEVER, TOO_FAR, NO_ENERGY, FUEL_FULL, STALLED</code>.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="signals--add-to-signalsinitluau">Signals — add to <code>Signals/init.luau</code><a href="#signals--add-to-signalsinitluau" class="hash-link" aria-label="Direct link to signals--add-to-signalsinitluau" title="Direct link to signals--add-to-signalsinitluau" translate="no">​</a></h3>
+<ul>
+<li class=""><code>OnTrainStateChanged</code> (client-side): fired by <code>TrainClient</code> on each <code>TrainStateSync</code> to
+drive the HUD. Signature <code>(fuel, rate, isBraked, isStalled, serverTime)</code>.</li>
+<li class="">Server reuses the existing <code>SetTrainState</code>.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="server-interaction-handlers-in-trainfuelmanager">Server interaction handlers (in <code>TrainFuelManager</code>)<a href="#server-interaction-handlers-in-trainfuelmanager" class="hash-link" aria-label="Direct link to server-interaction-handlers-in-trainfuelmanager" title="Direct link to server-interaction-handlers-in-trainfuelmanager" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="reqrefueltrainonserverinvokeplayer-engine"><code>ReqRefuelTrain.OnServerInvoke(player, engine)</code><a href="#reqrefueltrainonserverinvokeplayer-engine" class="hash-link" aria-label="Direct link to reqrefueltrainonserverinvokeplayer-engine" title="Direct link to reqrefueltrainonserverinvokeplayer-engine" translate="no">​</a></h3>
+<ol>
+<li class="">Validate <code>engine</code> is a Model with the <code>ENGINE_TAG</code> (CollectionService) → else <code>INVALID_ENGINE</code>.</li>
+<li class="">Proximity check: player HumanoidRootPart → engine <code>PrimaryPart</code>, within the <strong>refuel
+prompt&#x27;s own <code>MaxActivationDistance</code></strong> + <code>PROXIMITY_TOLERANCE</code> → else <code>TOO_FAR</code>.</li>
+<li class="">If <code>getFuel() &gt;= MAX_FUEL</code> → <code>FUEL_FULL</code>.</li>
+<li class="">Gather the player&#x27;s Energy tools (Backpack + currently-equipped) by reading the Tool&#x27;s
+<code>PrimaryPart</code> attributes <code>Type == &quot;Energy&quot;</code> and <code>Tier</code> (reuses the Shredder&#x27;s
+<code>getJunkAttributes</code> approach). None → <code>NO_ENERGY</code>.</li>
+<li class=""><strong>Sort ascending by <code>TierRecharge</code> value; consume smallest-first, one at a time, while
+<code>fuel &lt; MAX_FUEL</code>.</strong> Each fed tool: add its recharge (cap at MAX), destroy the tool,
+accumulate <code>fuelAdded</code>. Stop the moment fuel reaches MAX. The bulk stockpile is
+preserved; only the last tool fed may overshoot the cap slightly (acceptable).</li>
+<li class="">Apply as an <strong>event</strong>: snapshot fuel. If <code>isStalled</code> and fuel now &gt; 0 → clear stall
+(<code>isStalled = false</code>), reset <code>gameOverFired</code>. Recompute <code>currentRate</code> for the current
+running/braked state, bump nonce, reschedule, fire <code>SetTrainState(not isBraked)</code> if the
+running state changed, broadcast <code>TrainStateSync</code>.</li>
+<li class="">Return <code>success = fuelAdded &gt; 0</code>, <code>fuelAdded</code>, <code>NONE</code>.</li>
+</ol>
+<p>Consuming equipped tools: unequip via <code>Humanoid:UnequipTools()</code> before destroying, matching
+the Shredder.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="reqtogglebrakeonserverinvokeplayer-lever"><code>ReqToggleBrake.OnServerInvoke(player, lever)</code><a href="#reqtogglebrakeonserverinvokeplayer-lever" class="hash-link" aria-label="Direct link to reqtogglebrakeonserverinvokeplayer-lever" title="Direct link to reqtogglebrakeonserverinvokeplayer-lever" translate="no">​</a></h3>
+<ol>
+<li class="">Validate <code>lever</code> is a Model with the <code>BRAKE_LEVER_TAG</code> → else <code>INVALID_LEVER</code>.</li>
+<li class="">Proximity check (brake prompt&#x27;s <code>MaxActivationDistance</code> + <code>PROXIMITY_TOLERANCE</code>) → else <code>TOO_FAR</code>.</li>
+<li class="">If <code>isStalled</code> → <code>STALLED</code> (lever is locked out until refueled). Return <code>false, isBraked, STALLED</code>.</li>
+<li class="">Toggle <code>isBraked</code>. Apply as an <strong>event</strong>: snapshot fuel, swap <code>currentRate</code>
+(running ↔ stopped), bump nonce, reschedule stall, fire <code>SetTrainState(not isBraked)</code>,
+broadcast.</li>
+<li class="">Return <code>true, isBraked, NONE</code>.</li>
+</ol>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="client">Client<a href="#client" class="hash-link" aria-label="Direct link to Client" title="Direct link to Client" translate="no">​</a></h2>
+<p>Two files mirroring the Shredder split (<code>ShredderClient</code> interaction + a GUI controller):</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="starterplayerstarterplayerscriptstrainclientclientluau"><code>StarterPlayer/StarterPlayerScripts/TrainClient.client.luau</code><a href="#starterplayerstarterplayerscriptstrainclientclientluau" class="hash-link" aria-label="Direct link to starterplayerstarterplayerscriptstrainclientclientluau" title="Direct link to starterplayerstarterplayerscriptstrainclientclientluau" translate="no">​</a></h3>
+<ul>
+<li class="">Receives <code>Packets.TrainStateSync.OnClientEvent</code> → stores the latest snapshot and fires
+<code>Signals.OnTrainStateChanged</code>.</li>
+<li class="">Registers engine and lever models via <code>CollectionService</code> tags
+(<code>GetInstanceAddedSignal</code> / <code>GetInstanceRemovedSignal</code> + a pre-tagged scan), exactly like
+<code>ShredderClient</code>. Absent models → nothing registers, no errors.</li>
+<li class=""><strong>Refuel prompt:</strong> find <code>RefuelPromptPart</code>&#x27;s <code>ProximityPrompt</code>; connect <code>.Triggered</code> →
+<code>ReqRefuelTrain:Fire(engine)</code>; show a toast with the result (<code>fuelAdded</code> on success,
+mapped reason on failure). Does <strong>not</strong> set <code>MaxActivationDistance</code>, <code>ActionText</code>, etc.</li>
+<li class=""><strong>Brake prompt:</strong> find <code>BrakePromptPart</code>&#x27;s <code>ProximityPrompt</code>; connect <code>.Triggered</code> →
+<code>ReqToggleBrake:Fire(lever)</code>; the <strong>only</strong> script-controlled property is <code>ActionText</code>,
+set to <code>BRAKE_ACTION_STOP</code> / <code>BRAKE_ACTION_RESUME</code> based on the synced <code>isBraked</code>
+(updated on each <code>TrainStateSync</code>). Stalled responses show a toast (&quot;Out of fuel&quot;).</li>
+<li class="">Reuses the Shredder toast pattern for feedback.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="starterplayerstarterplayerscriptstrainfuelguicontrollerclientluau"><code>StarterPlayer/StarterPlayerScripts/TrainFuelGuiController.client.luau</code><a href="#starterplayerstarterplayerscriptstrainfuelguicontrollerclientluau" class="hash-link" aria-label="Direct link to starterplayerstarterplayerscriptstrainfuelguicontrollerclientluau" title="Direct link to starterplayerstarterplayerscriptstrainfuelguicontrollerclientluau" translate="no">​</a></h3>
+<ul>
+<li class="">Builds a fuel bar + status label programmatically (self-contained, like the Shredder
+toast UI). Position/colors are local constants; can be restyled later.</li>
+<li class=""><strong>Per-frame prediction</strong> drives smooth drain with zero extra packets:
+<code>predicted = clamp(snapshot.fuel - snapshot.rate * (GetServerTimeNow() - snapshot.serverTime), 0, MAX_FUEL)</code>,
+read each frame from the latest snapshot.</li>
+<li class="">Smooth drain comes from prediction itself (continuous). Refuel jumps are eased with
+<strong>MotionMaster</strong> (per the CLAUDE.md client-animation rule).</li>
+<li class="">Status label reflects state: normal, <code>BRAKED</code>, <code>OUT OF FUEL</code>.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="model-expectations-authored-later-in-studio">Model expectations (authored later in Studio)<a href="#model-expectations-authored-later-in-studio" class="hash-link" aria-label="Direct link to Model expectations (authored later in Studio)" title="Direct link to Model expectations (authored later in Studio)" translate="no">​</a></h2>
+<p>Code waits on tags, so these can be built after the code lands.</p>
+<ul>
+<li class=""><strong>Engine:</strong> a <code>Model</code> tagged <code>TrainEngine</code>, with a <code>PrimaryPart</code>, containing a child
+BasePart named <code>RefuelPromptPart</code> that holds a <code>ProximityPrompt</code> (its
+<code>MaxActivationDistance</code>, <code>ActionText</code>, <code>ObjectText</code> all set in Studio).</li>
+<li class=""><strong>Brake lever:</strong> a <code>Model</code> tagged <code>TrainBrakeLever</code>, with a <code>PrimaryPart</code>, containing a
+child BasePart named <code>BrakePromptPart</code> that holds a <code>ProximityPrompt</code> (distance set in
+Studio; <code>ActionText</code> is overwritten by script).</li>
+</ul>
+<p>Part and tag names live in <code>TrainConfig</code> for easy changes.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="files-touched">Files touched<a href="#files-touched" class="hash-link" aria-label="Direct link to Files touched" title="Direct link to Files touched" translate="no">​</a></h2>
+<p><strong>New:</strong></p>
+<ul>
+<li class=""><code>ReplicatedStorage/SharedModules/Configs/TrainConfig.luau</code></li>
+<li class=""><code>ReplicatedStorage/SharedModules/TrainResultCodes.luau</code></li>
+<li class=""><code>ServerStorage/SharedModules/TrainFuelManager.luau</code></li>
+<li class=""><code>ServerScriptService/TrainFuelSystemLoader.server.luau</code></li>
+<li class=""><code>StarterPlayer/StarterPlayerScripts/TrainClient.client.luau</code></li>
+<li class=""><code>StarterPlayer/StarterPlayerScripts/TrainFuelGuiController.client.luau</code></li>
+</ul>
+<p><strong>Edited:</strong></p>
+<ul>
+<li class=""><code>ReplicatedStorage/SharedModules/Packets/init.luau</code> (3 new packets + exports)</li>
+<li class=""><code>ReplicatedStorage/SharedModules/Signals/init.luau</code> (<code>OnTrainStateChanged</code>)</li>
+<li class=""><code>Documentations/Project-Maintenance-Guide.md</code> (networking map, config map, new Train Fuel section)</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="verification">Verification<a href="#verification" class="hash-link" aria-label="Direct link to Verification" title="Direct link to Verification" translate="no">​</a></h2>
+<p>No automated tests; verification happens in Studio via live Rojo sync (no <code>rojo build</code>,
+no selene step). Manual checks:</p>
+<ul>
+<li class="">Fuel drains from 100 over ~10 min running; HUD bar predicts smoothly.</li>
+<li class="">Refuel prompt feeds smallest-tier Energy first, only up to the cap; stockpile preserved.</li>
+<li class="">Brake lever toggles Stop/Resume; junk visibly slows when braked; fuel drains slower.</li>
+<li class="">At 0 fuel: train stalls (junk slows), lever locks out, HUD shows OUT OF FUEL.</li>
+<li class="">3 min after reaching 0 (and not refueled): the placeholder GAME OVER message prints once.</li>
+<li class="">Refueling above 0 cancels the countdown and resumes running.</li>
+<li class="">Late-joining player&#x27;s HUD initializes to the current global fuel.</li>
+</ul>
+<pre tabindex="0" class="codeBlockStandalone_MEMb thin-scrollbar codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><code class="codeBlockLines_e6Vv"></code></pre></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/Game-Dev-Neohermit/Endless-Journey/edit/main/docs/superpowers/specs/2026-05-28-train-fuel-system-design.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#summary" class="table-of-contents__link toc-highlight">Summary</a></li><li><a href="#goals" class="table-of-contents__link toc-highlight">Goals</a></li><li><a href="#non-goals" class="table-of-contents__link toc-highlight">Non-goals</a></li><li><a href="#key-decisions-from-brainstorming" class="table-of-contents__link toc-highlight">Key decisions (from brainstorming)</a></li><li><a href="#architecture" class="table-of-contents__link toc-highlight">Architecture</a><ul><li><a href="#drain-model--event-driven--prediction-no-loop" class="table-of-contents__link toc-highlight">Drain model — event-driven + prediction (no loop)</a></li><li><a href="#initial-state--join" class="table-of-contents__link toc-highlight">Initial state / join</a></li></ul></li><li><a href="#config--replicatedstoragesharedmodulesconfigstrainconfigluau" class="table-of-contents__link toc-highlight">Config — <code>ReplicatedStorage/SharedModules/Configs/TrainConfig.luau</code></a></li><li><a href="#networking--add-to-packetsinitluau" class="table-of-contents__link toc-highlight">Networking — add to <code>Packets/init.luau</code></a><ul><li><a href="#result-codes--replicatedstoragesharedmodulestrainresultcodesluau" class="table-of-contents__link toc-highlight">Result codes — <code>ReplicatedStorage/SharedModules/TrainResultCodes.luau</code></a></li><li><a href="#signals--add-to-signalsinitluau" class="table-of-contents__link toc-highlight">Signals — add to <code>Signals/init.luau</code></a></li></ul></li><li><a href="#server-interaction-handlers-in-trainfuelmanager" class="table-of-contents__link toc-highlight">Server interaction handlers (in <code>TrainFuelManager</code>)</a><ul><li><a href="#reqrefueltrainonserverinvokeplayer-engine" class="table-of-contents__link toc-highlight"><code>ReqRefuelTrain.OnServerInvoke(player, engine)</code></a></li><li><a href="#reqtogglebrakeonserverinvokeplayer-lever" class="table-of-contents__link toc-highlight"><code>ReqToggleBrake.OnServerInvoke(player, lever)</code></a></li></ul></li><li><a href="#client" class="table-of-contents__link toc-highlight">Client</a><ul><li><a href="#starterplayerstarterplayerscriptstrainclientclientluau" class="table-of-contents__link toc-highlight"><code>StarterPlayer/StarterPlayerScripts/TrainClient.client.luau</code></a></li><li><a href="#starterplayerstarterplayerscriptstrainfuelguicontrollerclientluau" class="table-of-contents__link toc-highlight"><code>StarterPlayer/StarterPlayerScripts/TrainFuelGuiController.client.luau</code></a></li></ul></li><li><a href="#model-expectations-authored-later-in-studio" class="table-of-contents__link toc-highlight">Model expectations (authored later in Studio)</a></li><li><a href="#files-touched" class="table-of-contents__link toc-highlight">Files touched</a></li><li><a href="#verification" class="table-of-contents__link toc-highlight">Verification</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Built with Moonwave.</div></div></div></footer></div>
+</body>
+</html>

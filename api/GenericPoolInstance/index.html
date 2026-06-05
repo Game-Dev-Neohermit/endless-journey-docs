@@ -1,0 +1,761 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="plugin-moonwave plugin-id-moonwave" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.1">
+<title data-rh="true">GenericPoolInstance | Endless Journey</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://game-dev-neohermit.github.io/endless-journey-docs/api/GenericPoolInstance"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="GenericPoolInstance | Endless Journey"><meta data-rh="true" name="description" content="A reusable Roblox `PVInstance` (Part or Model) object pool that manages
+creation, retrieval, and recycling of instances.  Instances are stored in
+a hidden `Folder` at `math.huge` when idle, then teleported to their
+requested `CFrame` via a batched `BulkMoveTo` call on the next
+`PreRender` step.
+
+Pools can be registered in a shared registry via `MakeGlobal` so that
+multiple scripts can access the same pool by name.
+
+```lua
+local GenericPoolInstance = require(path.to.GenericPoolInstance)
+
+local pool = GenericPoolInstance.new(workspace.MyTemplate, 20, 100, 10)
+local part = pool:RetrieveObject(CFrame.new(0, 5, 0))
+-- ... use part ...
+pool:InsertObject(part)
+```"><meta data-rh="true" property="og:description" content="A reusable Roblox `PVInstance` (Part or Model) object pool that manages
+creation, retrieval, and recycling of instances.  Instances are stored in
+a hidden `Folder` at `math.huge` when idle, then teleported to their
+requested `CFrame` via a batched `BulkMoveTo` call on the next
+`PreRender` step.
+
+Pools can be registered in a shared registry via `MakeGlobal` so that
+multiple scripts can access the same pool by name.
+
+```lua
+local GenericPoolInstance = require(path.to.GenericPoolInstance)
+
+local pool = GenericPoolInstance.new(workspace.MyTemplate, 20, 100, 10)
+local part = pool:RetrieveObject(CFrame.new(0, 5, 0))
+-- ... use part ...
+pool:InsertObject(part)
+```"><link data-rh="true" rel="canonical" href="https://game-dev-neohermit.github.io/endless-journey-docs/api/GenericPoolInstance"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/api/GenericPoolInstance" hreflang="en"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/api/GenericPoolInstance" hreflang="x-default"><link rel="stylesheet" href="/endless-journey-docs/assets/css/styles.333e449a.css">
+<script src="/endless-journey-docs/assets/js/runtime~main.ebdda3ed.js" defer="defer"></script>
+<script src="/endless-journey-docs/assets/js/main.a950c257.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/endless-journey-docs/"><b class="navbar__title text--truncate">Endless Journey</b></a><a class="navbar__item navbar__link" href="/endless-journey-docs/docs/intro">Docs</a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/endless-journey-docs/api/">API</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/Game-Dev-Neohermit/Endless-Journey" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search"><span aria-label="expand searchbar" role="button" class="search-icon" tabindex="0"></span><input id="search_input_react" type="search" placeholder="Loading..." aria-label="Search" class="navbar__search-input search-bar" disabled=""></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0 docPageContainer_wNNk"><div class="docPage_Dpn1"><div class="docSidebarContainer_o_re"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/endless-journey-docs/api/Signals"><span title="Backbone" class="categoryLinkLabel_W154">Backbone</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/endless-journey-docs/api/SoundManager"><span title="Audio &amp; UI" class="categoryLinkLabel_W154">Audio &amp; UI</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/endless-journey-docs/api/PlacementSystem"><span title="Placement" class="categoryLinkLabel_W154">Placement</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/endless-journey-docs/api/SprintValidation"><span title="Movement &amp; Camera" class="categoryLinkLabel_W154">Movement &amp; Camera</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/endless-journey-docs/api/JunkController"><span title="Junk &amp; Grabhook" class="categoryLinkLabel_W154">Junk &amp; Grabhook</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/endless-journey-docs/api/JunkController"><span title="​Junk​Controller" class="linkLabel_WmDU">​Junk​Controller</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/endless-journey-docs/api/JunkService"><span title="​Junk​Service" class="linkLabel_WmDU">​Junk​Service</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/endless-journey-docs/api/SpawnHelper"><span title="​Spawn​Helper" class="linkLabel_WmDU">​Spawn​Helper</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/endless-journey-docs/api/GenericPoolInstance"><span title="​Generic​Pool​Instance" class="linkLabel_WmDU">​Generic​Pool​Instance</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/endless-journey-docs/api/GenericPoolObject"><span title="​Generic​Pool​Object" class="linkLabel_WmDU">​Generic​Pool​Object</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/endless-journey-docs/api/GrabHook"><span title="​Grab​Hook" class="linkLabel_WmDU">​Grab​Hook</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/endless-journey-docs/api/GrabHookVisuals"><span title="​Grab​Hook​Visuals" class="linkLabel_WmDU">​Grab​Hook​Visuals</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/endless-journey-docs/api/ShredderServer"><span title="Shredder" class="categoryLinkLabel_W154">Shredder</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/endless-journey-docs/api/TrainFuelManager"><span title="Train" class="categoryLinkLabel_W154">Train</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/endless-journey-docs/api/BindableCore"><span title="Utilities" class="categoryLinkLabel_W154">Utilities</span></a></div></li></ul></nav></div></div><main class="docMainContainer_HJE1"><div class="container padding-vert--lg"><div class="row"><div class="col docItemCol_MU3C"><div class="docItemContainer_Wv98"><article><div class="member_J0w1 markdown"><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_oUs_"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><header><h1 class="docTitle_mZRt" style="text-decoration:none"><span style="display:inline-block">Generic</span><span style="display:inline-block">Pool</span><span style="display:inline-block">Instance</span></h1><div class="luaClassTags_EipM"></div><div>
+<p>
+  A reusable Roblox <code>PVInstance</code> (Part or Model) object pool that manages
+  creation, retrieval, and recycling of instances. Instances are stored in
+  a hidden <code>Folder</code> at <code>math.huge</code> when idle, then teleported to their
+  requested <code>CFrame</code> via a batched <code>BulkMoveTo</code> call on the next
+  <code>PreRender</code> step.
+</p>
+<p>
+  Pools can be registered in a shared registry via <code>MakeGlobal</code> so that
+  multiple scripts can access the same pool by name.
+</p>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> GenericPoolInstance <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span>path<span class="token punctuation">.</span>to<span class="token punctuation">.</span>GenericPoolInstance<span class="token punctuation">)</span>
+
+<span class="token keyword">local</span> pool <span class="token operator">=</span> GenericPoolInstance<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span>workspace<span class="token punctuation">.</span>MyTemplate<span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span>
+<span class="token keyword">local</span> part <span class="token operator">=</span> pool<span class="token punctuation">:</span><span class="token function">RetrieveObject</span><span class="token punctuation">(</span>CFrame<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment">-- ... use part ...</span>
+pool<span class="token punctuation">:</span><span class="token function">InsertObject</span><span class="token punctuation">(</span>part<span class="token punctuation">)</span>
+</code></pre>
+</div></header><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions" translate="no">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="new"><code style="text-decoration:none">new</code><a href="#new" class="hash-link" aria-label="Direct link to new" title="Direct link to new" translate="no">​</a></h3><span class="docTag__6UZ" style="border-color:#70cc00;color:#70cc00">constructor</span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L208"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->.</code><code class="green_DgR4">new</code><code>(</code><div class="inset_uKQm"><div><code>objectTemplate<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/PVInstance" target="_blank" rel="noopener noreferrer">PVInstance?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>Template to clone. Must have <code>Archivable = true</code>. Defaults to a blank <code>Part</code>.</p>
+</span></span></div><div><code>initialSize<!-- -->: </code><code class="blue_P4bS">number?</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>Number of instances to pre-allocate. Defaults to <code>0</code>.</p>
+</span></span></div><div><code>maxSize<!-- -->: </code><code class="blue_P4bS">number?</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>Hard cap on pool size (<code>-1</code> = unlimited). Defaults to <code>-1</code>.</p>
+</span></span></div><div><code>expandSize<!-- -->: </code><code class="blue_P4bS">number?</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>How many clones to create when the pool is exhausted. Defaults to <code>50</code>.</p>
+</span></span></div><div><code>location<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Instance" target="_blank" rel="noopener noreferrer">Instance?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>Parent for the internal storage <code>Folder</code>. Defaults to <code>workspace</code>.</p>
+</span></span></div><div><code>insertFunction<!-- -->: </code><code class="purple_ieR2">(</code><code class="green_DgR4">(</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/PVInstance" target="_blank" rel="noopener noreferrer">PVInstance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code class="green_DgR4">)</code><code class="green_DgR4"> → </code><code class="green_DgR4">(</code><code class="green_DgR4">)</code><code class="purple_ieR2">)</code><code class="blue_P4bS">?</code><span class="inlineDescription_G7Er">-- <span>
+<p>Optional callback invoked each time a new clone is created.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/endless-journey-docs/api/GenericPoolInstance">GenericPoolInstance</a></code></div><div>
+<p>Creates a new <code>GenericPoolInstance</code> pool.</p>
+<p>
+  The <code>objectTemplate</code> is cloned immediately; the original is never
+  re-parented. If <code>initialSize > 0</code> the pool is pre-filled with clones
+  and the optional <code>insertFunction</code> is called on each one.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="SetMaxSize"><code style="text-decoration:none">SetMaxSize</code><a href="#SetMaxSize" class="hash-link" aria-label="Direct link to SetMaxSize" title="Direct link to SetMaxSize" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L282"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">SetMaxSize</code><code>(</code><div class="inset_uKQm"><div><code>maxSize<!-- -->: </code><code class="blue_P4bS">number?</code><span class="inlineDescription_G7Er">-- <span>
+<p>New cap. <code>-1</code> = unlimited.</p>
+</span></span></div></div><code>) →  </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/endless-journey-docs/api/GenericPoolInstance">GenericPoolInstance</a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Returns <code>self</code> for chaining.</p>
+</span></span></div><div>
+<p>
+  Sets the maximum pool size. If the pool currently holds more instances
+  than the new cap, the excess are destroyed immediately. Pass <code>-1</code> for
+  unlimited.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="SetLocation"><code style="text-decoration:none">SetLocation</code><a href="#SetLocation" class="hash-link" aria-label="Direct link to SetLocation" title="Direct link to SetLocation" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L311"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">SetLocation</code><code>(</code><div class="inset_uKQm"><div><code>location<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/Instance" target="_blank" rel="noopener noreferrer">Instance?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>New parent. Defaults to <code>workspace</code>.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/endless-journey-docs/api/GenericPoolInstance">GenericPoolInstance</a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Returns <code>self</code> for chaining.</p>
+</span></span></div><div>
+<p>
+  Moves the pool's internal storage <code>Folder</code> to a new <code>location</code> in the
+  DataModel.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="SetInsertFunction"><code style="text-decoration:none">SetInsertFunction</code><a href="#SetInsertFunction" class="hash-link" aria-label="Direct link to SetInsertFunction" title="Direct link to SetInsertFunction" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L333"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">SetInsertFunction</code><code>(</code><div class="inset_uKQm"><div><code>insertFunction<!-- -->: </code><code class="purple_ieR2">(</code><code class="green_DgR4">(</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/PVInstance" target="_blank" rel="noopener noreferrer">PVInstance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code class="green_DgR4">)</code><code class="green_DgR4"> → </code><code class="green_DgR4">(</code><code class="green_DgR4">)</code><code class="purple_ieR2">)</code><code class="blue_P4bS">?</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>New callback, or <code>nil</code> to clear.</p>
+</span></span></div><div><code>applyFunction<!-- -->: </code><code class="blue_P4bS">boolean?</code><span class="inlineDescription_G7Er">-- <span>
+<p>When <code>true</code>, applies the callback to all existing pooled instances.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/endless-journey-docs/api/GenericPoolInstance">GenericPoolInstance</a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Returns <code>self</code> for chaining.</p>
+</span></span></div><div>
+<p>
+  Replaces the pool's <code>insertFunction</code>. When <code>applyFunction</code> is <code>true</code> the
+  new callback is immediately called on every instance currently in the pool.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="MakeGlobal"><code style="text-decoration:none">MakeGlobal</code><a href="#MakeGlobal" class="hash-link" aria-label="Direct link to MakeGlobal" title="Direct link to MakeGlobal" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L359"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">MakeGlobal</code><code>(</code><div class="inset_uKQm"><div><code>globalName<!-- -->: </code><code class="blue_P4bS">string</code><span class="inlineDescription_G7Er">-- <span>
+<p>Key used to look up this pool globally.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/endless-journey-docs/api/GenericPoolInstance">GenericPoolInstance</a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Returns <code>self</code> for chaining.</p>
+</span></span></div><div>
+<p>
+  Registers the pool in the shared <code>GenericPoolInstance.globalPools</code> registry
+  under <code>globalName</code>. Any previous registration under a different name is
+  cleared first.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="MakeLocal"><code style="text-decoration:none">MakeLocal</code><a href="#MakeLocal" class="hash-link" aria-label="Direct link to MakeLocal" title="Direct link to MakeLocal" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L378"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">MakeLocal</code><code>(</code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/endless-journey-docs/api/GenericPoolInstance">GenericPoolInstance</a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Returns <code>self</code> for chaining.</p>
+</span></span></div><div>
+<p>
+  Removes the pool from the global registry. Has no effect if the pool was
+  never registered globally.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ContainsObject"><code style="text-decoration:none">ContainsObject</code><a href="#ContainsObject" class="hash-link" aria-label="Direct link to ContainsObject" title="Direct link to ContainsObject" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L394"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">ContainsObject</code><code>(</code><div class="inset_uKQm"><div><code>object<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/PVInstance" target="_blank" rel="noopener noreferrer">PVInstance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>The instance to search for.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS">boolean</code></div><div>
+<p>Returns whether <code>object</code> is currently held inside this pool.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="LoadObjects"><code style="text-decoration:none">LoadObjects</code><a href="#LoadObjects" class="hash-link" aria-label="Direct link to LoadObjects" title="Direct link to LoadObjects" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L406"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">LoadObjects</code><code>(</code><div class="inset_uKQm"><div><code>objectCount<!-- -->: </code><code class="blue_P4bS">number</code><span class="inlineDescription_G7Er">-- <span>
+<p>Number of new clones to add.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/endless-journey-docs/api/GenericPoolInstance">GenericPoolInstance</a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Returns <code>self</code> for chaining.</p>
+</span></span></div><div>
+<p>
+  Pre-fills the pool by cloning <code>objectCount</code> additional instances from the
+  template (capped by <code>maxSize</code> when set).
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="InsertObject"><code style="text-decoration:none">InsertObject</code><a href="#InsertObject" class="hash-link" aria-label="Direct link to InsertObject" title="Direct link to InsertObject" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L436"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">InsertObject</code><code>(</code><div class="inset_uKQm"><div><code>object<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/PVInstance" target="_blank" rel="noopener noreferrer">PVInstance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>The instance to recycle.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/endless-journey-docs/api/GenericPoolInstance">GenericPoolInstance</a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Returns <code>self</code> for chaining.</p>
+</span></span></div><div>
+<p>
+  Returns a single externally-owned instance back into the pool. The
+  instance is teleported to the off-screen holding position and
+  re-parented to the internal folder. No-ops if the pool is at capacity.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="InsertObjects"><code style="text-decoration:none">InsertObjects</code><a href="#InsertObjects" class="hash-link" aria-label="Direct link to InsertObjects" title="Direct link to InsertObjects" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L462"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">InsertObjects</code><code>(</code><div class="inset_uKQm"><div><code>objects<!-- -->: </code><code class="purple_ieR2">{</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/PVInstance" target="_blank" rel="noopener noreferrer">PVInstance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code class="purple_ieR2">}</code><span class="inlineDescription_G7Er">-- <span>
+<p>Array of instances to recycle.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/endless-journey-docs/api/GenericPoolInstance">GenericPoolInstance</a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Returns <code>self</code> for chaining.</p>
+</span></span></div><div>
+<p>
+  Bulk-recycles an array of externally-owned instances back into the pool.
+  Excess instances beyond <code>maxSize</code> are silently dropped.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ReturnObject"><code style="text-decoration:none">ReturnObject</code><a href="#ReturnObject" class="hash-link" aria-label="Direct link to ReturnObject" title="Direct link to ReturnObject" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L495"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">ReturnObject</code><code>(</code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/PVInstance" target="_blank" rel="noopener noreferrer">PVInstance?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>The top-of-stack instance, or <code>nil</code> if the pool is empty.</p>
+</span></span></div><div>
+<p>Peeks at the most-recently-added instance without removing it from the pool.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ReturnObjects"><code style="text-decoration:none">ReturnObjects</code><a href="#ReturnObjects" class="hash-link" aria-label="Direct link to ReturnObjects" title="Direct link to ReturnObjects" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L507"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">ReturnObjects</code><code>(</code><div class="inset_uKQm"><div><code>objectCount<!-- -->: </code><code class="blue_P4bS">number</code><span class="inlineDescription_G7Er">-- <span>
+<p>Maximum number of instances to peek at.</p>
+</span></span></div></div><code>) → </code><code class="purple_ieR2">{</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/PVInstance" target="_blank" rel="noopener noreferrer">PVInstance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code class="purple_ieR2">}</code><code class="blue_P4bS">?</code><span class="inlineDescription_G7Er">-- <span>
+<p>Array of instances (newest-first), or <code>nil</code>.</p>
+</span></span></div><div>
+<p>
+  Returns up to <code>objectCount</code> instances from the top of the pool stack
+  <strong>without</strong> removing them. Returns <code>nil</code> if the pool is empty.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ReturnCustomObject"><code style="text-decoration:none">ReturnCustomObject</code><a href="#ReturnCustomObject" class="hash-link" aria-label="Direct link to ReturnCustomObject" title="Direct link to ReturnCustomObject" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L530"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">ReturnCustomObject</code><code>(</code><div class="inset_uKQm"><div><code>predicate<!-- -->: </code><code class="purple_ieR2">(</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/PVInstance" target="_blank" rel="noopener noreferrer">PVInstance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="blue_P4bS">boolean</code><span class="inlineDescription_G7Er">-- <span>
+<p>Filter function.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/PVInstance" target="_blank" rel="noopener noreferrer">PVInstance?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Matching instance, or <code>nil</code>.</p>
+</span></span></div><div>
+<p>
+  Peeks at the most-recently-added instance that satisfies <code>predicate</code>
+  without removing it from the pool.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ReturnCustomObjects"><code style="text-decoration:none">ReturnCustomObjects</code><a href="#ReturnCustomObjects" class="hash-link" aria-label="Direct link to ReturnCustomObjects" title="Direct link to ReturnCustomObjects" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L552"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">ReturnCustomObjects</code><code>(</code><div class="inset_uKQm"><div><code>predicate<!-- -->: </code><code class="purple_ieR2">(</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/PVInstance" target="_blank" rel="noopener noreferrer">PVInstance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="blue_P4bS">boolean</code><span class="inlineDescription_G7Er">-- <span>
+<p>Filter function.</p>
+</span></span></div></div><code>) → </code><code class="purple_ieR2">{</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/PVInstance" target="_blank" rel="noopener noreferrer">PVInstance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code class="purple_ieR2">}</code><code class="blue_P4bS">?</code><span class="inlineDescription_G7Er">-- <span>
+<p>Matching instances, or <code>nil</code>.</p>
+</span></span></div><div>
+<p>
+  Peeks at all pooled instances that satisfy <code>predicate</code> without removing
+  them. Returns <code>nil</code> if none match.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="RemoveObject"><code style="text-decoration:none">RemoveObject</code><a href="#RemoveObject" class="hash-link" aria-label="Direct link to RemoveObject" title="Direct link to RemoveObject" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L575"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">RemoveObject</code><code>(</code><div class="inset_uKQm"><div><code>object<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/PVInstance" target="_blank" rel="noopener noreferrer">PVInstance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>The instance to remove and destroy.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/endless-journey-docs/api/GenericPoolInstance">GenericPoolInstance</a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Returns <code>self</code> for chaining.</p>
+</span></span></div><div>
+<p>Permanently removes <code>object</code> from the pool and destroys it.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="RetrieveObject"><code style="text-decoration:none">RetrieveObject</code><a href="#RetrieveObject" class="hash-link" aria-label="Direct link to RetrieveObject" title="Direct link to RetrieveObject" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L596"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">RetrieveObject</code><code>(</code><div class="inset_uKQm"><div><code>cframe<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/CFrame" target="_blank" rel="noopener noreferrer">CFrame?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Optional target position for the retrieved instance.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/PVInstance" target="_blank" rel="noopener noreferrer">PVInstance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>The retrieved instance (never <code>nil</code>; expands automatically).</p>
+</span></span></div><div>
+<p>
+  Removes and returns one instance from the pool. If the pool is empty it
+  auto-expands by <code>expandSize</code> clones first. When <code>cframe</code> is provided the
+  instance is scheduled for a batched <code>BulkMoveTo</code> on the next <code>PreRender</code>.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="RetrieveObjects"><code style="text-decoration:none">RetrieveObjects</code><a href="#RetrieveObjects" class="hash-link" aria-label="Direct link to RetrieveObjects" title="Direct link to RetrieveObjects" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L618"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">RetrieveObjects</code><code>(</code><div class="inset_uKQm"><div><code>objectCount<!-- -->: </code><code class="blue_P4bS">number</code><span class="inlineDescription_G7Er">-- <span>
+<p>Number of instances to retrieve.</p>
+</span></span></div></div><code>) → </code><code class="purple_ieR2">{</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/PVInstance" target="_blank" rel="noopener noreferrer">PVInstance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code class="purple_ieR2">}</code><span class="inlineDescription_G7Er">-- <span>
+<p>Array of retrieved instances.</p>
+</span></span></div><div>
+<p>
+  Removes and returns <code>objectCount</code> instances from the pool. Auto-expands
+  if there are not enough idle instances.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="RetrieveCustomObject"><code style="text-decoration:none">RetrieveCustomObject</code><a href="#RetrieveCustomObject" class="hash-link" aria-label="Direct link to RetrieveCustomObject" title="Direct link to RetrieveCustomObject" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L659"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">RetrieveCustomObject</code><code>(</code><div class="inset_uKQm"><div><code>predicate<!-- -->: </code><code class="purple_ieR2">(</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/PVInstance" target="_blank" rel="noopener noreferrer">PVInstance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="blue_P4bS">boolean</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>Filter function.</p>
+</span></span></div><div><code>cframe<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/datatype/CFrame" target="_blank" rel="noopener noreferrer">CFrame?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Optional target position.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/PVInstance" target="_blank" rel="noopener noreferrer">PVInstance?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><span class="inlineDescription_G7Er">-- <span>
+<p>The matching instance, or <code>nil</code>.</p>
+</span></span></div><div>
+<p>
+  Removes and returns the first pooled instance that satisfies <code>predicate</code>,
+  searching from newest to oldest. If <code>cframe</code> is provided the instance is
+  scheduled for a <code>BulkMoveTo</code>. Returns <code>nil</code> if nothing matches.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="RetrieveCustomObjects"><code style="text-decoration:none">RetrieveCustomObjects</code><a href="#RetrieveCustomObjects" class="hash-link" aria-label="Direct link to RetrieveCustomObjects" title="Direct link to RetrieveCustomObjects" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L685"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">RetrieveCustomObjects</code><code>(</code><div class="inset_uKQm"><div><code>predicate<!-- -->: </code><code class="purple_ieR2">(</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/PVInstance" target="_blank" rel="noopener noreferrer">PVInstance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="blue_P4bS">boolean</code><span class="inlineDescription_G7Er">-- <span>
+<p>Filter function.</p>
+</span></span></div></div><code>) → </code><code class="purple_ieR2">{</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/PVInstance" target="_blank" rel="noopener noreferrer">PVInstance<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code class="purple_ieR2">}</code><code class="blue_P4bS">?</code><span class="inlineDescription_G7Er">-- <span>
+<p>Matching instances, or <code>nil</code>.</p>
+</span></span></div><div>
+<p>
+  Removes and returns all pooled instances that satisfy <code>predicate</code>.
+  Returns <code>nil</code> if nothing matches.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Clone"><code style="text-decoration:none">Clone</code><a href="#Clone" class="hash-link" aria-label="Direct link to Clone" title="Direct link to Clone" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L708"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">Clone</code><code>(</code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/endless-journey-docs/api/GenericPoolInstance">GenericPoolInstance</a></code><span class="inlineDescription_G7Er">-- <span>
+<p>The cloned pool.</p>
+</span></span></div><div>
+<p>
+  Creates a new <code>GenericPoolInstance</code> pool with the same configuration and
+  a deep copy of all currently pooled instances.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Clear"><code style="text-decoration:none">Clear</code><a href="#Clear" class="hash-link" aria-label="Direct link to Clear" title="Direct link to Clear" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L731"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">Clear</code><code>(</code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/endless-journey-docs/api/GenericPoolInstance">GenericPoolInstance</a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Returns <code>self</code> for chaining.</p>
+</span></span></div><div>
+<p>
+  Destroys all instances currently held in the pool and empties the pool
+  array. The pool itself remains usable; it will auto-expand on the next
+  <code>RetrieveObject</code> call.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Destroy"><code style="text-decoration:none">Destroy</code><a href="#Destroy" class="hash-link" aria-label="Direct link to Destroy" title="Direct link to Destroy" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Game-Dev-Neohermit/Endless-Journey/blob/main/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau#L747"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>GenericPoolInstance<!-- -->:</code><code class="green_DgR4">Destroy</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
+<p>
+  Destroys all pooled instances, removes the internal storage folder, and
+  de-registers the pool from the global registry. The pool table is wiped
+  and the metatable cleared; the reference should be discarded afterwards.
+</p>
+</div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
+    &quot;functions&quot;: [
+        {
+            &quot;name&quot;: &quot;new&quot;,
+            &quot;desc&quot;: &quot;Creates a new `GenericPoolInstance` pool.\n\nThe `objectTemplate` is cloned immediately; the original is never\nre-parented.  If `initialSize &gt; 0` the pool is pre-filled with clones\nand the optional `insertFunction` is called on each one.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;objectTemplate&quot;,
+                    &quot;desc&quot;: &quot;Template to clone. Must have `Archivable = true`. Defaults to a blank `Part`.&quot;,
+                    &quot;lua_type&quot;: &quot;PVInstance?&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;initialSize&quot;,
+                    &quot;desc&quot;: &quot;Number of instances to pre-allocate. Defaults to `0`.&quot;,
+                    &quot;lua_type&quot;: &quot;number?&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;maxSize&quot;,
+                    &quot;desc&quot;: &quot;Hard cap on pool size (`-1` = unlimited). Defaults to `-1`.&quot;,
+                    &quot;lua_type&quot;: &quot;number?&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;expandSize&quot;,
+                    &quot;desc&quot;: &quot;How many clones to create when the pool is exhausted. Defaults to `50`.&quot;,
+                    &quot;lua_type&quot;: &quot;number?&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;location&quot;,
+                    &quot;desc&quot;: &quot;Parent for the internal storage `Folder`. Defaults to `workspace`.&quot;,
+                    &quot;lua_type&quot;: &quot;Instance?&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;insertFunction&quot;,
+                    &quot;desc&quot;: &quot;Optional callback invoked each time a new clone is created.&quot;,
+                    &quot;lua_type&quot;: &quot;((PVInstance) -&gt; ())?&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;GenericPoolInstance&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;tags&quot;: [
+                &quot;constructor&quot;
+            ],
+            &quot;source&quot;: {
+                &quot;line&quot;: 208,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;SetMaxSize&quot;,
+            &quot;desc&quot;: &quot;Sets the maximum pool size.  If the pool currently holds more instances\nthan the new cap, the excess are destroyed immediately.  Pass `-1` for\nunlimited.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;maxSize&quot;,
+                    &quot;desc&quot;: &quot;New cap. `-1` = unlimited.&quot;,
+                    &quot;lua_type&quot;: &quot;number?&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Returns `self` for chaining.&quot;,
+                    &quot;lua_type&quot;: &quot;GenericPoolInstance&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 282,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;SetLocation&quot;,
+            &quot;desc&quot;: &quot;Moves the pool&#x27;s internal storage `Folder` to a new `location` in the\nDataModel.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;location&quot;,
+                    &quot;desc&quot;: &quot;New parent. Defaults to `workspace`.&quot;,
+                    &quot;lua_type&quot;: &quot;Instance?&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Returns `self` for chaining.&quot;,
+                    &quot;lua_type&quot;: &quot;GenericPoolInstance&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 311,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;SetInsertFunction&quot;,
+            &quot;desc&quot;: &quot;Replaces the pool&#x27;s `insertFunction`.  When `applyFunction` is `true` the\nnew callback is immediately called on every instance currently in the pool.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;insertFunction&quot;,
+                    &quot;desc&quot;: &quot;New callback, or `nil` to clear.&quot;,
+                    &quot;lua_type&quot;: &quot;((PVInstance) -&gt; ())?&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;applyFunction&quot;,
+                    &quot;desc&quot;: &quot;When `true`, applies the callback to all existing pooled instances.&quot;,
+                    &quot;lua_type&quot;: &quot;boolean?&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Returns `self` for chaining.&quot;,
+                    &quot;lua_type&quot;: &quot;GenericPoolInstance&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 333,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;MakeGlobal&quot;,
+            &quot;desc&quot;: &quot;Registers the pool in the shared `GenericPoolInstance.globalPools` registry\nunder `globalName`.  Any previous registration under a different name is\ncleared first.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;globalName&quot;,
+                    &quot;desc&quot;: &quot;Key used to look up this pool globally.&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Returns `self` for chaining.&quot;,
+                    &quot;lua_type&quot;: &quot;GenericPoolInstance&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 359,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;MakeLocal&quot;,
+            &quot;desc&quot;: &quot;Removes the pool from the global registry.  Has no effect if the pool was\nnever registered globally.&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Returns `self` for chaining.&quot;,
+                    &quot;lua_type&quot;: &quot;GenericPoolInstance&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 378,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;ContainsObject&quot;,
+            &quot;desc&quot;: &quot;Returns whether `object` is currently held inside this pool.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;object&quot;,
+                    &quot;desc&quot;: &quot;The instance to search for.&quot;,
+                    &quot;lua_type&quot;: &quot;PVInstance&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;boolean&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 394,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;LoadObjects&quot;,
+            &quot;desc&quot;: &quot;Pre-fills the pool by cloning `objectCount` additional instances from the\ntemplate (capped by `maxSize` when set).&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;objectCount&quot;,
+                    &quot;desc&quot;: &quot;Number of new clones to add.&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Returns `self` for chaining.&quot;,
+                    &quot;lua_type&quot;: &quot;GenericPoolInstance&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 406,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;InsertObject&quot;,
+            &quot;desc&quot;: &quot;Returns a single externally-owned instance back into the pool.  The\ninstance is teleported to the off-screen holding position and\nre-parented to the internal folder.  No-ops if the pool is at capacity.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;object&quot;,
+                    &quot;desc&quot;: &quot;The instance to recycle.&quot;,
+                    &quot;lua_type&quot;: &quot;PVInstance&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Returns `self` for chaining.&quot;,
+                    &quot;lua_type&quot;: &quot;GenericPoolInstance&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 436,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;InsertObjects&quot;,
+            &quot;desc&quot;: &quot;Bulk-recycles an array of externally-owned instances back into the pool.\nExcess instances beyond `maxSize` are silently dropped.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;objects&quot;,
+                    &quot;desc&quot;: &quot;Array of instances to recycle.&quot;,
+                    &quot;lua_type&quot;: &quot;{PVInstance}&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Returns `self` for chaining.&quot;,
+                    &quot;lua_type&quot;: &quot;GenericPoolInstance&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 462,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;ReturnObject&quot;,
+            &quot;desc&quot;: &quot;Peeks at the most-recently-added instance without removing it from the pool.&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;The top-of-stack instance, or `nil` if the pool is empty.&quot;,
+                    &quot;lua_type&quot;: &quot;PVInstance?&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 495,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;ReturnObjects&quot;,
+            &quot;desc&quot;: &quot;Returns up to `objectCount` instances from the top of the pool stack\n**without** removing them.  Returns `nil` if the pool is empty.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;objectCount&quot;,
+                    &quot;desc&quot;: &quot;Maximum number of instances to peek at.&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Array of instances (newest-first), or `nil`.&quot;,
+                    &quot;lua_type&quot;: &quot;{PVInstance}?&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 507,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;ReturnCustomObject&quot;,
+            &quot;desc&quot;: &quot;Peeks at the most-recently-added instance that satisfies `predicate`\nwithout removing it from the pool.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;predicate&quot;,
+                    &quot;desc&quot;: &quot;Filter function.&quot;,
+                    &quot;lua_type&quot;: &quot;(PVInstance) -&gt; boolean&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Matching instance, or `nil`.&quot;,
+                    &quot;lua_type&quot;: &quot;PVInstance?&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 530,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;ReturnCustomObjects&quot;,
+            &quot;desc&quot;: &quot;Peeks at all pooled instances that satisfy `predicate` without removing\nthem.  Returns `nil` if none match.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;predicate&quot;,
+                    &quot;desc&quot;: &quot;Filter function.&quot;,
+                    &quot;lua_type&quot;: &quot;(PVInstance) -&gt; boolean&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Matching instances, or `nil`.&quot;,
+                    &quot;lua_type&quot;: &quot;{PVInstance}?&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 552,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;RemoveObject&quot;,
+            &quot;desc&quot;: &quot;Permanently removes `object` from the pool and destroys it.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;object&quot;,
+                    &quot;desc&quot;: &quot;The instance to remove and destroy.&quot;,
+                    &quot;lua_type&quot;: &quot;PVInstance&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Returns `self` for chaining.&quot;,
+                    &quot;lua_type&quot;: &quot;GenericPoolInstance&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 575,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;RetrieveObject&quot;,
+            &quot;desc&quot;: &quot;Removes and returns one instance from the pool.  If the pool is empty it\nauto-expands by `expandSize` clones first.  When `cframe` is provided the\ninstance is scheduled for a batched `BulkMoveTo` on the next `PreRender`.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;cframe&quot;,
+                    &quot;desc&quot;: &quot;Optional target position for the retrieved instance.&quot;,
+                    &quot;lua_type&quot;: &quot;CFrame?&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;The retrieved instance (never `nil`; expands automatically).&quot;,
+                    &quot;lua_type&quot;: &quot;PVInstance&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 596,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;RetrieveObjects&quot;,
+            &quot;desc&quot;: &quot;Removes and returns `objectCount` instances from the pool.  Auto-expands\nif there are not enough idle instances.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;objectCount&quot;,
+                    &quot;desc&quot;: &quot;Number of instances to retrieve.&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Array of retrieved instances.&quot;,
+                    &quot;lua_type&quot;: &quot;{PVInstance}&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 618,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;RetrieveCustomObject&quot;,
+            &quot;desc&quot;: &quot;Removes and returns the first pooled instance that satisfies `predicate`,\nsearching from newest to oldest.  If `cframe` is provided the instance is\nscheduled for a `BulkMoveTo`.  Returns `nil` if nothing matches.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;predicate&quot;,
+                    &quot;desc&quot;: &quot;Filter function.&quot;,
+                    &quot;lua_type&quot;: &quot;(PVInstance) -&gt; boolean&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;cframe&quot;,
+                    &quot;desc&quot;: &quot;Optional target position.&quot;,
+                    &quot;lua_type&quot;: &quot;CFrame?&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;The matching instance, or `nil`.&quot;,
+                    &quot;lua_type&quot;: &quot;PVInstance?&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 659,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;RetrieveCustomObjects&quot;,
+            &quot;desc&quot;: &quot;Removes and returns all pooled instances that satisfy `predicate`.\nReturns `nil` if nothing matches.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;predicate&quot;,
+                    &quot;desc&quot;: &quot;Filter function.&quot;,
+                    &quot;lua_type&quot;: &quot;(PVInstance) -&gt; boolean&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Matching instances, or `nil`.&quot;,
+                    &quot;lua_type&quot;: &quot;{PVInstance}?&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 685,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Clone&quot;,
+            &quot;desc&quot;: &quot;Creates a new `GenericPoolInstance` pool with the same configuration and\na deep copy of all currently pooled instances.&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;The cloned pool.&quot;,
+                    &quot;lua_type&quot;: &quot;GenericPoolInstance&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 708,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Clear&quot;,
+            &quot;desc&quot;: &quot;Destroys all instances currently held in the pool and empties the pool\narray.  The pool itself remains usable; it will auto-expand on the next\n`RetrieveObject` call.&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Returns `self` for chaining.&quot;,
+                    &quot;lua_type&quot;: &quot;GenericPoolInstance&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 731,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Destroy&quot;,
+            &quot;desc&quot;: &quot;Destroys all pooled instances, removes the internal storage folder, and\nde-registers the pool from the global registry.  The pool table is wiped\nand the metatable cleared; the reference should be discarded afterwards.&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 747,
+                &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+            }
+        }
+    ],
+    &quot;properties&quot;: [],
+    &quot;types&quot;: [],
+    &quot;name&quot;: &quot;GenericPoolInstance&quot;,
+    &quot;desc&quot;: &quot;A reusable Roblox `PVInstance` (Part or Model) object pool that manages\ncreation, retrieval, and recycling of instances.  Instances are stored in\na hidden `Folder` at `math.huge` when idle, then teleported to their\nrequested `CFrame` via a batched `BulkMoveTo` call on the next\n`PreRender` step.\n\nPools can be registered in a shared registry via `MakeGlobal` so that\nmultiple scripts can access the same pool by name.\n\n```lua\nlocal GenericPoolInstance = require(path.to.GenericPoolInstance)\n\nlocal pool = GenericPoolInstance.new(workspace.MyTemplate, 20, 100, 10)\nlocal part = pool:RetrieveObject(CFrame.new(0, 5, 0))\n-- ... use part ...\npool:InsertObject(part)\n```&quot;,
+    &quot;source&quot;: {
+        &quot;line&quot;: 25,
+        &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau&quot;
+    }
+}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#Clear" class="table-of-contents__link toc-highlight">:Clear</a></li><li><a href="#Clone" class="table-of-contents__link toc-highlight">:Clone</a></li><li><a href="#ContainsObject" class="table-of-contents__link toc-highlight">:ContainsObject</a></li><li><a href="#Destroy" class="table-of-contents__link toc-highlight">:Destroy</a></li><li><a href="#InsertObject" class="table-of-contents__link toc-highlight">:InsertObject</a></li><li><a href="#InsertObjects" class="table-of-contents__link toc-highlight">:InsertObjects</a></li><li><a href="#LoadObjects" class="table-of-contents__link toc-highlight">:LoadObjects</a></li><li><a href="#MakeGlobal" class="table-of-contents__link toc-highlight">:MakeGlobal</a></li><li><a href="#MakeLocal" class="table-of-contents__link toc-highlight">:MakeLocal</a></li><li><a href="#RemoveObject" class="table-of-contents__link toc-highlight">:RemoveObject</a></li><li><a href="#RetrieveCustomObject" class="table-of-contents__link toc-highlight">:RetrieveCustomObject</a></li><li><a href="#RetrieveCustomObjects" class="table-of-contents__link toc-highlight">:RetrieveCustomObjects</a></li><li><a href="#RetrieveObject" class="table-of-contents__link toc-highlight">:RetrieveObject</a></li><li><a href="#RetrieveObjects" class="table-of-contents__link toc-highlight">:RetrieveObjects</a></li><li><a href="#ReturnCustomObject" class="table-of-contents__link toc-highlight">:ReturnCustomObject</a></li><li><a href="#ReturnCustomObjects" class="table-of-contents__link toc-highlight">:ReturnCustomObjects</a></li><li><a href="#ReturnObject" class="table-of-contents__link toc-highlight">:ReturnObject</a></li><li><a href="#ReturnObjects" class="table-of-contents__link toc-highlight">:ReturnObjects</a></li><li><a href="#SetInsertFunction" class="table-of-contents__link toc-highlight">:SetInsertFunction</a></li><li><a href="#SetLocation" class="table-of-contents__link toc-highlight">:SetLocation</a></li><li><a href="#SetMaxSize" class="table-of-contents__link toc-highlight">:SetMaxSize</a></li><li><a href="#new" class="table-of-contents__link toc-highlight">.new</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Built with Moonwave.</div></div></div></footer></div>
+</body>
+</html>
