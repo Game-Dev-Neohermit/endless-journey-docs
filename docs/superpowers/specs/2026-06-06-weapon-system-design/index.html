@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-superpowers/specs/2026-06-06-weapon-system-design" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.1">
+<title data-rh="true">Weapon System — Design Spec | Endless Journey</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-06-weapon-system-design"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Weapon System — Design Spec | Endless Journey"><meta data-rh="true" name="description" content="Date: 2026-06-06"><meta data-rh="true" property="og:description" content="Date: 2026-06-06"><link data-rh="true" rel="canonical" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-06-weapon-system-design"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-06-weapon-system-design" hreflang="en"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-06-weapon-system-design" hreflang="x-default"><link rel="stylesheet" href="/endless-journey-docs/assets/css/styles.68ec3e37.css">
+<script src="/endless-journey-docs/assets/js/runtime~main.efa4b066.js" defer="defer"></script>
+<script src="/endless-journey-docs/assets/js/main.e41d1d04.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/endless-journey-docs/"><b class="navbar__title text--truncate">Endless Journey</b></a><a class="navbar__item navbar__link" href="/endless-journey-docs/docs/intro">Docs</a><a class="navbar__item navbar__link" href="/endless-journey-docs/api/">API</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/Game-Dev-Neohermit/Endless-Journey" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search"><span aria-label="expand searchbar" role="button" class="search-icon" tabindex="0"></span><input id="search_input_react" type="search" placeholder="Loading..." aria-label="Search" class="navbar__search-input search-bar" disabled=""></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Weapon System — Design Spec</h1></header>
+<p><strong>Date:</strong> 2026-06-06
+<strong>Status:</strong> Approved design, pending implementation plan
+<strong>Scope:</strong> v1 = full weapon system (melee + guns + rocket + grenade + C4 + ammo/reload + PvE damage contract)</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-purpose--scope">1. Purpose &amp; Scope<a href="#1-purpose--scope" class="hash-link" aria-label="Direct link to 1. Purpose &amp; Scope" title="Direct link to 1. Purpose &amp; Scope" translate="no">​</a></h2>
+<p>Add a combat weapon system to <em>Endless Journey</em> following the project&#x27;s
+<strong>client-predicts / server-authoritative</strong> pattern with a shared validator.</p>
+<p>In scope for v1:</p>
+<ul>
+<li class=""><strong>Melee</strong> weapons — single swing, 1 combo (no chains).</li>
+<li class=""><strong>Guns</strong> — pistol, SMG, AR, SR. All <strong>hitscan</strong> (instant server raycast).</li>
+<li class=""><strong>Rocket launcher</strong> — <strong>FastCast2 projectile</strong> with travel time + AOE.</li>
+<li class=""><strong>Grenade</strong> — thrown <strong>FastCast2 spherecast</strong> arc (bounces, fused) + AOE.</li>
+<li class=""><strong>C4</strong> — placed prop, remote detonate + AOE.</li>
+<li class=""><strong>Ammo/reload</strong> for guns — magazine + reserve + timed reload, server-authoritative.</li>
+<li class=""><strong>PvE damage</strong> — players damage tagged NPC Humanoids (and players, via existing HealthManager).</li>
+</ul>
+<p>Explicitly <strong>out of scope</strong> (the user builds these):</p>
+<ul>
+<li class="">All HUD/GUI. This spec defines a <strong>HUD Integration Contract</strong> (§11) but builds no UI.</li>
+<li class="">Scopes / aim-down-sights. Weapons have no zoom/ADS state.</li>
+<li class="">Enemy AI / NPC spawning. The spec defines the <strong>damageable contract</strong> only; enemy
+models and behavior are supplied separately.</li>
+<li class="">Automated tests (project has none; verification is manual in Studio — see §13).</li>
+</ul>
+<p>Decisions locked during brainstorming:</p>
+<ul>
+<li class=""><strong>Targets:</strong> PvE — players damage NPC Humanoids; HealthManager stays player-only and is
+wrapped by a damage router.</li>
+<li class=""><strong>Delivery:</strong> Roblox Tools equipped from the Backpack (like GrabHook).</li>
+<li class=""><strong>Ammo:</strong> full magazine + reserve + reload.</li>
+<li class=""><strong>Fire modes:</strong> all guns hitscan; only the rocket launcher is a FastCast2 projectile.</li>
+<li class=""><strong>Architecture:</strong> Approach B — per-category handlers over a shared base + a data-driven
+<code>WeaponConfig</code> registry + a shared validator.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-existing-code-this-builds-on">2. Existing Code This Builds On<a href="#2-existing-code-this-builds-on" class="hash-link" aria-label="Direct link to 2. Existing Code This Builds On" title="Direct link to 2. Existing Code This Builds On" translate="no">​</a></h2>
+<ul>
+<li class=""><a class="" href="/endless-journey-docs/src/ServerStorage/SharedModules/HealthManager.luau">HealthManager</a> — already
+defines <code>AttackType = &quot;Melee&quot; | &quot;Bullet&quot; | &quot;AOE&quot;</code>, <code>AOEVariant = &quot;Gas&quot; | &quot;Explosion&quot;</code>,
+and <code>ApplyDamage(target, amount, attackType, source, aoeVariant)</code>. This is the damage sink
+for <strong>players</strong>. It is keyed by <code>Player</code> and does not handle NPC Humanoids.</li>
+<li class=""><a class="" href="/endless-journey-docs/src/ReplicatedStorage/SharedModules/Packets/init.luau">Packets</a> — all new
+client↔server traffic registers here. Weapon identity is inferred server-side from the
+equipped Tool (pattern: <code>RequestDrop</code>), keeping fire packets minimal.</li>
+<li class=""><a class="" href="/endless-journey-docs/src/ReplicatedStorage/SharedModules/FastCast2/init.luau">FastCast2</a> — projectile
+engine (Eti/EgoMoose fork by Mawin CK). Serial mode <code>FastCast2.new()</code>, <code>newBehavior()</code>,
+<code>RaycastFire</code>/<code>BlockcastFire</code>/<code>SpherecastFire</code>, events <code>Hit</code>/<code>LengthChanged</code>/<code>CastFire</code>/
+<code>CastTerminating</code>/<code>CanPierce</code>/<code>Pierced</code>, and ObjectCache pooling for cosmetic bullets.</li>
+<li class="">Shared-validator precedent: <a class="" href="/endless-journey-docs/src/ReplicatedStorage/SharedModules/PlacementSystem.luau">PlacementSystem</a>,
+<a class="" href="/endless-journey-docs/src/ReplicatedStorage/SharedModules/SprintValidation.luau">SprintValidation</a>,
+<a class="" href="/endless-journey-docs/src/ReplicatedStorage/SharedModules/ShredderMath.luau">ShredderMath</a>.</li>
+<li class="">Anti-exploit precedent: <a class="" href="/endless-journey-docs/src/ServerScriptService/PlacementServer.server.luau">PlacementServer</a>
+(distance/raycast/cooldown thresholds treated as sensitive).</li>
+<li class="">Cross-cutting: <a class="" href="/endless-journey-docs/Packages/Janitor">Janitor</a> (every lifecycle scope),
+<a class="" href="/endless-journey-docs/src/ReplicatedStorage/SharedModules/SoundManager/init.luau">SoundManager</a>
+(all audio), <a class="" href="/endless-journey-docs/src/ReplicatedStorage/SharedModules/MotionMaster.luau">MotionMaster</a>
+(all client animation), <a class="" href="/endless-journey-docs/src/ReplicatedStorage/SharedModules/Signals/init.luau">Signals</a>
+(in-process event bus), <a class="" href="/endless-journey-docs/src/ReplicatedStorage/SharedModules/GenericPoolInstance.luau">GenericPoolInstance</a>
+(instance pooling for effects).</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-architecture-approach-b">3. Architecture (Approach B)<a href="#3-architecture-approach-b" class="hash-link" aria-label="Direct link to 3. Architecture (Approach B)" title="Direct link to 3. Architecture (Approach B)" translate="no">​</a></h2>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#bfc7d5"><span class="token plain">Shared (ReplicatedStorage/SharedModules)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">├── Configs/WeaponConfig.luau     -- registry: every weapon keyed by name + stats</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">├── WeaponValidation.luau         -- shared math both sides run (fire-rate, ammo, hitbox, ballistics, AOE falloff)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">├── WeaponTypes.luau              -- shared exported types (Category, FireMode, configs, fire payloads)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">├── Packets/init.luau             -- new weapon packets (additions)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">└── Configs/SoundConfig.luau      -- new weapon SFX entries (additions)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">Client (StarterPlayer/StarterPlayerScripts)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">├── WeaponController.client.luau  -- bootstrap: watches equipped Tool, reads config, input, predicts, dispatches</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">└── WeaponHandlers/               -- ModuleScripts required by the controller</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">    ├── MeleeHandler.luau</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">    ├── GunHandler.luau           -- hitscan + rocket (FastCast2 client caster)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">    ├── ThrowableHandler.luau     -- grenade (FastCast2 client caster)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">    └── PlacedHandler.luau        -- C4</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">Server</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">├── ServerScriptService/WeaponServer.server.luau   -- receives packets, validates per category, applies damage</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">├── ServerStorage/SharedModules/CombatService.luau -- damage router: Player → HealthManager, NPC → Humanoid</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">└── ServerStorage/SharedModules/WeaponState.luau   -- per-player authoritative ammo + cooldown state</span><br></div></code></pre></div></div>
+<p><strong>Dispatch:</strong> <code>WeaponController</code> and <code>WeaponServer</code> own input/lifecycle and dispatch to a
+handler chosen by <code>WeaponConfig[name].Category</code>. FastCast2 is referenced <strong>only</strong> inside the
+gun (rocket) and throwable (grenade) handlers. Each handler is independently understandable:
+given a config entry and a fire intent, it produces visuals (client) or a validated damage
+event (server).</p>
+<p><strong>Caster ownership:</strong> one serial FastCast2 caster per <strong>projectile weapon type</strong> (one rocket
+caster, one grenade caster), created once and reused for every shot — never one caster per
+shot (per FastCast2&#x27;s own guidance). Client casters use a cosmetic template + ObjectCache;
+server casters use no cosmetic part (validation/AOE only).</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-weapon-categories">4. Weapon Categories<a href="#4-weapon-categories" class="hash-link" aria-label="Direct link to 4. Weapon Categories" title="Direct link to 4. Weapon Categories" translate="no">​</a></h2>
+<table><thead><tr><th>Category</th><th>Weapons</th><th>Client (predict)</th><th>Server (authoritative)</th><th>Damage sink</th></tr></thead><tbody><tr><td>Melee</td><td>swords/bats (1 combo)</td><td>swing anim + predicted hit FX</td><td>re-run hitbox query from server CFrame</td><td><code>Melee</code></td></tr><tr><td>Gun (hitscan)</td><td>pistol, SMG, AR, SR</td><td>muzzle flash + tracer to client raycast pt</td><td>own <code>workspace:Raycast</code>, server hit wins</td><td><code>Bullet</code></td></tr><tr><td>Gun (projectile)</td><td>rocket launcher</td><td>FastCast2 cosmetic rocket</td><td>own FastCast2 cast; AOE on <code>Hit</code></td><td><code>AOE</code>/<code>Explosion</code></td></tr><tr><td>Throwable</td><td>grenade</td><td>FastCast2 spherecast arc (bounces)</td><td>simulate arc; AOE on fuse expiry</td><td><code>AOE</code>/<code>Explosion</code></td></tr><tr><td>Placed</td><td>C4</td><td>place preview + placed prop</td><td>validate place + detonate; AOE</td><td><code>AOE</code>/<code>Explosion</code></td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="5-weaponconfig-schema">5. WeaponConfig Schema<a href="#5-weaponconfig-schema" class="hash-link" aria-label="Direct link to 5. WeaponConfig Schema" title="Direct link to 5. WeaponConfig Schema" translate="no">​</a></h2>
+<p><code>Configs/WeaponConfig.luau</code> returns <code>{ [weaponName: string]: WeaponConfigEntry }</code>. Types live
+in <code>WeaponTypes.luau</code>. Tuning lives here, never in code (project convention).</p>
+<p><strong>Common fields (all categories):</strong></p>
+<ul>
+<li class=""><code>Category: &quot;Melee&quot; | &quot;Gun&quot; | &quot;Throwable&quot; | &quot;Placed&quot;</code></li>
+<li class=""><code>DisplayName: string</code></li>
+<li class=""><code>ToolName: string</code> — the Tool instance name this config binds to</li>
+<li class=""><code>Damage: number</code> — base direct-hit damage</li>
+<li class=""><code>DamageType: &quot;Melee&quot; | &quot;Bullet&quot; | &quot;AOE&quot;</code></li>
+<li class=""><code>HeadshotMultiplier: number?</code> — applied when the hit part is named <code>Head</code> (default <code>1</code>, i.e. off)</li>
+</ul>
+<p><strong>Melee:</strong></p>
+<ul>
+<li class=""><code>SwingCooldown: number</code> — seconds between swings (fire-rate gate)</li>
+<li class=""><code>Range: number</code> — reach in studs</li>
+<li class=""><code>HitboxSize: Vector3</code> — OverlapParams box extents in front of the character</li>
+<li class=""><code>SwingAnimId: string?</code>, <code>SwingSound: string</code> (SoundConfig key)</li>
+</ul>
+<p><strong>Gun (hitscan: pistol/SMG/AR/SR):</strong></p>
+<ul>
+<li class=""><code>FireMode: &quot;Hitscan&quot;</code></li>
+<li class=""><code>RPM: number</code> — rounds per minute → server min-interval = <code>60/RPM</code></li>
+<li class=""><code>Automatic: boolean</code> — hold-to-fire vs semi</li>
+<li class=""><code>MagazineSize: number</code>, <code>ReserveMax: number</code>, <code>ReloadTime: number</code></li>
+<li class=""><code>Spread: number</code> — max cone half-angle in degrees (applied to aim direction)</li>
+<li class=""><code>MaxDistance: number</code> — hard cap on hit range (anti-exploit + ray length)</li>
+<li class=""><code>FireSound</code>, <code>ReloadSound</code>, <code>DrySound</code> (SoundConfig keys)</li>
+</ul>
+<p><strong>Gun (projectile: rocket launcher):</strong> all hitscan-gun fields except <code>FireMode = &quot;Projectile&quot;</code>,
+plus:</p>
+<ul>
+<li class=""><code>ProjectileSpeed: number</code> — studs/sec</li>
+<li class=""><code>Gravity: Vector3</code> — FastCast2 <code>Acceleration</code> (e.g. low or zero for a flat rocket)</li>
+<li class=""><code>AOERadius: number</code>, <code>AOEDamage: number</code> — center damage; falls off to 0 at radius</li>
+<li class=""><code>CosmeticTemplate: string</code> — name of the rocket model to clone into ObjectCache</li>
+</ul>
+<p><strong>Throwable (grenade):</strong></p>
+<ul>
+<li class=""><code>ThrowSpeed: number</code>, <code>Gravity: Vector3</code></li>
+<li class=""><code>SpherecastRadius: number</code> — FastCast2 <code>SpherecastFire</code> radius</li>
+<li class=""><code>Restitution: number</code> — bounce energy retained per impact (0–1)</li>
+<li class=""><code>FuseTime: number</code> — seconds from throw to detonation</li>
+<li class=""><code>AOERadius: number</code>, <code>AOEDamage: number</code></li>
+<li class=""><code>CarryCount: number</code> — max carried</li>
+<li class=""><code>CosmeticTemplate: string</code>, throw/bounce/explode SoundConfig keys</li>
+</ul>
+<p><strong>Placed (C4):</strong></p>
+<ul>
+<li class=""><code>PlaceRange: number</code> — max stud distance from character to place</li>
+<li class=""><code>MaxActive: number</code> — max simultaneously placed per player</li>
+<li class=""><code>ArmDelay: number</code> — seconds after place before it can detonate</li>
+<li class=""><code>AOERadius: number</code>, <code>AOEDamage: number</code></li>
+<li class="">place/detonate SoundConfig keys</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="6-weaponvalidation-shared-math">6. WeaponValidation (shared math)<a href="#6-weaponvalidation-shared-math" class="hash-link" aria-label="Direct link to 6. WeaponValidation (shared math)" title="Direct link to 6. WeaponValidation (shared math)" translate="no">​</a></h2>
+<p><code>WeaponValidation.luau</code> holds pure functions run on <strong>both</strong> client (predict) and server
+(authoritative) so the two sides agree:</p>
+<ul>
+<li class=""><code>canFire(weaponName, lastFireTime, now) -&gt; boolean</code> — fire-rate gate from <code>RPM</code>/<code>SwingCooldown</code>.</li>
+<li class=""><code>applySpread(direction, spreadDegrees, seed) -&gt; Vector3</code> — deterministic cone spread.
+The client sends its post-spread direction; the server re-derives/validates the cone bound
+(the direction must lie within <code>Spread</code> of the reported aim).</li>
+<li class=""><code>meleeHitbox(rootCFrame, range, hitboxSize) -&gt; OverlapParams region</code> — the box query both
+sides use; server runs it from the server-known character CFrame.</li>
+<li class=""><code>aoeFalloff(center, hitPos, radius, maxDamage) -&gt; number</code> — linear falloff to 0 at radius.</li>
+<li class=""><code>isWithinRange(origin, hitPos, maxDistance) -&gt; boolean</code></li>
+<li class=""><code>ammoAfterShot</code> / <code>ammoAfterReload</code> — pure transitions over <code>{ mag, reserve }</code>.</li>
+</ul>
+<p>No instance creation, no networking — math only (mirrors <code>ShredderMath</code>/<code>SprintValidation</code>).</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="7-authority-flows">7. Authority Flows<a href="#7-authority-flows" class="hash-link" aria-label="Direct link to 7. Authority Flows" title="Direct link to 7. Authority Flows" translate="no">​</a></h2>
+<p>All client→server fire packets carry only what the server cannot already know (origin, aim
+direction). The <strong>weapon is inferred</strong> from the player&#x27;s currently equipped Tool. The server
+never trusts a client-claimed hit; it re-raycasts or re-simulates.</p>
+<p><strong>Melee</strong></p>
+<ol>
+<li class="">Client: input → <code>canFire</code> gate → play swing (MotionMaster/Animator) → predicted hit FX.</li>
+<li class=""><code>ReqMeleeSwing(aimDir)</code> → server.</li>
+<li class="">Server: validate fire-rate (<code>WeaponState</code>), run <code>meleeHitbox</code> from server character CFrame,
+cap by <code>Range</code>, resolve targets via <code>CombatService</code>, apply <code>Melee</code> damage.</li>
+<li class="">Broadcast <code>WeaponImpact</code> for hit sparks on other clients (swing anim replicates via Animator).</li>
+</ol>
+<p><strong>Hitscan gun</strong></p>
+<ol>
+<li class="">Client: <code>canFire</code> + local ammo predict → muzzle flash + tracer to client <code>workspace:Raycast</code> point.</li>
+<li class=""><code>ReqFireWeapon(origin, dir)</code> → server.</li>
+<li class="">Server: validate fire-rate + ammo (<code>WeaponState</code>) + <code>origin</code> within tolerance of the muzzle/
+character + <code>Spread</code> bound → server <code>workspace:Raycast</code> (length <code>MaxDistance</code>, filter shooter)
+→ <code>CombatService</code> damage (<code>Bullet</code>, ×<code>HeadshotMultiplier</code> if <code>Head</code>).</li>
+<li class="">Broadcast <code>WeaponFired(shooter, weaponName, origin, hitPos, isHit)</code> → others render tracer/impact.</li>
+<li class=""><code>WeaponAmmoSync</code> to the owner.</li>
+</ol>
+<p><strong>Rocket (projectile)</strong></p>
+<ol>
+<li class="">Client: spawn FastCast2 cosmetic rocket via the rocket caster (ObjectCache); <code>LengthChanged</code>
+moves the part, <code>CastTerminating</code> plays the explosion FX locally.</li>
+<li class=""><code>ReqFireWeapon(origin, dir)</code> → server.</li>
+<li class="">Server: validate fire-rate + ammo + origin → run its <strong>own</strong> rocket caster (no cosmetic) with
+<code>Acceleration = Gravity</code>; on <code>Hit</code>, apply AOE via <code>aoeFalloff</code> to all targets in <code>AOERadius</code>
+(<code>AOE</code>/<code>Explosion</code>).</li>
+<li class="">Broadcast <code>ProjectileSpawned(shooter, origin, dir, speed)</code> so other clients render their own
+cosmetic rocket; <code>ExplosionAt(pos, radius, weaponName)</code> for the blast FX/sound.</li>
+</ol>
+<p><strong>Grenade (throwable)</strong></p>
+<ol>
+<li class="">Client: <code>ReqThrowGrenade(origin, dir)</code> plus a local FastCast2 spherecast arc (bounces via
+<code>Restitution</code>) for immediate feedback.</li>
+<li class="">Server: validate <code>CarryCount</code> + throw origin; simulate the same spherecast arc; after
+<code>FuseTime</code>, apply AOE at the grenade&#x27;s current position.</li>
+<li class="">Broadcast <code>GrenadeThrown(shooter, origin, dir, speed, fuse)</code> → clients render the arc;
+<code>ExplosionAt</code> at detonation.</li>
+</ol>
+<p><strong>C4 (placed)</strong></p>
+<ol>
+<li class="">Client: place preview → <code>ReqPlaceC4(pos, normal)</code>.</li>
+<li class="">Server: validate <code>PlaceRange</code> + <code>MaxActive</code>; spawn the armed prop (server-owned), start <code>ArmDelay</code>.</li>
+<li class=""><code>ReqDetonateC4()</code> → server detonates <strong>all</strong> of that player&#x27;s armed C4, applying AOE per charge.</li>
+<li class="">Broadcast <code>ExplosionAt</code> per charge.</li>
+</ol>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="8-ammo--reload">8. Ammo &amp; Reload<a href="#8-ammo--reload" class="hash-link" aria-label="Direct link to 8. Ammo &amp; Reload" title="Direct link to 8. Ammo &amp; Reload" translate="no">​</a></h2>
+<p><code>WeaponState.luau</code> (server) is the source of truth: per player, per weapon → <code>{ mag, reserve }</code>,
+plus <code>lastFireTime</code> and <code>reloadEndsAt</code>.</p>
+<ul>
+<li class=""><strong>Fire:</strong> server checks <code>mag &gt; 0</code> and fire-rate; decrements <code>mag</code>; rejects (and sends <code>DrySound</code>
+cue / no-op) at 0.</li>
+<li class=""><strong>Reload:</strong> <code>ReqReloadWeapon()</code> → server validates not-already-reloading and <code>reserve &gt; 0</code>,
+sets <code>reloadEndsAt = now + ReloadTime</code>; on completion moves <code>min(MagazineSize - mag, reserve)</code>
+from reserve to mag. Mid-reload fire is rejected until complete.</li>
+<li class=""><strong>Client prediction:</strong> the client decrements its local mag immediately for HUD responsiveness;
+the server reconciles via <code>WeaponAmmoSync</code> (authoritative <code>mag</code>/<code>reserve</code>). On mismatch the
+server value wins.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="9-npc-damage-contract-pve-dependency">9. NPC Damage Contract (PvE dependency)<a href="#9-npc-damage-contract-pve-dependency" class="hash-link" aria-label="Direct link to 9. NPC Damage Contract (PvE dependency)" title="Direct link to 9. NPC Damage Contract (PvE dependency)" translate="no">​</a></h2>
+<p><code>CombatService.luau</code> (server) is the single damage router:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#bfc7d5"><span class="token plain">CombatService.ApplyHit(hitPart, amount, attackType, sourcePlayer, aoeVariant?)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  → resolve hitPart to nearest ancestor Model containing a Humanoid</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  → if that Model is a Player&#x27;s character:  HealthManager.ApplyDamage(player, amount, attackType, sourcePlayer, aoeVariant)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  → elseif Model has CollectionService tag &quot;Damageable&quot; and a Humanoid:  damage the Humanoid directly</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  → else: ignore (no damage)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">CombatService.ApplyAOE(center, radius, maxDamage, attackType, sourcePlayer, aoeVariant?)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  → OverlapParams sphere → for each Humanoid root in range → ApplyHit with aoeFalloff amount</span><br></div></code></pre></div></div>
+<p><strong>Contract for enemies (supplied separately):</strong> a damageable NPC is a <code>Model</code> containing a
+<code>Humanoid</code>, tagged with CollectionService tag <code>&quot;Damageable&quot;</code>. No tag → no damage. NPC death,
+AI, and spawning are out of scope; v1 damages the Humanoid directly (a dedicated NpcHealth
+manager can replace the direct path later without changing handlers).</p>
+<blockquote>
+<p>Note: HealthManager mirrors its record → <code>Humanoid.Health</code> but does <strong>not</strong> read Humanoid →
+record (see its Audit H3 note). Routing player damage through <code>HealthManager.ApplyDamage</code>
+(not raw Humanoid writes) keeps the HUD-tracked value correct.</p>
+</blockquote>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="10-new-packets">10. New Packets<a href="#10-new-packets" class="hash-link" aria-label="Direct link to 10. New Packets" title="Direct link to 10. New Packets" translate="no">​</a></h2>
+<p>Register in <a class="" href="/endless-journey-docs/src/ReplicatedStorage/SharedModules/Packets/init.luau">Packets/init.luau</a>
+and document in the networking-map reference (§14).</p>
+<p><strong>Client → Server</strong> (weapon inferred from equipped Tool):</p>
+<ul>
+<li class=""><code>ReqFireWeapon(origin: Vector3, dir: Vector3)</code> — hitscan + rocket.</li>
+<li class=""><code>ReqMeleeSwing(aimDir: Vector3)</code></li>
+<li class=""><code>ReqReloadWeapon()</code> — Response: <code>(accepted: boolean, reloadTime: number)</code></li>
+<li class=""><code>ReqThrowGrenade(origin: Vector3, dir: Vector3)</code></li>
+<li class=""><code>ReqPlaceC4(pos: Vector3, normal: Vector3)</code> — Response: <code>(success: boolean, reason: u8)</code></li>
+<li class=""><code>ReqDetonateC4()</code></li>
+</ul>
+<p><strong>Server → all clients</strong> (visuals):</p>
+<ul>
+<li class=""><code>WeaponFired(shooter: Player, weaponName: string, origin: Vector3, hitPos: Vector3, isHit: boolean)</code></li>
+<li class=""><code>ProjectileSpawned(shooter: Player, origin: Vector3, dir: Vector3, speed: number, weaponName: string)</code></li>
+<li class=""><code>GrenadeThrown(shooter: Player, origin: Vector3, dir: Vector3, speed: number, fuse: number)</code></li>
+<li class=""><code>ExplosionAt(pos: Vector3, radius: number, weaponName: string)</code></li>
+<li class=""><code>WeaponImpact(pos: Vector3, normal: Vector3, weaponName: string)</code></li>
+</ul>
+<p><strong>Server → owning client</strong> (state):</p>
+<ul>
+<li class=""><code>WeaponAmmoSync(weaponName: string, mag: number, reserve: number)</code></li>
+</ul>
+<p>High-frequency positional packets (if profiling shows need) may move to <code>makeUnreliable</code>
+following the ghost-update precedent; v1 keeps them reliable.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="11-hud-integration-contract-user-builds-the-hud">11. HUD Integration Contract (user builds the HUD)<a href="#11-hud-integration-contract-user-builds-the-hud" class="hash-link" aria-label="Direct link to 11. HUD Integration Contract (user builds the HUD)" title="Direct link to 11. HUD Integration Contract (user builds the HUD)" translate="no">​</a></h2>
+<p>This system builds <strong>no UI</strong>. The user&#x27;s HUD consumes the following, all already produced by the
+system above:</p>
+<ul>
+<li class=""><strong>Ammo:</strong> subscribe to the <code>WeaponAmmoSync</code> packet (<code>weaponName, mag, reserve</code>) for the
+authoritative count, and to a client-side <code>Signals</code> event <code>WeaponAmmoChanged(weaponName, mag, reserve)</code>
+fired on local prediction for zero-latency updates. The HUD should render whichever is most
+recent, trusting <code>WeaponAmmoSync</code> on mismatch.</li>
+<li class=""><strong>Equipped weapon:</strong> client <code>Signals</code> events <code>WeaponEquipped(weaponName, category)</code> and
+<code>WeaponUnequipped(weaponName)</code>, fired by <code>WeaponController</code> on Tool equip/unequip. Config
+(display name, category, mag size) is read from <code>WeaponConfig[weaponName]</code>.</li>
+<li class=""><strong>Reload state:</strong> client <code>Signals</code> event <code>WeaponReloadStarted(weaponName, reloadTime)</code> and
+<code>WeaponReloadComplete(weaponName)</code> so the HUD can show a reload timer/animation.</li>
+<li class=""><strong>Throwable/C4 counts:</strong> <code>WeaponAmmoSync</code> is reused for grenades (<code>mag</code> = carried, <code>reserve</code> = 0)
+and C4 (<code>mag</code> = remaining, <code>reserve</code> = active-placed), or a dedicated signal if the user prefers
+— to be finalized in the implementation plan.</li>
+<li class=""><strong>Crosshair/hitmarker:</strong> client <code>Signals</code> event <code>WeaponLocalHit(targetPart)</code> fired when the
+client&#x27;s predicted ray hits a <code>Damageable</code>; the HUD may show a hitmarker. (Server confirmation
+is authoritative for damage but not required for the marker.)</li>
+</ul>
+<p>New <code>Signals</code> entries to register: <code>WeaponEquipped</code>, <code>WeaponUnequipped</code>, <code>WeaponAmmoChanged</code>,
+<code>WeaponReloadStarted</code>, <code>WeaponReloadComplete</code>, <code>WeaponLocalHit</code>.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="12-effects-audio-cleanup">12. Effects, Audio, Cleanup<a href="#12-effects-audio-cleanup" class="hash-link" aria-label="Direct link to 12. Effects, Audio, Cleanup" title="Direct link to 12. Effects, Audio, Cleanup" translate="no">​</a></h2>
+<ul>
+<li class=""><strong>Visuals:</strong> tracers, muzzle flash, impacts, and explosion FX animate via <strong>MotionMaster</strong>
+(no <code>TweenService</code>). Reusable effect instances pool through <strong>GenericPoolInstance</strong>. Cosmetic
+projectiles (rocket, grenade) pool through FastCast2 <strong>ObjectCache</strong>.</li>
+<li class=""><strong>Audio:</strong> every sound goes through <strong>SoundManager</strong> (<code>PlaySFXAt</code> for positional fire/impact/
+explosion, <code>PlaySFX</code> for local reload/dry). New asset ids/volumes/pitch live in
+<a class="" href="/endless-journey-docs/src/ReplicatedStorage/SharedModules/Configs/SoundConfig.luau">SoundConfig</a>;
+the server relay&#x27;s replication allowlist derives from SoundConfig. <strong>No ad-hoc <code>Sound</code> instances.</strong></li>
+<li class=""><strong>Cleanup:</strong> every lifecycle scope owns a <strong>Janitor</strong> — the equipped Tool (input connections,
+casters), each in-flight projectile, each placed C4. Keyed collections (active C4 per player,
+in-flight grenades) store one Janitor per entry (<code>entry.cleaner: Janitor.Janitor</code>). No
+hand-rolled connection arrays.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="13-anti-exploit-sensitive-thresholds">13. Anti-Exploit (sensitive thresholds)<a href="#13-anti-exploit-sensitive-thresholds" class="hash-link" aria-label="Direct link to 13. Anti-Exploit (sensitive thresholds)" title="Direct link to 13. Anti-Exploit (sensitive thresholds)" translate="no">​</a></h2>
+<p>Treated like <a class="" href="/endless-journey-docs/src/ServerScriptService/PlacementServer.server.luau">PlacementServer</a>
+thresholds. <strong>All damage is applied server-side only; client hit claims are never trusted.</strong></p>
+<ul>
+<li class="">Fire-rate: server enforces <code>60/RPM</code> (or <code>SwingCooldown</code>) min interval per weapon; early
+requests dropped.</li>
+<li class="">Ammo: server-authoritative <code>mag</code>/<code>reserve</code>; fire at 0 rejected; reload timing server-stamped.</li>
+<li class="">Origin: claimed <code>origin</code> must be within a tolerance of the player&#x27;s muzzle/character; else reject.</li>
+<li class="">Range: hitscan ray length and hit acceptance capped at <code>MaxDistance</code>.</li>
+<li class="">Spread: reported <code>dir</code> must lie within <code>Spread</code> of the player&#x27;s aim; else clamp/reject.</li>
+<li class="">Line of sight: implicit — the server does its own raycast/cast, so occluded &quot;hits&quot; never register.</li>
+<li class="">Grenade/C4: throw origin and <code>PlaceRange</code> distance caps; <code>CarryCount</code>/<code>MaxActive</code> enforced
+server-side; <code>ArmDelay</code> enforced before detonation.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="14-documentation-updates-same-commit-as-implementation">14. Documentation Updates (same commit as implementation)<a href="#14-documentation-updates-same-commit-as-implementation" class="hash-link" aria-label="Direct link to 14. Documentation Updates (same commit as implementation)" title="Direct link to 14. Documentation Updates (same commit as implementation)" translate="no">​</a></h2>
+<p>Per project policy, when implementation lands it must also update:</p>
+<ul>
+<li class="">A new <strong>Weapon System</strong> system page + a <strong>how-to</strong> playbook under <code>docs/</code>.</li>
+<li class="">The <strong>networking-map</strong> reference (every new packet in §10).</li>
+<li class="">The <strong>signals</strong> reference (every new signal in §11).</li>
+<li class="">The <strong>config</strong> reference (the new <code>WeaponConfig</code> and SoundConfig entries).</li>
+<li class="">Moonwave <code>--[=[ ]=]</code> doc-comments on every new public module.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="15-verification-manual-in-studio">15. Verification (manual, in Studio)<a href="#15-verification-manual-in-studio" class="hash-link" aria-label="Direct link to 15. Verification (manual, in Studio)" title="Direct link to 15. Verification (manual, in Studio)" translate="no">​</a></h2>
+<p>No automated suite. Verify in Studio:</p>
+<ul>
+<li class="">Melee: hit and miss on a tagged <code>Damageable</code> dummy; range cap; cooldown gate.</li>
+<li class="">Each gun: fire-rate cadence, magazine depletion, reload (incl. mid-reload fire rejected),
+reserve drain, hitscan damage, headshot multiplier.</li>
+<li class="">Rocket: travel, impact, AOE falloff at center vs edge of radius.</li>
+<li class="">Grenade: arc, bounce, fuse timing, AOE.</li>
+<li class="">C4: place within range, max-active cap, arm delay, detonate-all.</li>
+<li class="">Exploit checks: spoofed origin rejected, over-rate fire dropped, out-of-range hit rejected,
+fire with empty mag rejected.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="16-open-questions-for-the-implementation-plan">16. Open Questions for the Implementation Plan<a href="#16-open-questions-for-the-implementation-plan" class="hash-link" aria-label="Direct link to 16. Open Questions for the Implementation Plan" title="Direct link to 16. Open Questions for the Implementation Plan" translate="no">​</a></h2>
+<ul>
+<li class="">Exact grenade/C4 HUD count representation (reuse <code>WeaponAmmoSync</code> vs dedicated signal) — §11.</li>
+<li class="">Whether the server should also replicate the rocket&#x27;s cosmetic via FastCast2 parallel VMs if
+many players fire rockets at once (deferred; serial is v1).</li>
+<li class="">Whether melee should support a light lunge/forward-step (currently pure in-place swing).</li>
+<li class="">Damage falloff over distance for guns (v1 = flat damage; falloff is a config-only future add).</li>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/Game-Dev-Neohermit/Endless-Journey/edit/main/docs/superpowers/specs/2026-06-06-weapon-system-design.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#1-purpose--scope" class="table-of-contents__link toc-highlight">1. Purpose &amp; Scope</a></li><li><a href="#2-existing-code-this-builds-on" class="table-of-contents__link toc-highlight">2. Existing Code This Builds On</a></li><li><a href="#3-architecture-approach-b" class="table-of-contents__link toc-highlight">3. Architecture (Approach B)</a></li><li><a href="#4-weapon-categories" class="table-of-contents__link toc-highlight">4. Weapon Categories</a></li><li><a href="#5-weaponconfig-schema" class="table-of-contents__link toc-highlight">5. WeaponConfig Schema</a></li><li><a href="#6-weaponvalidation-shared-math" class="table-of-contents__link toc-highlight">6. WeaponValidation (shared math)</a></li><li><a href="#7-authority-flows" class="table-of-contents__link toc-highlight">7. Authority Flows</a></li><li><a href="#8-ammo--reload" class="table-of-contents__link toc-highlight">8. Ammo &amp; Reload</a></li><li><a href="#9-npc-damage-contract-pve-dependency" class="table-of-contents__link toc-highlight">9. NPC Damage Contract (PvE dependency)</a></li><li><a href="#10-new-packets" class="table-of-contents__link toc-highlight">10. New Packets</a></li><li><a href="#11-hud-integration-contract-user-builds-the-hud" class="table-of-contents__link toc-highlight">11. HUD Integration Contract (user builds the HUD)</a></li><li><a href="#12-effects-audio-cleanup" class="table-of-contents__link toc-highlight">12. Effects, Audio, Cleanup</a></li><li><a href="#13-anti-exploit-sensitive-thresholds" class="table-of-contents__link toc-highlight">13. Anti-Exploit (sensitive thresholds)</a></li><li><a href="#14-documentation-updates-same-commit-as-implementation" class="table-of-contents__link toc-highlight">14. Documentation Updates (same commit as implementation)</a></li><li><a href="#15-verification-manual-in-studio" class="table-of-contents__link toc-highlight">15. Verification (manual, in Studio)</a></li><li><a href="#16-open-questions-for-the-implementation-plan" class="table-of-contents__link toc-highlight">16. Open Questions for the Implementation Plan</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Built with Moonwave.</div></div></div></footer></div>
+</body>
+</html>
