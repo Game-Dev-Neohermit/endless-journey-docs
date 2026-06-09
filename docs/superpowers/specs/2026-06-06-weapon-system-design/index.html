@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.10.1">
 <title data-rh="true">Weapon System — Design Spec | Endless Journey</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-06-weapon-system-design"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Weapon System — Design Spec | Endless Journey"><meta data-rh="true" name="description" content="Date: 2026-06-06"><meta data-rh="true" property="og:description" content="Date: 2026-06-06"><link data-rh="true" rel="canonical" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-06-weapon-system-design"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-06-weapon-system-design" hreflang="en"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-06-weapon-system-design" hreflang="x-default"><link rel="stylesheet" href="/endless-journey-docs/assets/css/styles.68ec3e37.css">
-<script src="/endless-journey-docs/assets/js/runtime~main.efa4b066.js" defer="defer"></script>
-<script src="/endless-journey-docs/assets/js/main.e41d1d04.js" defer="defer"></script>
+<script src="/endless-journey-docs/assets/js/runtime~main.4f475d63.js" defer="defer"></script>
+<script src="/endless-journey-docs/assets/js/main.388c4cc8.js" defer="defer"></script>
 </head>
 <body>
 <svg style="display: none;"><defs>
@@ -203,6 +203,7 @@ cosmetic rocket; <code>ExplosionAt(pos, radius, weaponName)</code> for the blast
 <li class=""><code>ReqDetonateC4()</code> → server detonates <strong>all</strong> of that player&#x27;s armed C4, applying AOE per charge.</li>
 <li class="">Broadcast <code>ExplosionAt</code> per charge.</li>
 </ol>
+<p><strong>Trajectory preview (client).</strong> While a throwable is equipped, <code>TrajectoryPreview</code> (a <code>WeaponHandlers</code> module) renders a live green neon arc from the camera aim, raycast-truncated to real geometry, ending in a landing marker. It uses the same <code>SPAWN_OFFSET</code> and upward aim bias as the real throw and <code>workspace.Gravity</code>, so the preview matches the projectile&#x27;s free flight. It is purely client-local — no packets or signals.</p>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="8-ammo--reload">8. Ammo &amp; Reload<a href="#8-ammo--reload" class="hash-link" aria-label="Direct link to 8. Ammo &amp; Reload" title="Direct link to 8. Ammo &amp; Reload" translate="no">​</a></h2>
 <p><code>WeaponState.luau</code> (server) is the source of truth: per player, per weapon → <code>{ mag, reserve }</code>,
 plus <code>lastFireTime</code> and <code>reloadEndsAt</code>.</p>
@@ -218,11 +219,13 @@ server value wins.</li>
 </ul>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="9-npc-damage-contract-pve-dependency">9. NPC Damage Contract (PvE dependency)<a href="#9-npc-damage-contract-pve-dependency" class="hash-link" aria-label="Direct link to 9. NPC Damage Contract (PvE dependency)" title="Direct link to 9. NPC Damage Contract (PvE dependency)" translate="no">​</a></h2>
 <p><code>CombatService.luau</code> (server) is the single damage router:</p>
-<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#bfc7d5"><span class="token plain">CombatService.ApplyHit(hitPart, amount, attackType, sourcePlayer, aoeVariant?)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  → resolve hitPart to nearest ancestor Model containing a Humanoid</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  → if that Model is a Player&#x27;s character:  HealthManager.ApplyDamage(player, amount, attackType, sourcePlayer, aoeVariant)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  → elseif Model has CollectionService tag &quot;Damageable&quot; and a Humanoid:  damage the Humanoid directly</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  → else: ignore (no damage)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">CombatService.ApplyAOE(center, radius, maxDamage, attackType, sourcePlayer, aoeVariant?)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  → OverlapParams sphere → for each Humanoid root in range → ApplyHit with aoeFalloff amount</span><br></div></code></pre></div></div>
-<p><strong>Contract for enemies (supplied separately):</strong> a damageable NPC is a <code>Model</code> containing a
-<code>Humanoid</code>, tagged with CollectionService tag <code>&quot;Damageable&quot;</code>. No tag → no damage. NPC death,
-AI, and spawning are out of scope; v1 damages the Humanoid directly (a dedicated NpcHealth
-manager can replace the direct path later without changing handlers).</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#bfc7d5"><span class="token plain">CombatService.ApplyHit(hitPart, amount, attackType, sourcePlayer, aoeVariant?)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  → resolve hitPart to nearest ancestor Model containing a Humanoid</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  → if that Model is a Player&#x27;s character:  HealthManager.ApplyDamage(player, amount, attackType, sourcePlayer, aoeVariant)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  → elseif Model has CollectionService tag &quot;NPC&quot; and a Humanoid:  damage the Humanoid directly</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  → else: ignore (no damage)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">CombatService.ApplyAOE(center, radius, maxDamage, attackType, sourcePlayer, aoeVariant?)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  → OverlapParams sphere → for each Humanoid root in range → ApplyHit with aoeFalloff amount</span><br></div></code></pre></div></div>
+<p><strong>Contract for enemies (supplied separately):</strong> an NPC is a <code>Model</code> containing a
+<code>Humanoid</code>, tagged with CollectionService tag <code>&quot;NPC&quot;</code>. That single tag both gates direct
+Humanoid damage here and places the NPC&#x27;s parts in the <code>Character</code> collision group (see
+NpcCollisionService), so thrown charges pass through it. No tag → no damage and no
+pass-through. NPC death, AI, and spawning are out of scope; v1 damages the Humanoid directly
+(a dedicated NpcHealth manager can replace the direct path later without changing handlers).</p>
 <blockquote>
 <p>Note: HealthManager mirrors its record → <code>Humanoid.Health</code> but does <strong>not</strong> read Humanoid →
 record (see its Audit H3 note). Routing player damage through <code>HealthManager.ApplyDamage</code>
@@ -271,7 +274,7 @@ recent, trusting <code>WeaponAmmoSync</code> on mismatch.</li>
 and C4 (<code>mag</code> = remaining, <code>reserve</code> = active-placed), or a dedicated signal if the user prefers
 — to be finalized in the implementation plan.</li>
 <li class=""><strong>Crosshair/hitmarker:</strong> client <code>Signals</code> event <code>WeaponLocalHit(targetPart)</code> fired when the
-client&#x27;s predicted ray hits a <code>Damageable</code>; the HUD may show a hitmarker. (Server confirmation
+client&#x27;s predicted ray hits an <code>NPC</code>; the HUD may show a hitmarker. (Server confirmation
 is authoritative for damage but not required for the marker.)</li>
 </ul>
 <p>New <code>Signals</code> entries to register: <code>WeaponEquipped</code>, <code>WeaponUnequipped</code>, <code>WeaponAmmoChanged</code>,
@@ -316,7 +319,7 @@ server-side; <code>ArmDelay</code> enforced before detonation.</li>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="15-verification-manual-in-studio">15. Verification (manual, in Studio)<a href="#15-verification-manual-in-studio" class="hash-link" aria-label="Direct link to 15. Verification (manual, in Studio)" title="Direct link to 15. Verification (manual, in Studio)" translate="no">​</a></h2>
 <p>No automated suite. Verify in Studio:</p>
 <ul>
-<li class="">Melee: hit and miss on a tagged <code>Damageable</code> dummy; range cap; cooldown gate.</li>
+<li class="">Melee: hit and miss on a tagged <code>NPC</code> dummy; range cap; cooldown gate.</li>
 <li class="">Each gun: fire-rate cadence, magazine depletion, reload (incl. mid-reload fire rejected),
 reserve drain, hitscan damage, headshot multiplier.</li>
 <li class="">Rocket: travel, impact, AOE falloff at center vs edge of radius.</li>
