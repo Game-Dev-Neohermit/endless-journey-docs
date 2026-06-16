@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-superpowers/specs/2026-06-16-weapon-ammo-system-design" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.1">
+<title data-rh="true">Weapon Ammo &amp; Consumable Throwables — Design | Endless Journey</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-16-weapon-ammo-system-design"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Weapon Ammo &amp; Consumable Throwables — Design | Endless Journey"><meta data-rh="true" name="description" content="Date: 2026-06-16"><meta data-rh="true" property="og:description" content="Date: 2026-06-16"><link data-rh="true" rel="canonical" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-16-weapon-ammo-system-design"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-16-weapon-ammo-system-design" hreflang="en"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-16-weapon-ammo-system-design" hreflang="x-default"><link rel="stylesheet" href="/endless-journey-docs/assets/css/styles.68ec3e37.css">
+<script src="/endless-journey-docs/assets/js/runtime~main.9691e513.js" defer="defer"></script>
+<script src="/endless-journey-docs/assets/js/main.b9fa7a7e.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/endless-journey-docs/"><b class="navbar__title text--truncate">Endless Journey</b></a><a class="navbar__item navbar__link" href="/endless-journey-docs/docs/intro">Docs</a><a class="navbar__item navbar__link" href="/endless-journey-docs/api/">API</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/Game-Dev-Neohermit/Endless-Journey" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search"><span aria-label="expand searchbar" role="button" class="search-icon" tabindex="0"></span><input id="search_input_react" type="search" placeholder="Loading..." aria-label="Search" class="navbar__search-input search-bar" disabled=""></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Weapon Ammo &amp; Consumable Throwables — Design</h1></header>
+<p><strong>Date:</strong> 2026-06-16
+<strong>Status:</strong> Approved (pending spec review)
+<strong>Scope:</strong> Add an inventory-backed ammo system for guns, make C4/grenades consumable
+(deleted from the backpack on use), and expose a clean ammo/throwable read API for the GUI.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="problem">Problem<a href="#problem" class="hash-link" aria-label="Direct link to Problem" title="Direct link to Problem" translate="no">​</a></h2>
+<p>Today, ranged weapons have a per-gun magazine/reserve model (<code>WeaponState</code> tracks
+<code>{ mag, reserve }</code>, server gates fire on <code>mag &gt; 0</code>, reload pulls from <code>reserve</code>), but the
+<code>reserve</code> refills to <code>ReserveMax</code> on every equip and is never tied to anything the player
+earns or spends — so ammo is effectively infinite. Throwables are worse: <code>Grenade.CarryCount</code>
+and <code>C4.CarryCount</code> exist in <code>WeaponConfig</code> but are <strong>never enforced</strong> — <code>onThrowProjectile</code>
+only gates on a cooldown, so a player can throw unlimited grenades and C4.</p>
+<p>We want ammo to be a real, consumable <strong>inventory resource</strong> that guns draw from, and we want
+throwables to be consumed from the backpack on use.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="decisions-locked-during-brainstorming">Decisions (locked during brainstorming)<a href="#decisions-locked-during-brainstorming" class="hash-link" aria-label="Direct link to Decisions (locked during brainstorming)" title="Direct link to Decisions (locked during brainstorming)" translate="no">​</a></h2>
+<table><thead><tr><th>Question</th><th>Decision</th></tr></thead><tbody><tr><td>Ammo representation</td><td><strong>Numeric ammo pool</strong> per player, owned by a server <code>AmmoManager</code> (mirrors <code>CoinManager</code>). Not physical Tools.</td></tr><tr><td>Ammo granularity</td><td><strong>Per ammo-type</strong> (<code>Light</code>, <code>Heavy</code>, <code>Rocket</code>), each gun maps to a type.</td></tr><tr><td>Mag vs pool</td><td><strong>Keep the magazine</strong> (per-gun loaded rounds); the shared <strong>pool replaces per-gun <code>ReserveMax</code></strong>. Reload pulls from the pool.</td></tr><tr><td>Persistence</td><td><strong>Session-only / in-memory.</strong> No ProfileStore. Reseeded per life.</td></tr><tr><td>Throwable model</td><td><strong>1 Tool = 1 throw.</strong> Throwing destroys the Tool. (<code>CarryCount</code> removed; design must not preclude a future Tool-stacking inventory.)</td></tr><tr><td>Acquisition</td><td><strong>Crafted at the workbench.</strong> Ammo + throwable recipes under the existing <code>&quot;ammo&quot;</code> category.</td></tr><tr><td>GUI</td><td>Expose <strong>current/max ammo and throwable counts</strong> via a client <code>AmmoApi</code> + reactive signals.</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="architecture">Architecture<a href="#architecture" class="hash-link" aria-label="Direct link to Architecture" title="Direct link to Architecture" translate="no">​</a></h2>
+<p>A new <strong><code>AmmoManager</code></strong> (ServerStorage/SharedModules) owns per-player, per-ammo-type numeric
+counts in memory, mirroring the <code>CoinManager</code> pattern. Guns keep their <strong>magazine</strong> (loaded
+rounds) in <code>WeaponState</code>; the shared <strong>pool</strong> is keyed by ammo type and lives entirely in
+<code>AmmoManager</code>. Reload moves rounds pool → mag. Throwables remain physical <code>Tool</code> instances,
+consumed (destroyed) server-side on throw. Ammo and throwables are granted by crafting via
+<code>CraftOutputDispatcher</code>. A client <strong><code>AmmoApi</code></strong> is the single read surface for the HUD,
+kept current by sync packets and backpack changes.</p>
+<p><em>Alternative considered and rejected:</em> folding the pool into <code>WeaponState</code> (reserve becomes a
+type-keyed pool). <code>WeaponState</code> is per-weapon and per-life; a shared, crafted resource belongs
+in its own manager that mirrors <code>CoinManager</code> and that <code>CraftOutputDispatcher</code> can grant into
+cleanly.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="components">Components<a href="#components" class="hash-link" aria-label="Direct link to Components" title="Direct link to Components" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-data-model--config">1. Data model &amp; config<a href="#1-data-model--config" class="hash-link" aria-label="Direct link to 1. Data model &amp; config" title="Direct link to 1. Data model &amp; config" translate="no">​</a></h3>
+<p><strong>New <code>Configs/AmmoConfig.luau</code>:</strong></p>
+<ul>
+<li class=""><code>AmmoTypes</code>: <code>id -&gt; { DisplayName: string, Capacity: number, Starting: number }</code>.
+Initial set:<!-- -->
+<ul>
+<li class=""><code>Light</code> — Pistol, SMG, AR</li>
+<li class=""><code>Heavy</code> — SR</li>
+<li class=""><code>Rocket</code> — RocketLauncher
+<code>Capacity</code> is the pool cap (the GUI&#x27;s &quot;max&quot; for the pool); <code>Starting</code> is the per-life seed.</li>
+</ul>
+</li>
+<li class=""><code>WeaponAmmo</code>: <code>gunToolName -&gt; ammoTypeId</code> (or, equivalently, an <code>AmmoType</code> field added to each
+gun entry in <code>WeaponConfig</code>). One source of truth; do not duplicate.</li>
+</ul>
+<p><strong><code>WeaponConfig</code> gun entries:</strong> add <code>AmmoType: string</code>. <strong>Remove <code>ReserveMax</code></strong> (pool capacity
+now lives in <code>AmmoConfig</code>). <code>MagazineSize</code> and <code>ReloadTime</code> stay. <code>WeaponTypes.GunWeaponConfig</code>
+updated to match (<code>AmmoType: string</code>, drop <code>ReserveMax</code>).</p>
+<p><strong><code>AmmoManager</code> (ServerStorage/SharedModules), mirrors <code>CoinManager</code>:</strong></p>
+<ul>
+<li class=""><code>GetAmmo(player, ammoType): number</code> — <code>0</code> if unknown.</li>
+<li class=""><code>AddAmmo(player, ammoType, amount)</code> — no-op on <code>amount &lt;= 0</code>; clamps to <code>Capacity</code>; fires sync.</li>
+<li class=""><code>ConsumeAmmo(player, ammoType, amount): boolean</code> — atomic spend; <code>false</code> with no mutation on
+<code>amount &lt;= 0</code> or insufficient.</li>
+<li class=""><code>EnsureStarting(player)</code> — seed each type&#x27;s <code>Starting</code> once per life (called on CharacterAdded).</li>
+<li class=""><code>Initialize()</code> — wires per-player lifecycle; clears state on <code>PlayerRemoving</code>; every successful
+mutation fires <code>AmmoPoolSync(ammoTypeId, amount)</code> to the owning client.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-gun-firing--reload-flow">2. Gun firing &amp; reload flow<a href="#2-gun-firing--reload-flow" class="hash-link" aria-label="Direct link to 2. Gun firing &amp; reload flow" title="Direct link to 2. Gun firing &amp; reload flow" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Fire (<code>WeaponServer.onFireWeapon</code>):</strong> unchanged ammo behavior except the source. Firing drains
+the per-gun <strong>magazine</strong> in <code>WeaponState</code>; <code>mag &lt;= 0</code> rejects the shot (dry). The pool is <strong>not</strong>
+touched on fire.</li>
+<li class=""><strong>Reload (<code>WeaponServer.onReloadWeapon</code>):</strong> on reload completion compute
+<code>take = min(MagazineSize - mag, AmmoManager.GetAmmo(player, ammoType))</code>, then
+<code>AmmoManager.ConsumeAmmo(player, ammoType, take)</code> and <code>mag += take</code>. If the pool is empty
+(<code>take == 0</code>), reload is a no-op (returns <code>false</code>). <code>WeaponValidation.ammoAfterReload</code> is
+reworked to <code>(mag, poolAvailable, magSize) -&gt; (newMag, taken)</code>.</li>
+<li class=""><strong><code>WeaponState</code>:</strong> <code>AmmoEntry</code> drops <code>reserve</code>, becoming <code>{ mag, reloadEndsAt }</code>. <code>EnsureAmmo</code>
+seeds only <code>mag = MagazineSize</code>. <code>GetAmmo</code>/<code>SetAmmo</code> reduce to mag-only (rename to
+<code>GetMag</code>/<code>SetMag</code> for clarity).</li>
+<li class=""><strong>Sync packets:</strong> replace <code>WeaponAmmoSync(weaponName, mag, reserve)</code> with:<!-- -->
+<ul>
+<li class=""><code>WeaponMagSync(weaponName, mag)</code> — per-gun loaded rounds.</li>
+<li class=""><code>AmmoPoolSync(ammoTypeId, amount)</code> — per-type pool (capacity is static config, not sent).</li>
+</ul>
+</li>
+<li class=""><strong>Client (<code>GunHandler</code>):</strong> local prediction keeps <code>mag</code> per gun; pool is read from the <code>AmmoApi</code>
+cache. Reload predicts the same <code>take</code> math and is reconciled by the two sync packets. Dry-fire
+SFX behavior unchanged.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-throwables-grenade--c4">3. Throwables (Grenade &amp; C4)<a href="#3-throwables-grenade--c4" class="hash-link" aria-label="Direct link to 3. Throwables (Grenade &amp; C4)" title="Direct link to 3. Throwables (Grenade &amp; C4)" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Consumption (<code>WeaponServer.onThrowProjectile</code>):</strong> after a validated throw, <strong>destroy the
+equipped throwable Tool</strong> (1 Tool = 1 throw). Keep the cooldown gate (relevant when the player
+holds several). Spawn / fuse / stick logic unchanged. <code>CarryCount</code> removed from config.</li>
+<li class=""><strong>C4 detonation decoupling:</strong> detonation moves off the per-Tool <code>G</code> binding (in
+<code>WeaponController</code>) into an always-listening client path that fires <code>ReqDetonate</code> on <code>G</code>
+regardless of the equipped Tool. The server already no-ops <code>onDetonate</code> when the player has no
+active charges. This lets a player throw their last C4 (Tool destroyed) and still detonate.
+<code>MaxActive</code> still caps simultaneously-stuck charges.</li>
+<li class=""><strong>Throwable counts for GUI:</strong> derived from <code>Tool</code> instances in Backpack + Character by
+<code>ToolName</code> (same pattern as <code>WorkbenchService.countMaterial</code>). Exposed via
+<code>AmmoApi.GetThrowableCount(toolName)</code> and a <code>Signals.ThrowableCountChanged(toolName, count)</code>
+fired on backpack add/remove.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-gui-api">4. GUI API<a href="#4-gui-api" class="hash-link" aria-label="Direct link to 4. GUI API" title="Direct link to 4. GUI API" translate="no">​</a></h3>
+<p>Client module <strong><code>AmmoApi</code></strong> (<code>ReplicatedStorage/SharedModules</code>) is the single read surface for
+the HUD; the GUI never talks to the server directly.</p>
+<ul>
+<li class=""><code>GetMag(weaponName): (mag, magSize)</code></li>
+<li class=""><code>GetPool(ammoType): (amount, capacity)</code></li>
+<li class=""><code>GetEquippedAmmo(): (mag, magSize, poolAmount, poolCapacity)?</code> — convenience for the active gun</li>
+<li class=""><code>GetThrowableCount(toolName): (count)</code></li>
+</ul>
+<p>Reactive signals (no polling):</p>
+<ul>
+<li class=""><code>Signals.WeaponMagChanged(weaponName, mag)</code></li>
+<li class=""><code>Signals.AmmoPoolChanged(ammoType, amount)</code></li>
+<li class=""><code>Signals.ThrowableCountChanged(toolName, count)</code></li>
+</ul>
+<p><code>AmmoApi</code> maintains its client cache by listening to <code>WeaponMagSync</code> / <code>AmmoPoolSync</code> and to
+backpack <code>ChildAdded</code>/<code>ChildRemoved</code>.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="5-crafting-integration">5. Crafting integration<a href="#5-crafting-integration" class="hash-link" aria-label="Direct link to 5. Crafting integration" title="Direct link to 5. Crafting integration" translate="no">​</a></h3>
+<ul>
+<li class="">New <code>Output</code> kind in <code>WorkbenchConfig</code>: <code>{ Kind = &quot;Ammo&quot;, AmmoType: string, Amount: number }</code>.
+<code>CraftOutputDispatcher.isFeasible</code> validates the ammo type exists in <code>AmmoConfig</code>; <code>grant</code> calls
+<code>AmmoManager.AddAmmo</code>.</li>
+<li class="">Throwables crafted via the existing <code>Weapon</code> output (<code>{ Kind = &quot;Weapon&quot;, ToolName = &quot;Grenade&quot; }</code>),
+cloning the Tool from <code>WeaponTemplates</code>. Optional <code>Count</code> field on the <code>Weapon</code> output to grant a
+batch (e.g. 3 grenades per craft); default 1.</li>
+<li class="">Add real recipes under the existing <code>&quot;ammo&quot;</code> category: Light/Heavy/Rocket ammo bundles, plus
+Grenade and C4. (Grenade/C4 Tool templates must exist in <code>ServerStorage/WeaponTemplates</code>.)</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="data-flow">Data flow<a href="#data-flow" class="hash-link" aria-label="Direct link to Data flow" title="Direct link to Data flow" translate="no">​</a></h2>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#bfc7d5"><span class="token plain">Craft ammo:   ReqCraft → WorkbenchService → CraftOutputDispatcher.grant</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">                       → AmmoManager.AddAmmo → AmmoPoolSync → AmmoApi → Signals.AmmoPoolChanged → HUD</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">Fire gun:     ReqFireWeapon → WeaponServer (drains WeaponState mag) → WeaponMagSync</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">                            → AmmoApi → Signals.WeaponMagChanged → HUD</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">Reload gun:   ReqReloadWeapon → WeaponServer (pool→mag via AmmoManager.ConsumeAmmo)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">                              → WeaponMagSync + AmmoPoolSync → HUD</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">Throw:        ReqThrowProjectile → WeaponServer (spawn + destroy equipped Tool)</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">                                 → backpack ChildRemoved → AmmoApi → Signals.ThrowableCountChanged → HUD</span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">Detonate C4:  G (always-on client) → ReqDetonate → WeaponServer.onDetonate (no-op if no actives)</span><br></div></code></pre></div></div>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="edge-cases">Edge cases<a href="#edge-cases" class="hash-link" aria-label="Direct link to Edge cases" title="Direct link to Edge cases" translate="no">​</a></h2>
+<ul>
+<li class=""><strong>Empty pool + empty mag:</strong> fire rejected with dry SFX (existing); reload no-ops.</li>
+<li class=""><strong>Death/respawn:</strong> pool reset and reseeded via <code>AmmoManager.EnsureStarting</code>; mag reseeded by
+<code>EnsureAmmo</code>; thrown Tools gone with the old backpack.</li>
+<li class=""><strong>Player leaving mid-reload:</strong> retain the existing <code>player.Parent == nil</code> guard in the reload
+<code>task.delay</code>; <code>AmmoManager</code> clears on <code>PlayerRemoving</code>.</li>
+<li class=""><strong>Throwing the last Tool:</strong> equipped Tool destroyed → character has no equipped Tool; player
+re-selects from the hotbar (acceptable; auto-equip-next is a possible later enhancement).</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="testing-studio-manual--no-automated-suite">Testing (Studio, manual — no automated suite)<a href="#testing-studio-manual--no-automated-suite" class="hash-link" aria-label="Direct link to Testing (Studio, manual — no automated suite)" title="Direct link to Testing (Studio, manual — no automated suite)" translate="no">​</a></h2>
+<ul>
+<li class="">Fire until mag empty → dry SFX; reload with pool &gt; 0 refills mag and decrements pool; reload with
+empty pool no-ops.</li>
+<li class="">Pool reads correct per ammo type; AR/SMG/Pistol share <code>Light</code>; SR uses <code>Heavy</code>; rocket uses
+<code>Rocket</code>.</li>
+<li class="">Craft ammo at the workbench → pool increases (clamped at <code>Capacity</code>), HUD updates.</li>
+<li class="">Throw a grenade → Tool removed from backpack; throwing the last grenade leaves no equipped Tool.</li>
+<li class="">Throw C4, switch away / throw last C4, press <code>G</code> → charges detonate.</li>
+<li class=""><code>AmmoApi</code> getters and signals return correct values for HUD wiring.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="out-of-scope">Out of scope<a href="#out-of-scope" class="hash-link" aria-label="Direct link to Out of scope" title="Direct link to Out of scope" translate="no">​</a></h2>
+<ul>
+<li class="">ProfileStore persistence of the ammo pool (session-only by decision).</li>
+<li class="">World / pickup ammo sources (crafting only this iteration).</li>
+<li class="">The future Tool-stacking inventory (design avoids blocking it; throwables stay 1 Tool = 1 throw).</li>
+<li class="">The actual HUD visuals — only the <code>AmmoApi</code> + signals are in scope.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="docs-to-update-in-the-same-change-per-claudemd">Docs to update in the same change (per CLAUDE.md)<a href="#docs-to-update-in-the-same-change-per-claudemd" class="hash-link" aria-label="Direct link to Docs to update in the same change (per CLAUDE.md)" title="Direct link to Docs to update in the same change (per CLAUDE.md)" translate="no">​</a></h2>
+<ul>
+<li class=""><code>docs/systems/weapons.md</code> — ammo pool, throwable consumption, C4 detonation change.</li>
+<li class="">Networking reference map — new/changed packets (<code>WeaponMagSync</code>, <code>AmmoPoolSync</code>, removed
+<code>WeaponAmmoSync</code>).</li>
+<li class="">Signals reference map — <code>WeaponMagChanged</code>, <code>AmmoPoolChanged</code>, <code>ThrowableCountChanged</code>.</li>
+<li class="">A short <code>AmmoManager</code> / <code>AmmoConfig</code> mention in the crafting/economy docs.</li>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/Game-Dev-Neohermit/Endless-Journey/edit/main/docs/superpowers/specs/2026-06-16-weapon-ammo-system-design.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#problem" class="table-of-contents__link toc-highlight">Problem</a></li><li><a href="#decisions-locked-during-brainstorming" class="table-of-contents__link toc-highlight">Decisions (locked during brainstorming)</a></li><li><a href="#architecture" class="table-of-contents__link toc-highlight">Architecture</a></li><li><a href="#components" class="table-of-contents__link toc-highlight">Components</a><ul><li><a href="#1-data-model--config" class="table-of-contents__link toc-highlight">1. Data model &amp; config</a></li><li><a href="#2-gun-firing--reload-flow" class="table-of-contents__link toc-highlight">2. Gun firing &amp; reload flow</a></li><li><a href="#3-throwables-grenade--c4" class="table-of-contents__link toc-highlight">3. Throwables (Grenade &amp; C4)</a></li><li><a href="#4-gui-api" class="table-of-contents__link toc-highlight">4. GUI API</a></li><li><a href="#5-crafting-integration" class="table-of-contents__link toc-highlight">5. Crafting integration</a></li></ul></li><li><a href="#data-flow" class="table-of-contents__link toc-highlight">Data flow</a></li><li><a href="#edge-cases" class="table-of-contents__link toc-highlight">Edge cases</a></li><li><a href="#testing-studio-manual--no-automated-suite" class="table-of-contents__link toc-highlight">Testing (Studio, manual — no automated suite)</a></li><li><a href="#out-of-scope" class="table-of-contents__link toc-highlight">Out of scope</a></li><li><a href="#docs-to-update-in-the-same-change-per-claudemd" class="table-of-contents__link toc-highlight">Docs to update in the same change (per CLAUDE.md)</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Built with Moonwave.</div></div></div></footer></div>
+</body>
+</html>
