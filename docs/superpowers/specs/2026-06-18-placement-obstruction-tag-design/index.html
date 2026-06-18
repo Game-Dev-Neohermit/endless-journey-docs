@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-superpowers/specs/2026-06-18-placement-obstruction-tag-design" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.1">
+<title data-rh="true">Placement Obstruction Tag — Design | Endless Journey</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-18-placement-obstruction-tag-design"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Placement Obstruction Tag — Design | Endless Journey"><meta data-rh="true" name="description" content="Date: 2026-06-18"><meta data-rh="true" property="og:description" content="Date: 2026-06-18"><link data-rh="true" rel="canonical" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-18-placement-obstruction-tag-design"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-18-placement-obstruction-tag-design" hreflang="en"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/docs/superpowers/specs/2026-06-18-placement-obstruction-tag-design" hreflang="x-default"><link rel="stylesheet" href="/endless-journey-docs/assets/css/styles.68ec3e37.css">
+<script src="/endless-journey-docs/assets/js/runtime~main.a397af02.js" defer="defer"></script>
+<script src="/endless-journey-docs/assets/js/main.f750afb3.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/endless-journey-docs/"><b class="navbar__title text--truncate">Endless Journey</b></a><a class="navbar__item navbar__link" href="/endless-journey-docs/docs/intro">Docs</a><a class="navbar__item navbar__link" href="/endless-journey-docs/api/">API</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/Game-Dev-Neohermit/Endless-Journey" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search"><span aria-label="expand searchbar" role="button" class="search-icon" tabindex="0"></span><input id="search_input_react" type="search" placeholder="Loading..." aria-label="Search" class="navbar__search-input search-bar" disabled=""></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Placement Obstruction Tag — Design</h1></header>
+<p><strong>Date:</strong> 2026-06-18
+<strong>Status:</strong> Approved (Approach B — fully tag-based)</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="problem">Problem<a href="#problem" class="hash-link" aria-label="Direct link to Problem" title="Direct link to Problem" translate="no">​</a></h2>
+<p>The build placement system lets a player place an item (e.g. Workbench) directly
+inside an already-existing world fixture such as the Train Shield Generator or the
+Tech Tree Bench. The overlap check never detects these fixtures.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="root-cause">Root cause<a href="#root-cause" class="hash-link" aria-label="Direct link to Root cause" title="Direct link to Root cause" translate="no">​</a></h3>
+<p><code>PlacementSystem.BuildObstructionFilter</code> builds the <code>GetPartBoundsInBox</code> include
+filter from exactly three sources:</p>
+<ol>
+<li class=""><code>PlacedObjects</code> folder (items placed through the placement system)</li>
+<li class="">Player characters</li>
+<li class=""><code>Enemy</code>-tagged instances</li>
+</ol>
+<p>The shield generator and tech-tree bench are <code>...Placeholder</code> models parented
+<strong>loose directly under <code>Workspace</code></strong> — they were never routed through the
+placement system, so they appear in none of the three buckets. The overlap query
+literally never tests them, so a ghost drops straight through.</p>
+<p>Their <code>CollisionBox</code> parts are <code>CanQuery = true</code>, so the moment a CollisionBox is
+included in the filter, <code>GetPartBoundsInBox</code> detects it. The fix is purely about
+<em>what goes into the filter</em>, not about the detection mechanism.</p>
+<p>Note: placed-vs-placed collision already works (via the folder). Only static world
+fixtures are affected.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="approach--fully-tag-based-approach-b">Approach — Fully tag-based (Approach B)<a href="#approach--fully-tag-based-approach-b" class="hash-link" aria-label="Direct link to Approach — Fully tag-based (Approach B)" title="Direct link to Approach — Fully tag-based (Approach B)" translate="no">​</a></h2>
+<p>A single CollectionService tag, <code>PlacementObstruction</code>, becomes the <strong>sole source
+of truth</strong> for &quot;this volume blocks build placement.&quot; The filter no longer depends
+on folder membership or hierarchy.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="why-b-over-a-hybrid-keep-folder--add-tag-for-fixtures">Why B over a hybrid (keep folder + add tag for fixtures)<a href="#why-b-over-a-hybrid-keep-folder--add-tag-for-fixtures" class="hash-link" aria-label="Direct link to Why B over a hybrid (keep folder + add tag for fixtures)" title="Direct link to Why B over a hybrid (keep folder + add tag for fixtures)" translate="no">​</a></h3>
+<p><code>GetPartBoundsInBox</code> cost scales with the number of filtered parts in the query
+region, and it runs every Heartbeat while a ghost is active. Including placed items
+as whole <strong>models</strong> forces the broadphase to test every visual mesh (the Workbench
+alone is 23 MeshParts). Tagging only the <strong>CollisionBox</strong> means the query tests one
+box per obstruction instead of its full mesh hierarchy — cheaper than the system is
+today, and uniform across fixtures and placed items.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="tagging-granularity-collisionbox-part-never-the-model">Tagging granularity: CollisionBox part, never the model<a href="#tagging-granularity-collisionbox-part-never-the-model" class="hash-link" aria-label="Direct link to Tagging granularity: CollisionBox part, never the model" title="Direct link to Tagging granularity: CollisionBox part, never the model" translate="no">​</a></h3>
+<p><code>TechTreeBenchPlaceholder</code> contains a <code>TrajectoryPoints</code> sub-model whose parts are
+scattered across the map. Tagging the whole model would turn every trajectory point
+into a placement blocker. Tags are therefore applied to the single <code>CollisionBox</code>
+part of each obstruction.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="changes">Changes<a href="#changes" class="hash-link" aria-label="Direct link to Changes" title="Direct link to Changes" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-placementsystemluau">1. <code>PlacementSystem.luau</code><a href="#1-placementsystemluau" class="hash-link" aria-label="Direct link to 1-placementsystemluau" title="Direct link to 1-placementsystemluau" translate="no">​</a></h3>
+<ul>
+<li class="">Add module constant <code>OBSTRUCTION_TAG = &quot;PlacementObstruction&quot;</code>.</li>
+<li class=""><code>BuildObstructionFilter</code>: replace the <code>self.PlacedObjectsFolder</code> entry with
+<code>CollectionService:GetTagged(OBSTRUCTION_TAG)</code>. Keep <code>GhostModelsFolder</code>, player
+characters, <code>Enemy</code>-tagged instances, and the <code>extra</code> argument.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-placementserverserverluau">2. <code>PlacementServer.server.luau</code><a href="#2-placementserverserverluau" class="hash-link" aria-label="Direct link to 2-placementserverserverluau" title="Direct link to 2-placementserverserverluau" translate="no">​</a></h3>
+<ul>
+<li class="">In <code>finalizeModel</code>, when a part is the <code>CollisionBox</code>, add the
+<code>PlacementObstruction</code> tag to it (so placed items participate via the tag instead
+of the folder).</li>
+<li class="">Fallback: if a placeable has no <code>CollisionBox</code> part, tag the model&#x27;s
+<code>PrimaryPart</code> (or the model itself) so it still blocks placement.</li>
+<li class="">The <code>PlacedObjects</code> folder remains as the organizational parent for placed items;
+it is simply no longer the collision source of truth. Tags set on the server
+replicate to clients automatically, so the client preview filter sees them.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-docs">3. Docs<a href="#3-docs" class="hash-link" aria-label="Direct link to 3. Docs" title="Direct link to 3. Docs" translate="no">​</a></h3>
+<ul>
+<li class="">Update <code>docs/systems/placement.md</code> and the model-structure contract: any static
+world model that build placement must respect needs its <code>CollisionBox</code> tagged
+<code>PlacementObstruction</code>.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="edge-cases">Edge cases<a href="#edge-cases" class="hash-link" aria-label="Direct link to Edge cases" title="Direct link to Edge cases" translate="no">​</a></h2>
+<ul>
+<li class=""><strong>Ghost self-collision:</strong> the active ghost is never tagged (lives in
+<code>GhostModels</code> / <code>ServerStorage</code>) and is additionally excluded via <code>GhostOwnParts</code>.</li>
+<li class=""><strong>Revert path:</strong> <code>RequestPlacementRevert</code> reuses <code>BuildObstructionFilter</code>, so it
+inherits the fix with no extra change.</li>
+<li class=""><strong>Client visibility:</strong> fixture tags live in the <code>.rbxlx</code> and replicate; placed-item
+tags are set server-side and replicate. Both are visible to the client filter.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="out-of-scope">Out of scope<a href="#out-of-scope" class="hash-link" aria-label="Direct link to Out of scope" title="Direct link to Out of scope" translate="no">​</a></h2>
+<ul>
+<li class="">Changing how placed items are organized (they stay in <code>PlacedObjects</code>).</li>
+<li class="">Any rework of the raycast / surface-resolution path.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="manual-actions-required-post-implementation-in-studio">Manual actions required (post-implementation, in Studio)<a href="#manual-actions-required-post-implementation-in-studio" class="hash-link" aria-label="Direct link to Manual actions required (post-implementation, in Studio)" title="Direct link to Manual actions required (post-implementation, in Studio)" translate="no">​</a></h2>
+<p>These are design-time <code>.rbxlx</code> edits that the code change does <strong>not</strong> perform. They
+must be done by hand in Studio after the code is synced, or the fix will not take
+effect for the existing fixtures:</p>
+<ul class="contains-task-list containsTaskList_mC6p">
+<li class="task-list-item"><input type="checkbox" disabled=""> <strong>Tag <code>Workspace.TrainShieldGeneratorPlaceholder.CollisionBox</code></strong> with the
+CollectionService tag <code>PlacementObstruction</code> (Tag Editor or
+<code>CollectionService:AddTag</code>).</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <strong>Tag <code>Workspace.TechTreeBenchPlaceholder.CollisionBox</code></strong> with
+<code>PlacementObstruction</code>.</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <strong>Any other static world model</strong> that build placement should respect: ensure
+it has a <code>CollisionBox</code> part and tag that part <code>PlacementObstruction</code>.</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <strong>Verify in Studio</strong> (playtest): attempt to place a Workbench overlapping the
+shield generator and the tech-tree bench — the ghost should turn invalid and
+placement should be rejected. Also confirm placed-vs-placed collision still
+works.</li>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/Game-Dev-Neohermit/Endless-Journey/edit/main/docs/superpowers/specs/2026-06-18-placement-obstruction-tag-design.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#problem" class="table-of-contents__link toc-highlight">Problem</a><ul><li><a href="#root-cause" class="table-of-contents__link toc-highlight">Root cause</a></li></ul></li><li><a href="#approach--fully-tag-based-approach-b" class="table-of-contents__link toc-highlight">Approach — Fully tag-based (Approach B)</a><ul><li><a href="#why-b-over-a-hybrid-keep-folder--add-tag-for-fixtures" class="table-of-contents__link toc-highlight">Why B over a hybrid (keep folder + add tag for fixtures)</a></li><li><a href="#tagging-granularity-collisionbox-part-never-the-model" class="table-of-contents__link toc-highlight">Tagging granularity: CollisionBox part, never the model</a></li></ul></li><li><a href="#changes" class="table-of-contents__link toc-highlight">Changes</a><ul><li><a href="#1-placementsystemluau" class="table-of-contents__link toc-highlight">1. <code>PlacementSystem.luau</code></a></li><li><a href="#2-placementserverserverluau" class="table-of-contents__link toc-highlight">2. <code>PlacementServer.server.luau</code></a></li><li><a href="#3-docs" class="table-of-contents__link toc-highlight">3. Docs</a></li></ul></li><li><a href="#edge-cases" class="table-of-contents__link toc-highlight">Edge cases</a></li><li><a href="#out-of-scope" class="table-of-contents__link toc-highlight">Out of scope</a></li><li><a href="#manual-actions-required-post-implementation-in-studio" class="table-of-contents__link toc-highlight">Manual actions required (post-implementation, in Studio)</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Built with Moonwave.</div></div></div></footer></div>
+</body>
+</html>
