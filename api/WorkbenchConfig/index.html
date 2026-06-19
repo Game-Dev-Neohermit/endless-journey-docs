@@ -10,8 +10,9 @@ never in service/controller code. The GUI is fixed to two material rows
 
 Studio setup required:
   1. Tag the `ReplicatedStorage/PlaceableItems/Workbench` Model with
-     CollectionService tag `WorkbenchStation`; give it a child BasePart named
-     `WorkbenchPromptPart` holding a `ProximityPrompt`, and set its PrimaryPart.
+     CollectionService tag `Workbench` (shared with the Shredder, which lives on
+     the same station); give it a BasePart named `CraftPromptPart` (anywhere under
+     the Model) holding a `ProximityPrompt`, and set its PrimaryPart.
   2. Create `ServerStorage/WeaponTemplates` holding craftable weapon Tools
      (e.g. clones of `Pistol`, `SMG`) — separate from StarterPack.
   3. Each craftable placeable needs its `ReplicatedStorage/PlaceableTools/&lt;Name&gt;` Tool.
@@ -22,14 +23,15 @@ never in service/controller code. The GUI is fixed to two material rows
 
 Studio setup required:
   1. Tag the `ReplicatedStorage/PlaceableItems/Workbench` Model with
-     CollectionService tag `WorkbenchStation`; give it a child BasePart named
-     `WorkbenchPromptPart` holding a `ProximityPrompt`, and set its PrimaryPart.
+     CollectionService tag `Workbench` (shared with the Shredder, which lives on
+     the same station); give it a BasePart named `CraftPromptPart` (anywhere under
+     the Model) holding a `ProximityPrompt`, and set its PrimaryPart.
   2. Create `ServerStorage/WeaponTemplates` holding craftable weapon Tools
      (e.g. clones of `Pistol`, `SMG`) — separate from StarterPack.
   3. Each craftable placeable needs its `ReplicatedStorage/PlaceableTools/&lt;Name&gt;` Tool.
   4. Wood/Metal reuse `ReplicatedStorage/CraftingMaterials`."><link data-rh="true" rel="canonical" href="https://game-dev-neohermit.github.io/endless-journey-docs/api/WorkbenchConfig"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/api/WorkbenchConfig" hreflang="en"><link data-rh="true" rel="alternate" href="https://game-dev-neohermit.github.io/endless-journey-docs/api/WorkbenchConfig" hreflang="x-default"><link rel="stylesheet" href="/endless-journey-docs/assets/css/styles.68ec3e37.css">
-<script src="/endless-journey-docs/assets/js/runtime~main.198fb67c.js" defer="defer"></script>
-<script src="/endless-journey-docs/assets/js/main.9bcda0a1.js" defer="defer"></script>
+<script src="/endless-journey-docs/assets/js/runtime~main.71cc1686.js" defer="defer"></script>
+<script src="/endless-journey-docs/assets/js/main.781e9ea0.js" defer="defer"></script>
 </head>
 <body>
 <svg style="display: none;"><defs>
@@ -46,8 +48,9 @@ Studio setup required:
 <ol>
   <li>
     Tag the <code>ReplicatedStorage/PlaceableItems/Workbench</code> Model with
-    CollectionService tag <code>WorkbenchStation</code>; give it a child BasePart named
-    <code>WorkbenchPromptPart</code> holding a <code>ProximityPrompt</code>, and set its PrimaryPart.
+    CollectionService tag <code>Workbench</code> (shared with the Shredder, which lives on
+    the same station); give it a BasePart named <code>CraftPromptPart</code> (anywhere under
+    the Model) holding a <code>ProximityPrompt</code>, and set its PrimaryPart.
   </li>
   <li>
     Create <code>ServerStorage/WeaponTemplates</code> holding craftable weapon Tools
@@ -61,9 +64,9 @@ Studio setup required:
     &quot;properties&quot;: [],
     &quot;types&quot;: [],
     &quot;name&quot;: &quot;WorkbenchConfig&quot;,
-    &quot;desc&quot;: &quot;Single tuning surface for the Workbench crafting station: interaction\nconstants, output template folders, and the recipe table. Edit gameplay here,\nnever in service/controller code. The GUI is fixed to two material rows\n(Wood/Metal), so recipe `Cost` is limited to those two materials.\n\nStudio setup required:\n  1. Tag the `ReplicatedStorage/PlaceableItems/Workbench` Model with\n     CollectionService tag `WorkbenchStation`; give it a child BasePart named\n     `WorkbenchPromptPart` holding a `ProximityPrompt`, and set its PrimaryPart.\n  2. Create `ServerStorage/WeaponTemplates` holding craftable weapon Tools\n     (e.g. clones of `Pistol`, `SMG`) — separate from StarterPack.\n  3. Each craftable placeable needs its `ReplicatedStorage/PlaceableTools/&lt;Name&gt;` Tool.\n  4. Wood/Metal reuse `ReplicatedStorage/CraftingMaterials`.&quot;,
+    &quot;desc&quot;: &quot;Single tuning surface for the Workbench crafting station: interaction\nconstants, output template folders, and the recipe table. Edit gameplay here,\nnever in service/controller code. The GUI is fixed to two material rows\n(Wood/Metal), so recipe `Cost` is limited to those two materials.\n\nStudio setup required:\n  1. Tag the `ReplicatedStorage/PlaceableItems/Workbench` Model with\n     CollectionService tag `Workbench` (shared with the Shredder, which lives on\n     the same station); give it a BasePart named `CraftPromptPart` (anywhere under\n     the Model) holding a `ProximityPrompt`, and set its PrimaryPart.\n  2. Create `ServerStorage/WeaponTemplates` holding craftable weapon Tools\n     (e.g. clones of `Pistol`, `SMG`) — separate from StarterPack.\n  3. Each craftable placeable needs its `ReplicatedStorage/PlaceableTools/&lt;Name&gt;` Tool.\n  4. Wood/Metal reuse `ReplicatedStorage/CraftingMaterials`.&quot;,
     &quot;source&quot;: {
-        &quot;line&quot;: 19,
+        &quot;line&quot;: 20,
         &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/Configs/WorkbenchConfig.luau&quot;
     }
 }</pre></details></div></div></div></main></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Built with Moonwave.</div></div></div></footer></div>
