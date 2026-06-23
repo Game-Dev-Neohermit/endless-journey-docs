@@ -24,7 +24,7 @@ weighted cache.
 local SpawnHelper = require(path.to.SpawnHelper)
 
 SpawnHelper:Init()
-SpawnHelper:SetGroupEnabled(&quot;Port&quot;, false) -- pause spawns in the &quot;Port&quot; group
+SpawnHelper:SetGroupEnabled(&quot;Left&quot;, false) -- pause spawns in the &quot;Left&quot; group
 local point = SpawnHelper.GetRandomPoint()
 if point then
 	character:PivotTo(CFrame.new(point))
@@ -50,14 +50,14 @@ weighted cache.
 local SpawnHelper = require(path.to.SpawnHelper)
 
 SpawnHelper:Init()
-SpawnHelper:SetGroupEnabled(&quot;Port&quot;, false) -- pause spawns in the &quot;Port&quot; group
+SpawnHelper:SetGroupEnabled(&quot;Left&quot;, false) -- pause spawns in the &quot;Left&quot; group
 local point = SpawnHelper.GetRandomPoint()
 if point then
 	character:PivotTo(CFrame.new(point))
 end
 ```"><link data-rh="true" rel="canonical" href="https://neohermit-game-dev.github.io/endless-journey-docs/api/SpawnHelper"><link data-rh="true" rel="alternate" href="https://neohermit-game-dev.github.io/endless-journey-docs/api/SpawnHelper" hreflang="en"><link data-rh="true" rel="alternate" href="https://neohermit-game-dev.github.io/endless-journey-docs/api/SpawnHelper" hreflang="x-default"><link rel="stylesheet" href="/endless-journey-docs/assets/css/styles.68ec3e37.css">
-<script src="/endless-journey-docs/assets/js/runtime~main.785932f1.js" defer="defer"></script>
-<script src="/endless-journey-docs/assets/js/main.c40f1a31.js" defer="defer"></script>
+<script src="/endless-journey-docs/assets/js/runtime~main.18a0828c.js" defer="defer"></script>
+<script src="/endless-journey-docs/assets/js/main.6b647c53.js" defer="defer"></script>
 </head>
 <body>
 <svg style="display: none;"><defs>
@@ -88,7 +88,7 @@ end
 <pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> SpawnHelper <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span>path<span class="token punctuation">.</span>to<span class="token punctuation">.</span>SpawnHelper<span class="token punctuation">)</span>
 
 SpawnHelper<span class="token punctuation">:</span><span class="token function">Init</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-SpawnHelper<span class="token punctuation">:</span><span class="token function">SetGroupEnabled</span><span class="token punctuation">(</span><span class="token string">"Port"</span><span class="token punctuation">,</span> <span class="token keyword">false</span><span class="token punctuation">)</span> <span class="token comment">-- pause spawns in the "Port" group</span>
+SpawnHelper<span class="token punctuation">:</span><span class="token function">SetGroupEnabled</span><span class="token punctuation">(</span><span class="token string">"Left"</span><span class="token punctuation">,</span> <span class="token keyword">false</span><span class="token punctuation">)</span> <span class="token comment">-- pause spawns in the "Left" group</span>
 <span class="token keyword">local</span> point <span class="token operator">=</span> SpawnHelper<span class="token punctuation">.</span><span class="token function">GetRandomPoint</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token keyword">if</span> point <span class="token keyword">then</span>
 	character<span class="token punctuation">:</span><span class="token function">PivotTo</span><span class="token punctuation">(</span>CFrame<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span>point<span class="token punctuation">)</span><span class="token punctuation">)</span>
@@ -227,7 +227,7 @@ SpawnHelper<span class="token punctuation">:</span><span class="token function">
     &quot;properties&quot;: [],
     &quot;types&quot;: [],
     &quot;name&quot;: &quot;SpawnHelper&quot;,
-    &quot;desc&quot;: &quot;Utility for volume-weighted random spawn point selection, with runtime\ntoggling of named spawn-volume groups.\n\nOn startup the module locates (or creates) a `Folder` named\n`SpawnVolumes` in `workspace`.  Each `BasePart` child of that folder is\ntreated as a spawn volume; its weight is proportional to its world-space\nvolume (`Size.X * Size.Y * Size.Z`).\n\nA `BasePart` may carry an optional **`SpawnGroup`** string attribute. Parts\nsharing a value form a togglable group; `SetGroupEnabled` disables/enables\nspawning from all volumes in a group at runtime (used by the pirate-ship\nevent to keep junk out of the ship&#x27;s path). Parts with no `SpawnGroup`\nattribute are *ungrouped* — always active and never affected by toggles.\n\n`Init` must be called before `GetRandomPoint` to populate the internal\nweighted cache.\n\n```lua\nlocal SpawnHelper = require(path.to.SpawnHelper)\n\nSpawnHelper:Init()\nSpawnHelper:SetGroupEnabled(\&quot;Port\&quot;, false) -- pause spawns in the \&quot;Port\&quot; group\nlocal point = SpawnHelper.GetRandomPoint()\nif point then\n\tcharacter:PivotTo(CFrame.new(point))\nend\n```&quot;,
+    &quot;desc&quot;: &quot;Utility for volume-weighted random spawn point selection, with runtime\ntoggling of named spawn-volume groups.\n\nOn startup the module locates (or creates) a `Folder` named\n`SpawnVolumes` in `workspace`.  Each `BasePart` child of that folder is\ntreated as a spawn volume; its weight is proportional to its world-space\nvolume (`Size.X * Size.Y * Size.Z`).\n\nA `BasePart` may carry an optional **`SpawnGroup`** string attribute. Parts\nsharing a value form a togglable group; `SetGroupEnabled` disables/enables\nspawning from all volumes in a group at runtime (used by the pirate-ship\nevent to keep junk out of the ship&#x27;s path). Parts with no `SpawnGroup`\nattribute are *ungrouped* — always active and never affected by toggles.\n\n`Init` must be called before `GetRandomPoint` to populate the internal\nweighted cache.\n\n```lua\nlocal SpawnHelper = require(path.to.SpawnHelper)\n\nSpawnHelper:Init()\nSpawnHelper:SetGroupEnabled(\&quot;Left\&quot;, false) -- pause spawns in the \&quot;Left\&quot; group\nlocal point = SpawnHelper.GetRandomPoint()\nif point then\n\tcharacter:PivotTo(CFrame.new(point))\nend\n```&quot;,
     &quot;source&quot;: {
         &quot;line&quot;: 36,
         &quot;path&quot;: &quot;src/ReplicatedStorage/SharedModules/SpawnHelper.luau&quot;
