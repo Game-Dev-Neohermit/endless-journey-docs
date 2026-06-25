@@ -15,7 +15,14 @@ a fixed yaw/pitch/height, it does not rotate in response to mouse delta
 the way the normal locked third-person camera does. The placement raycast
 aims from the mouse cursor&#x27;s actual on-screen position, so on PC this
 module also frees the cursor (via Signals.RequestMouseIcon) while build
-mode is active so the player can aim."><meta data-rh="true" property="og:description" content="Takes exclusive ownership of the camera while build mode is active: a
+mode is active so the player can aim.
+
+Entry and exit both ease the camera angle via an exponential chase-lerp
+(PlacementConfig.CameraTransitionSpeed) instead of snapping instantly. On
+exit there&#x27;s no live Custom-camera CFrame to blend toward, so it eases
+toward an approximation reconstructed from the camera&#x27;s offset relative to
+hrp at the moment build mode was entered, then hands off to
+Enum.CameraType.Custom once that blend has settled."><meta data-rh="true" property="og:description" content="Takes exclusive ownership of the camera while build mode is active: a
 fixed-height, fixed-pitch, yaw-locked-at-entry top-down view that follows
 the player. Restores Enum.CameraType.Custom on exit. Independent of
 CameraController (Enum.CameraType.Custom + CameraOffset spring), which is
@@ -27,9 +34,16 @@ a fixed yaw/pitch/height, it does not rotate in response to mouse delta
 the way the normal locked third-person camera does. The placement raycast
 aims from the mouse cursor&#x27;s actual on-screen position, so on PC this
 module also frees the cursor (via Signals.RequestMouseIcon) while build
-mode is active so the player can aim."><link data-rh="true" rel="canonical" href="https://neohermit-game-dev.github.io/endless-journey-docs/api/PlacementCameraController"><link data-rh="true" rel="alternate" href="https://neohermit-game-dev.github.io/endless-journey-docs/api/PlacementCameraController" hreflang="en"><link data-rh="true" rel="alternate" href="https://neohermit-game-dev.github.io/endless-journey-docs/api/PlacementCameraController" hreflang="x-default"><link rel="stylesheet" href="/endless-journey-docs/assets/css/styles.68ec3e37.css">
-<script src="/endless-journey-docs/assets/js/runtime~main.0b019c3c.js" defer="defer"></script>
-<script src="/endless-journey-docs/assets/js/main.779f3999.js" defer="defer"></script>
+mode is active so the player can aim.
+
+Entry and exit both ease the camera angle via an exponential chase-lerp
+(PlacementConfig.CameraTransitionSpeed) instead of snapping instantly. On
+exit there&#x27;s no live Custom-camera CFrame to blend toward, so it eases
+toward an approximation reconstructed from the camera&#x27;s offset relative to
+hrp at the moment build mode was entered, then hands off to
+Enum.CameraType.Custom once that blend has settled."><link data-rh="true" rel="canonical" href="https://neohermit-game-dev.github.io/endless-journey-docs/api/PlacementCameraController"><link data-rh="true" rel="alternate" href="https://neohermit-game-dev.github.io/endless-journey-docs/api/PlacementCameraController" hreflang="en"><link data-rh="true" rel="alternate" href="https://neohermit-game-dev.github.io/endless-journey-docs/api/PlacementCameraController" hreflang="x-default"><link rel="stylesheet" href="/endless-journey-docs/assets/css/styles.68ec3e37.css">
+<script src="/endless-journey-docs/assets/js/runtime~main.7e00c17d.js" defer="defer"></script>
+<script src="/endless-journey-docs/assets/js/main.990929a6.js" defer="defer"></script>
 </head>
 <body>
 <svg style="display: none;"><defs>
@@ -52,17 +66,25 @@ mode is active so the player can aim."><link data-rh="true" rel="canonical" href
   module also frees the cursor (via Signals.RequestMouseIcon) while build
   mode is active so the player can aim.
 </p>
+<p>
+  Entry and exit both ease the camera angle via an exponential chase-lerp
+  (PlacementConfig.CameraTransitionSpeed) instead of snapping instantly. On
+  exit there's no live Custom-camera CFrame to blend toward, so it eases
+  toward an approximation reconstructed from the camera's offset relative to
+  hrp at the moment build mode was entered, then hands off to
+  Enum.CameraType.Custom once that blend has settled.
+</p>
 </div></header></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
     &quot;functions&quot;: [],
     &quot;properties&quot;: [],
     &quot;types&quot;: [],
     &quot;name&quot;: &quot;PlacementCameraController&quot;,
-    &quot;desc&quot;: &quot;Takes exclusive ownership of the camera while build mode is active: a\nfixed-height, fixed-pitch, yaw-locked-at-entry top-down view that follows\nthe player. Restores Enum.CameraType.Custom on exit. Independent of\nCameraController (Enum.CameraType.Custom + CameraOffset spring), which is\nharmlessly inert while this module owns the camera — it never touches\nCamera.CFrame or Camera.CameraType.\n\nBecause this camera is Scriptable and driven entirely by hrp.Position plus\na fixed yaw/pitch/height, it does not rotate in response to mouse delta\nthe way the normal locked third-person camera does. The placement raycast\naims from the mouse cursor&#x27;s actual on-screen position, so on PC this\nmodule also frees the cursor (via Signals.RequestMouseIcon) while build\nmode is active so the player can aim.&quot;,
+    &quot;desc&quot;: &quot;Takes exclusive ownership of the camera while build mode is active: a\nfixed-height, fixed-pitch, yaw-locked-at-entry top-down view that follows\nthe player. Restores Enum.CameraType.Custom on exit. Independent of\nCameraController (Enum.CameraType.Custom + CameraOffset spring), which is\nharmlessly inert while this module owns the camera — it never touches\nCamera.CFrame or Camera.CameraType.\n\nBecause this camera is Scriptable and driven entirely by hrp.Position plus\na fixed yaw/pitch/height, it does not rotate in response to mouse delta\nthe way the normal locked third-person camera does. The placement raycast\naims from the mouse cursor&#x27;s actual on-screen position, so on PC this\nmodule also frees the cursor (via Signals.RequestMouseIcon) while build\nmode is active so the player can aim.\n\nEntry and exit both ease the camera angle via an exponential chase-lerp\n(PlacementConfig.CameraTransitionSpeed) instead of snapping instantly. On\nexit there&#x27;s no live Custom-camera CFrame to blend toward, so it eases\ntoward an approximation reconstructed from the camera&#x27;s offset relative to\nhrp at the moment build mode was entered, then hands off to\nEnum.CameraType.Custom once that blend has settled.&quot;,
     &quot;realm&quot;: [
         &quot;Client&quot;
     ],
     &quot;source&quot;: {
-        &quot;line&quot;: 22,
+        &quot;line&quot;: 29,
         &quot;path&quot;: &quot;src/StarterPlayer/StarterPlayerScripts/PlacementCameraController.client.luau&quot;
     }
 }</pre></details></div></div></div></main></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Built with Moonwave.</div></div></div></footer></div>
