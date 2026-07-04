@@ -24,8 +24,8 @@ that call `AddCoins` / `DeductCoins`; they are not part of this module.
 Cross-place: `STORE_NAME` + `tostring(UserId)` key are identical in every
 place of the universe, so the same DataStore record is shared. ProfileStore
 session-locking serializes the lobby↔gameplay teleport handoff automatically."><link data-rh="true" rel="canonical" href="https://neohermit-game-dev.github.io/endless-journey-docs/api/CoinManager"><link data-rh="true" rel="alternate" href="https://neohermit-game-dev.github.io/endless-journey-docs/api/CoinManager" hreflang="en"><link data-rh="true" rel="alternate" href="https://neohermit-game-dev.github.io/endless-journey-docs/api/CoinManager" hreflang="x-default"><link rel="stylesheet" href="/endless-journey-docs/assets/css/styles.68ec3e37.css">
-<script src="/endless-journey-docs/assets/js/runtime~main.02a60e50.js" defer="defer"></script>
-<script src="/endless-journey-docs/assets/js/main.b9816573.js" defer="defer"></script>
+<script src="/endless-journey-docs/assets/js/runtime~main.bdcaaa9e.js" defer="defer"></script>
+<script src="/endless-journey-docs/assets/js/main.7118b2fc.js" defer="defer"></script>
 </head>
 <body>
 <svg style="display: none;"><defs>
@@ -63,7 +63,15 @@ session-locking serializes the lobby↔gameplay teleport handoff automatically."
   is not loaded, or the balance is insufficient. This is the contract a future
   shop relies on.
 </p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Initialize"><code style="text-decoration:none">Initialize</code><a href="#Initialize" class="hash-link" aria-label="Direct link to Initialize" title="Direct link to Initialize" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Neohermit-Game-Dev/Endless-Journey/blob/main/src/ServerStorage/SharedModules/CoinManager.luau#L145"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>CoinManager<!-- -->.</code><code class="green_DgR4">Initialize</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="RefundCoins"><code style="text-decoration:none">RefundCoins</code><a href="#RefundCoins" class="hash-link" aria-label="Direct link to RefundCoins" title="Direct link to RefundCoins" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Neohermit-Game-Dev/Endless-Journey/blob/main/src/ServerStorage/SharedModules/CoinManager.luau#L120"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>CoinManager<!-- -->.</code><code class="green_DgR4">RefundCoins</code><code>(</code><div class="inset_uKQm"><div><code>player<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="https://developer.roblox.com/en-us/api-reference/class/Player" target="_blank" rel="noopener noreferrer">Player<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" style="color:gray;vertical-align:middle;margin-left:2px"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></code><code>,</code></div><div><code>amount<!-- -->: </code><code class="blue_P4bS">number</code></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>
+  Return an exact <code>amount</code> of coins to a player (e.g. a perk-unlock refund).
+  Unlike <code>AddCoins</code>, this is NOT scaled by the Fortune <code>CoinGainBonus</code> — a refund
+  must return exactly what was paid, or unlock→respec cycling could mint coins.
+  No-op if <code>amount &#x3C;= 0</code> or the profile is not loaded. Clamps to
+  <code>CoinConfig.MAX_BALANCE</code>, then replicates.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Initialize"><code style="text-decoration:none">Initialize</code><a href="#Initialize" class="hash-link" aria-label="Direct link to Initialize" title="Direct link to Initialize" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/Neohermit-Game-Dev/Endless-Journey/blob/main/src/ServerStorage/SharedModules/CoinManager.luau#L166"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>CoinManager<!-- -->.</code><code class="green_DgR4">Initialize</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
 <p>Wire up the profile lifecycle. Call exactly once per server (from a loader).</p>
 </div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
     &quot;functions&quot;: [
@@ -144,13 +152,35 @@ session-locking serializes the lobby↔gameplay teleport handoff automatically."
             }
         },
         {
+            &quot;name&quot;: &quot;RefundCoins&quot;,
+            &quot;desc&quot;: &quot;Return an exact `amount` of coins to a player (e.g. a perk-unlock refund).\nUnlike `AddCoins`, this is NOT scaled by the Fortune `CoinGainBonus` — a refund\nmust return exactly what was paid, or unlock→respec cycling could mint coins.\nNo-op if `amount &lt;= 0` or the profile is not loaded. Clamps to\n`CoinConfig.MAX_BALANCE`, then replicates.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;player&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Player&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;amount&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 120,
+                &quot;path&quot;: &quot;src/ServerStorage/SharedModules/CoinManager.luau&quot;
+            }
+        },
+        {
             &quot;name&quot;: &quot;Initialize&quot;,
             &quot;desc&quot;: &quot;Wire up the profile lifecycle. Call exactly once per server (from a loader).&quot;,
             &quot;params&quot;: [],
             &quot;returns&quot;: [],
             &quot;function_type&quot;: &quot;static&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 145,
+                &quot;line&quot;: 166,
                 &quot;path&quot;: &quot;src/ServerStorage/SharedModules/CoinManager.luau&quot;
             }
         }
@@ -166,6 +196,6 @@ session-locking serializes the lobby↔gameplay teleport handoff automatically."
         &quot;line&quot;: 18,
         &quot;path&quot;: &quot;src/ServerStorage/SharedModules/CoinManager.luau&quot;
     }
-}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#AddCoins" class="table-of-contents__link toc-highlight">.AddCoins</a></li><li><a href="#DeductCoins" class="table-of-contents__link toc-highlight">.DeductCoins</a></li><li><a href="#GetCoins" class="table-of-contents__link toc-highlight">.GetCoins</a></li><li><a href="#Initialize" class="table-of-contents__link toc-highlight">.Initialize</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Built with Moonwave.</div></div></div></footer></div>
+}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#AddCoins" class="table-of-contents__link toc-highlight">.AddCoins</a></li><li><a href="#DeductCoins" class="table-of-contents__link toc-highlight">.DeductCoins</a></li><li><a href="#GetCoins" class="table-of-contents__link toc-highlight">.GetCoins</a></li><li><a href="#Initialize" class="table-of-contents__link toc-highlight">.Initialize</a></li><li><a href="#RefundCoins" class="table-of-contents__link toc-highlight">.RefundCoins</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Built with Moonwave.</div></div></div></footer></div>
 </body>
 </html>
